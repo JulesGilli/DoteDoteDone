@@ -1,5 +1,13 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { authGuard } from './guards/auth.guard';
+import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  {
+    path: 'app',
+    loadChildren: () =>
+      import('./workspace/workspace.routes').then((m) => m.workspaceRoutes),
+  },
+  {
+    path: '**',
+    redirectTo: 'app',
+  },
+];

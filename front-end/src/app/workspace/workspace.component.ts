@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-workspace',
   imports: [RouterOutlet],
   template: `<router-outlet />`,
 })
-export class AppComponent {
+export class WorkspaceComponent {
   title = 'frontEnd';
 }
