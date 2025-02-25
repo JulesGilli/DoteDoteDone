@@ -26,9 +26,9 @@
 }
 
 .workspace {
+  margin: 15px;
   display: flex;
   align-items: center;
-  background: #2a263a;
   border-radius: var(--radius);
   padding: 8px 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -46,24 +46,31 @@
 }
 
 .new-tickets-btn {
-  background: var(--primary-color);
+  background: var.$light-purple;
   color: #fff;
   border: none;
-  border-radius: var(--radius);
-  padding: 6px 12px;
+  border-radius: 5px;
+  padding: 8px 24px;
+  margin: 15px;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, background 0.2s ease;
+  transform: scale(1);
 }
 
 .new-tickets-btn:hover {
-  background: var(--primary-color);
-  transform: translateY(-2px);
+  transform: scale(1.05);
 }
 
+.new-tickets-btn:active {
+  transform: scale(0.95);
+  background: darken(var.$purple, 10%);
+}
+
+
+
 .tickets-title {
-  margin: 0 0 12px 0;
-  font-size: 1.1rem;
+  margin: 13px;
+  font-size: 20px;
   font-weight: 500;
 }
 
@@ -83,50 +90,57 @@
 .tickets-table td {
   text-align: left;
   padding: 12px;
-  border-bottom: 1px solid #3a3944;
+  border-bottom: 1px solid var.$lighter-dark;
 }
 
 .tickets-table th {
-  color: var(--text-muted);
+  background-color: var.$dark;
   font-weight: 500;
+  font-size: 14px;
+  padding: 4px 4px 4px 12px;
+  color: var.$grey;
+
+}
+
+.select-container {
+  position: relative;
+  display: inline-block;
 }
 
 .workspace-select {
-  background: #2a263a;
-  border: none;
-  border-radius: 8px;
+  background: #242132;
   color: #fff;
-  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 32px 10px 10px;
+  margin-left: 15px;
+  font-size: 20px;
+  font-weight: 600;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  font-size: 1rem;
-  font-weight: 600;
+  transition: background 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    background: #3a3550;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
 }
 
-.workspace-select:hover {
-  background: #3a3550;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.workspace-select option {
-  background: #2a263a;
-  color: #fff;
-}
-
-.workspace {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.workspace::after {
+.select-container::after {
   content: "▼";
   position: absolute;
+  top: 50%;
   right: 12px;
+  transform: translateY(-50%);
   color: #888;
   pointer-events: none;
 }
+
