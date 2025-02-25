@@ -19,7 +19,7 @@ export const workspaceRoutes: Routes = [
       },
       {
         path: '**',
-        redirectTo: 'app',
+        redirectTo: 'workspace',
       },
     ],
   },
