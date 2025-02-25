@@ -2,12 +2,11 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'app',
-    loadChildren: () =>
-      import('./workspace/workspace.routes').then((m) => m.workspaceRoutes),
+    path: 'workspace',
+    loadChildren: () => import('./workspace').then((m) => m.workspaceRoutes),
   },
   {
     path: '**',
-    redirectTo: 'app',
+    redirectTo: 'workspace',
   },
 ];
