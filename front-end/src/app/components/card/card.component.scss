@@ -1,0 +1,17 @@
+.card {
+  display: flex;
+  align-items: center;
+}
+
+.status-indicator {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  object-fit: cover;
+}
+
+.card-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff;
+}

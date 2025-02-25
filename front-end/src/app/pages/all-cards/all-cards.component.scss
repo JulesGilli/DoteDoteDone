@@ -1,0 +1,132 @@
+
+@use '../../../variables.scss' as var;
+:root {
+  --bg-color: var.$dark;
+  --bg-color-2: var.$lighter-dark;
+  --primary-color: var.$purple;
+  --text-color: var.$white;
+  --text-muted: var.$grey;
+  --radius: 8px;
+  --spacing: 16px;
+}
+
+.all-cards-page {
+  min-height: 100vh;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  padding: var(--spacing);
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing);
+}
+
+.workspace {
+  display: flex;
+  align-items: center;
+  background: #2a263a;
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.arrow {
+  margin-right: 8px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.workspace-name {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.new-tickets-btn {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.new-tickets-btn:hover {
+  background: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.tickets-title {
+  margin: 0 0 12px 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.tickets-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-color-2);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.tickets-table thead {
+  background: #2a2933;
+}
+
+.tickets-table th,
+.tickets-table td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #3a3944;
+}
+
+.tickets-table th {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.workspace-select {
+  background: #2a263a;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  padding: 8px 12px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.workspace-select:hover {
+  background: #3a3550;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.workspace-select option {
+  background: #2a263a;
+  color: #fff;
+}
+
+.workspace {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.workspace::after {
+  content: "▼";
+  position: absolute;
+  right: 12px;
+  color: #888;
+  pointer-events: none;
+}

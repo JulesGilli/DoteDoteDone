@@ -1,0 +1,40 @@
+<div class="all-cards-page">
+  <div class="top-bar">
+    <div class="workspace">
+      <span class="arrow">&#9662;</span>
+      <select class="workspace-select" [(ngModel)]="selectedWorkspace">
+        <option value="workspace1">Workspace 1</option>
+        <option value="workspace2">Workspace 2</option>
+        <option value="workspace3">Workspace 3</option>
+      </select>
+    </div>
+
+    <button class="new-tickets-btn">New tickets</button>
+  </div>
+
+  <h2 class="tickets-title">Tickets {{ tickets.length }}</h2>
+
+  <table class="tickets-table">
+    <thead>
+    <tr>
+      <th>Resume</th>
+      <th>ID</th>
+      <th>Manager</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let ticket of tickets">
+      <td>
+        <app-card
+          [titre]="ticket.titre"
+          [statusCard]="ticket.statusCard"
+          [ticketId]="ticket.ticketId"
+          [manager]="ticket.manager"
+        ></app-card>
+      </td>
+      <td>{{ ticket.ticketId }}</td>
+      <td>{{ ticket.manager }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
