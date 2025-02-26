@@ -1,0 +1,56 @@
+<div class="modal-container">
+    <div class="modal-header">
+        <input type="text" class="title-input" placeholder="Title" />
+        <button class="close-btn">X</button>
+    </div>
+
+    <div class="modal-body">
+        <div class="left-zone">
+            <label for="resume" class="resume-label">Resume</label>
+            <textarea id="resume" class="resume-textarea" placeholder="Tapez votre description..."></textarea>
+        </div>
+
+        <div class="right-zone">
+            <div class="select-field">
+                <label for="workspace">Workspace</label>
+                <select id="workspace">
+                    <option value="T-DEV">T-DEV</option>
+                    <option value="B-DEV">B-DEV</option>
+                    <option value="X-DEV">X-DEV</option>
+                </select>
+            </div>
+
+            <div class="select-field">
+                <label for="priority">Priorité</label>
+                <select id="priority">
+                    <option value="normal">Normal</option>
+                    <option value="minor">Minor</option>
+                    <option value="medium">Medium</option>
+                    <option value="critical">Critical</option>
+                    <option value="blocking">Blocking</option>
+                </select>
+            </div>
+
+            <div class="select-field">
+                <label for="manager">Manager</label>
+                <select id="manager">
+                    <option value="">Not assigned</option>
+                    <option value="username1">username1</option>
+                    <option value="username2">username2</option>
+                </select>
+            </div>
+
+            <div class="select-field">
+                <label for="board">Board</label>
+                <select id="board">
+                    <option value="board1">Board name</option>
+                    <option value="board2">Board 2</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="create-btn">Create</button>
+    </div>
+</div>

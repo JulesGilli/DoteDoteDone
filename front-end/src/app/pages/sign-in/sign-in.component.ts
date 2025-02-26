@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -7,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrl: './sign-in.component.scss'
 })
 export class SignInComponent {
-
+  constructor(private authService: AuthService) { }
+  oauthLogin(): void {
+    this.authService.login();
+  }
 }
