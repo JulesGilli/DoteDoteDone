@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-card',
@@ -11,4 +11,10 @@ export class CardComponent {
   @Input() statusCard!: string;
   @Input() ticketId!: string;
   @Input() manager!: string;
+  @Output() cardClick = new EventEmitter<void>();
+
+  onTitleClick(event: Event) {
+    event.stopPropagation();
+    this.cardClick.emit();
+  }
 }
