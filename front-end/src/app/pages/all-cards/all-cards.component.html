@@ -1,15 +1,12 @@
-<link rel="stylesheet" href="all-cards.component.scss">
 <div class="all-cards-page">
   <div class="top-bar">
     <div class="select-container">
       <select class="workspace-select" [(ngModel)]="selectedWorkspace">
-        <option value="workspace1">WorkspaceWorkspace 1</option>
+        <option value="workspace1">Workspace 1</option>
         <option value="workspace2">Workspace 2</option>
         <option value="workspace3">Workspace 3</option>
       </select>
     </div>
-
-
     <button class="new-tickets-btn">New ticket</button>
   </div>
 
@@ -31,6 +28,7 @@
           [statusCard]="ticket.statusCard"
           [ticketId]="ticket.ticketId"
           [manager]="ticket.manager"
+          (cardClick)="openModal(ticket)"
         ></app-card>
       </td>
       <td>{{ ticket.ticketId }}</td>
@@ -38,4 +36,11 @@
     </tr>
     </tbody>
   </table>
+
+  <app-modal
+    *ngIf="selectedTicket"
+    [ticket]="selectedTicket"
+    (close)="closeModal()"
+  >
+  </app-modal>
 </div>
