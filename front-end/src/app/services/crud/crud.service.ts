@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
+  providedIn: 'root',
 })
 export class GetService {
   private readonly _authService = inject(AuthService);
@@ -44,7 +45,10 @@ export class GetService {
   // } || {
   // members: {idMember}
   // }
+  // }
 
+  getAllLists(boardsObject: Object) {
+    return this.getAll('lists', boardsObject);
   getAllLists(boardsObject: Object) {
     return this.getAll('lists', boardsObject);
   }
