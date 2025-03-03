@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiKey = environment.apiKey;
@@ -11,8 +11,8 @@ export class AuthService {
   private apiUrl = `https://trello.com/1/authorize?expiration=1day&scope=read,write&key=${this.apiKey}&callback_method=fragment&return_url=http://${this.appUrl}/workspace/callback`;
   private token: string | null = null;
   constructor(private router: Router) {}
-  login(): void{
-    window.location.href=this.apiUrl;
+  login(): void {
+    window.location.href = this.apiUrl;
   }
   setToken(token: string): void {
     this.token = token;

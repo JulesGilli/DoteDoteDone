@@ -1,14 +1,14 @@
-import { Injectable, inject, signal } from '@angular/core'; import { HttpClient } from '@angular/common/http';
+import { Injectable, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class DataTestService {
   private readonly _authService = inject(AuthService);
-  private apiTrello = "https://api.trello.com/1";
+  private apiTrello = 'https://api.trello.com/1';
   private apiKeyToken = `&key=${environment.apiKey}&token=${this._authService.getToken()}`;
   private http = inject(HttpClient);
 
@@ -20,23 +20,23 @@ export class DataTestService {
     }*/
 
   getAllBoards(organizationsMembersObject: Object) {
-    return this.getAll('boards', organizationsMemberObject)
+    return this.getAll('boards', organizationsMemberObject);
   }
   // organizationsMemberObject={
   //   organizations: {idOrganization};
   // } || {
   // members: {idMember}
-// }
+  // }
 
-  getAllLists(boardsObject:Object){
-    return this.getAll('lists',boardsObject);
+  getAllLists(boardsObject: Object) {
+    return this.getAll('lists', boardsObject);
   }
   //boardsObject={
   //   boards: {idBoard};
   // }
 
-  getAllCards(memberBoardOrListObject:Object){
-    return this.getAll('cards',memberBoardOrListObject);
+  getAllCards(memberBoardOrListObject: Object) {
+    return this.getAll('cards', memberBoardOrListObject);
   }
   /*
   memberBoardOrListObject={
@@ -56,4 +56,3 @@ export class DataTestService {
     return this.http.get(uri);
   }
 }
-
