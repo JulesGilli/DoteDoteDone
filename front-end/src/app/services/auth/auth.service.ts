@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiKey = process.env[""];
-  private apiUrl = `https://trello.com/1/authorize?expiration=1day&scope=read,write&response_type=token&key=${this.apiKey}`;
+  private apiKey = environment.apiKey;
+  private appUrl = environment.appURL;
+  private apiUrl = `https://trello.com/1/authorize?expiration=1day&scope=read,write&key=${this.apiKey}&callback_method=fragment&return_url=http://${this.appUrl}/workspace/callback`;
   private token: string | null = null;
-  constructor(private http: HttpClient, private router: Router) {}
-  login(username: string, password: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}`);
+  constructor(private router: Router) {}
+  login(): void{
+    window.location.href=this.apiUrl;
   }
   setToken(token: string): void {
     this.token = token;
@@ -24,7 +24,7 @@ export class AuthService {
   logout(): void {
     this.token = null;
     localStorage.removeItem('access_token');
-    this.router.navigate(['/']);
+    this.router.navigate(['/sign-in']);
   }
   isAuthenticated(): boolean {
     return this.getToken() !== null;
