@@ -8,18 +8,23 @@
   --text-muted: var.$grey;
   --radius: 8px;
   --spacing: 16px;
+  --navbar-width: 250px;
 }
 
 .all-cards-page {
+  width: calc(100vw - var(--navbar-width));
   min-height: 100vh;
   background: var(--bg-color);
   color: var(--text-color);
   font-family: Arial, sans-serif;
   padding: var(--spacing);
+  box-sizing: border-box;
 }
+
 
 .top-bar {
   display: flex;
+  padding-top: 15px;
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--spacing);
@@ -47,6 +52,9 @@
 
 .new-tickets-btn {
   background: var.$light-purple;
+  position: absolute;
+  right: 5px;
+  top: 5px;
   color: #fff;
   border: none;
   border-radius: 5px;
