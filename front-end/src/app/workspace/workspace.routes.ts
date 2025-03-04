@@ -16,10 +16,6 @@ export const workspaceRoutes: Routes = [
         component: CallbackComponent,
       },
       {
-        path: 'sign-in',
-        component: SignInComponent,
-      },
-      {
         path: 'all-cards',
         component: AllCardsComponent,
       },
@@ -29,7 +25,7 @@ export const workspaceRoutes: Routes = [
       },
       {
         path: '**',
-        redirectTo: 'workspace',
+        redirectTo: 'workspace/kanban',
       },
     ],
   },
