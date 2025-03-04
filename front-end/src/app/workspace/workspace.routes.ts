@@ -25,7 +25,7 @@ export const workspaceRoutes: Routes = [
       },
       {
         path: '**',
-        redirectTo: 'workspace/kanban',
+        redirectTo: 'kanban',
       },
     ],
   },
