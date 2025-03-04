@@ -39,6 +39,7 @@
 .modal-left {
   flex: 4;
   display: flex;
+  resize: none;
   flex-direction: column;
   gap: 15px;
 }
@@ -48,10 +49,15 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 5px;
   padding: 10px;
+  resize: none;
   color: var.$white;
   font-size: 16px;
   white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  height: auto;                 
 }
+
 
 .title {
   min-height: 40px;
