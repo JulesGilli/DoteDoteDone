@@ -43,14 +43,20 @@
   gap: 15px;
 }
 
-// Champs éditables
+// en mode édition
 .field {
-  background: var.$dark;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 5px;
+  background: var.$lighter-dark;
   color: var.$white;
+  border-radius: 3px;
   font-size: 16px;
   padding: 10px;
+  border: none;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.field:focus {
+  border: 1px solid var.$light-purple;
 }
 
 .title {
@@ -81,10 +87,25 @@
 }
 
 .option-value {
-  background: var.$dark;
-  padding: 8px 8px 8px 0;
+  width: 100%;
+  background: var.$lighter-dark;
+  border: 1px solid var.$purple;
+  outline: none;
+  padding: 8px 12px;
+  border-radius: 4px;
   color: #fff;
   cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.difficulty-indicator {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  object-fit: cover;
 }
 
 .modal-footer {
@@ -95,14 +116,43 @@
 .valid-btn {
   display: block;
   width: 100%;
-  background: rgba(255, 255, 255, 0.1);
+  background: var.$light-purple;
   border: 1px solid var.$light-purple;
   border-radius: 5px;
-  color: var.$light-purple;
+  color: var.$white;
   padding: 8px 24px;
   cursor: pointer;
   transition: background 0.2s ease;
   &:hover {
     background: rgba(255, 255, 255, 0.2);
   }
+}
+
+.dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var.$dark;
+  border: 1px solid var.$lighter-dark;
+  border-radius: 3px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  z-index: 10;
+}
+
+.dropdown-menu li {
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dropdown-menu li:hover {
+  background: var.$lighter-dark;
 }

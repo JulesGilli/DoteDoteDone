@@ -4,6 +4,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {ModalViewComponent} from '../../components/modal-view/modal-view.component';
 import {ModalEditComponent} from '../../components/modal-edit/modal-edit.component';
+import {ModalCreateComponent} from '../../components/modal-create/modal-create.component';
 
 @Component({
   selector: 'app-all-cards',
@@ -15,7 +16,8 @@ import {ModalEditComponent} from '../../components/modal-edit/modal-edit.compone
     NgIf,
     FormsModule,
     ModalViewComponent,
-    ModalEditComponent
+    ModalEditComponent,
+    ModalCreateComponent
   ],
   styleUrls: ['./all-cards.component.scss']
 })
@@ -24,6 +26,7 @@ export class AllCardsComponent {
   selectedTicket: any = null;
 
   isEditMode: boolean = false;
+  isCreateMode: boolean = false;
 
   tickets = [
     { titre: 'Card name', statusCard: 'normal', ticketId: 'DEV-01', manager: 'username' },
@@ -51,5 +54,19 @@ export class AllCardsComponent {
 
   onValidEdit() {
     this.isEditMode = false;
+  }
+
+  openCreateModal() {
+    this.isCreateMode = true;
+    this.selectedTicket = null;
+  }
+
+  closeCreateModal() {
+    this.isCreateMode = false;
+  }
+
+  onCreateTicket(newTicket: any) {
+    this.tickets.push(newTicket);
+    this.closeCreateModal();
   }
 }
