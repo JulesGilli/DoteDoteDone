@@ -6,7 +6,7 @@ export interface Card {
   desc?: string;
   idBoard: string;
   idList: string;
-  pos: number;
+  pos?: number;
   idMembers?: string[];
   labels?: Label[];
 }
