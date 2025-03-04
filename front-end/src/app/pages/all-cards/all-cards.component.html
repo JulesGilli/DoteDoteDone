@@ -37,10 +37,17 @@
     </tbody>
   </table>
 
-  <app-modal
-    *ngIf="selectedTicket"
+  <app-modal-view
+    *ngIf="selectedTicket && !isEditMode"
     [ticket]="selectedTicket"
     (close)="closeModal()"
-  >
-  </app-modal>
+    (edit)="switchToEdit()"
+  ></app-modal-view>
+
+  <app-modal-edit
+    *ngIf="selectedTicket && isEditMode"
+    [ticket]="selectedTicket"
+    (close)="closeModal()"
+    (valid)="onValidEdit()"
+  ></app-modal-edit>
 </div>

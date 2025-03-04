@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CardComponent } from '../../components/card/card.component';
-import { ModalComponent } from '../../components/modal/modal.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {ModalViewComponent} from '../../components/modal-view/modal-view.component';
+import {ModalEditComponent} from '../../components/modal-edit/modal-edit.component';
 
 @Component({
   selector: 'app-all-cards',
@@ -10,16 +11,19 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [
     CardComponent,
-    ModalComponent,
     NgForOf,
     NgIf,
-    FormsModule
+    FormsModule,
+    ModalViewComponent,
+    ModalEditComponent
   ],
   styleUrls: ['./all-cards.component.scss']
 })
 export class AllCardsComponent {
   selectedWorkspace = 'workspace1';
   selectedTicket: any = null;
+
+  isEditMode: boolean = false;
 
   tickets = [
     { titre: 'Card name', statusCard: 'normal', ticketId: 'DEV-01', manager: 'username' },
@@ -33,9 +37,19 @@ export class AllCardsComponent {
 
   openModal(ticket: any) {
     this.selectedTicket = ticket;
+    this.isEditMode = false;
   }
 
   closeModal() {
     this.selectedTicket = null;
+    this.isEditMode = false;
+  }
+
+  switchToEdit() {
+    this.isEditMode = true;
+  }
+
+  onValidEdit() {
+    this.isEditMode = false;
   }
 }
