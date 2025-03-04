@@ -1,11 +1,9 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../../services/auth/auth.service';
-import { environment } from '../../../environments/environment.development';
+import { AuthService } from '../../index';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
   providedIn: 'root',
 })
 export class GetService {
@@ -13,9 +11,6 @@ export class GetService {
   private apiTrello = 'https://api.trello.com/1';
   private http = inject(HttpClient);
 
-  private getApiKeyToken(): string {
-    return `&key=${environment.apiKey}&token=${this._authService.getToken()}`;
-  }
   getAllWorkspace(): Observable<any> {
     return new Observable((observer) => {
       this.getMemberId().subscribe((data: any) => {
@@ -25,8 +20,7 @@ export class GetService {
             (organizations) => {
               observer.next(organizations);
               observer.complete();
-            },
-            (error) => observer.error(error)
+            }
           );
         }
       });
@@ -49,8 +43,6 @@ export class GetService {
 
   getAllLists(boardsObject: Object) {
     return this.getAll('lists', boardsObject);
-  getAllLists(boardsObject: Object) {
-    return this.getAll('lists', boardsObject);
   }
   //boardsObject={
   //   boards: {idBoard};
@@ -71,7 +63,7 @@ export class GetService {
   getAll(typeQuest: String, fromWhatTable: Object): Observable<Object> {
     let uri = this.apiTrello;
     uri += `/${Object.keys(fromWhatTable)[0]}/${Object.values(fromWhatTable)[0]}/${typeQuest}?`;
-    uri += this.getApiKeyToken();
+    uri += this._authService.getApiKeyTokenUrl();
     return this.http.get(uri, {
       responseType: 'json',
     });
