@@ -20,7 +20,7 @@ export class DataTestService {
     }*/
 
   getAllBoards(organizationsMembersObject: Object) {
-    return this.getAll('boards', organizationsMemberObject);
+    return this.getAll('boards', organizationsMembersObject);
   }
   // organizationsMemberObject={
   //   organizations: {idOrganization};
