@@ -7,7 +7,7 @@
         <option value="workspace3">Workspace 3</option>
       </select>
     </div>
-    <button class="new-tickets-btn">New ticket</button>
+    <button class="new-tickets-btn" (click)="openCreateModal()">New ticket</button>
   </div>
 
   <h2 class="tickets-title">Tickets {{ tickets.length }}</h2>
@@ -50,4 +50,10 @@
     (close)="closeModal()"
     (valid)="onValidEdit()"
   ></app-modal-edit>
+
+  <app-modal-create
+    *ngIf="isCreateMode"
+    (close)="closeCreateModal()"
+    (create)="onCreateTicket($event)"
+  ></app-modal-create>
 </div>

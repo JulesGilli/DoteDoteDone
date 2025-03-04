@@ -1,1 +1,85 @@
-<p>modal-create works!</p>
+<div class="modal-overlay">
+  <div class="modal-content">
+    <span class="close-btn" (click)="closeModal()">✖</span>
+
+    <div class="modal-left">
+      <input
+        class="field title"
+        type="text"
+        [(ngModel)]="newTicket.titre"
+        placeholder="Card name"
+      />
+      <textarea
+        class="field resume"
+        [(ngModel)]="newTicket.resume"
+        placeholder="Task resume"
+      ></textarea>
+    </div>
+
+    <div class="modal-right">
+      <div class="option">
+        <span class="option-label">Workspace</span>
+        <div class="dropdown">
+          <button class="option-value" (click)="toggleDropdown('workspace')">
+            ▲ {{ newTicket.workspace || 'T-DEV' }}
+          </button>
+          <ul class="dropdown-menu" *ngIf="isDropdownOpen('workspace')">
+            <li (click)="newTicket.workspace = 'T-DEV'; closeDropdown('workspace')">T-DEV</li>
+            <li (click)="newTicket.workspace = 'Production'; closeDropdown('workspace')">Production</li>
+            <li (click)="newTicket.workspace = 'Autre'; closeDropdown('workspace')">Autre</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="option">
+        <span class="option-label">Priorité</span>
+        <div class="dropdown">
+          <button class="option-value" (click)="toggleDropdown('statusCard')">
+            ▲ {{ newTicket.statusCard || 'normal' }}
+          </button>
+          <ul class="dropdown-menu" *ngIf="isDropdownOpen('statusCard')">
+            <li (click)="newTicket.statusCard = 'normal'; closeDropdown('statusCard')">Normal</li>
+            <li (click)="newTicket.statusCard = 'minor'; closeDropdown('statusCard')">Minor</li>
+            <li (click)="newTicket.statusCard = 'medium'; closeDropdown('statusCard')">Medium</li>
+            <li (click)="newTicket.statusCard = 'critical'; closeDropdown('statusCard')">Critical</li>
+            <li (click)="newTicket.statusCard = 'blocking'; closeDropdown('statusCard')">Blocking</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="option">
+        <span class="option-label">Manager</span>
+        <div class="dropdown">
+          <button class="option-value" (click)="toggleDropdown('manager')">
+            ▲ {{ newTicket.manager || 'Not assigned' }}
+          </button>
+          <ul class="dropdown-menu" *ngIf="isDropdownOpen('manager')">
+            <li (click)="newTicket.manager = 'Not assigned'; closeDropdown('manager')">Not assigned</li>
+            <li (click)="newTicket.manager = 'Manager1'; closeDropdown('manager')">Manager1</li>
+            <li (click)="newTicket.manager = 'Manager2'; closeDropdown('manager')">Manager2</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="option">
+        <span class="option-label">Board</span>
+        <div class="dropdown">
+          <button class="option-value" (click)="toggleDropdown('board')">
+            ▲ {{ newTicket.board || 'Board name' }}
+          </button>
+          <ul class="dropdown-menu" *ngIf="isDropdownOpen('board')">
+            <li (click)="newTicket.board = 'Board name'; closeDropdown('board')">Board name</li>
+            <li (click)="newTicket.board = 'Board1'; closeDropdown('board')">Board1</li>
+            <li (click)="newTicket.board = 'Board2'; closeDropdown('board')">Board2</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="valid-btn" (click)="createTicket()" [disabled]="!newTicket.titre">
+          Create
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
