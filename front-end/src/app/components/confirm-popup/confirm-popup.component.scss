@@ -1,0 +1,47 @@
+@use '../../../variables.scss' as var;
+
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.confirm-content {
+  background: var.$dark;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+  border: 1px solid var.$lighter-dark;
+}
+
+.confirm-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.confirm-btn {
+  background: var.$light-purple;
+  color: var.$white;
+  border: 1px solid var.$lighter-dark;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: var.$dark;
+  color: #fff;
+  border: 1px solid var.$purple;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}

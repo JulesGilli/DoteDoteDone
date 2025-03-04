@@ -124,4 +124,19 @@
   object-fit: cover;
 }
 
+.delete-btn {
+  display: block;
+  width: 100%;
+  background: #cf0037;
+  border: 1px solid #cf0037;
+  border-radius: 5px;
+  color: #fff;
+  padding: 8px 24px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
 
+.delete-btn:hover {
+  background: #a3002a;
+}

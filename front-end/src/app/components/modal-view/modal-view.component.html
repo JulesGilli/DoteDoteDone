@@ -40,8 +40,16 @@
       </div>
 
       <div class="modal-footer">
+        <button class="delete-btn" (click)="showDeleteConfirm()">Delete</button>
         <button class="edit-btn" (click)="editModal()">Edit</button>
       </div>
     </div>
   </div>
+
+  <app-confirm-popup
+    *ngIf="isConfirmVisible"
+    [message]="'Do you really want to remove this card?'"
+    (confirm)="onDeleteConfirmed()"
+    (cancel)="onDeleteCancelled()"
+  ></app-confirm-popup>
 </div>
