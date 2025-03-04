@@ -5,7 +5,6 @@ import { SignUpComponent } from '../pages/sign-up/sign-up.component';
 import { WorkspaceComponent } from './workspace.component';
 import {AllCardsComponent} from '../pages/all-cards/all-cards.component';
 import { CallbackComponent } from '../components/callback/callback.component';
-import { CreateCardComponent } from '../components/create-card/create-card.component';
 
 export const workspaceRoutes: Routes = [
   {
@@ -27,10 +26,6 @@ export const workspaceRoutes: Routes = [
       {
         path: 'all-cards',
         component: AllCardsComponent,
-      },
-      {
-        path: 'create-card',
-        component: CreateCardComponent,
       },
       {
         path: '**',
