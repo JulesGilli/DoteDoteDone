@@ -5,7 +5,7 @@ import { WorkspaceComponent } from './workspace.component';
 import { AllCardsComponent } from '../pages/all-cards/all-cards.component';
 import { CallbackComponent } from '../components/callback/callback.component';
 import { CreateCardComponent } from '../components/create-card/create-card.component';
-import { KanbanPageComponent } from '../pages/kanban-page/kanban-page.component';
+import { KanbanComponent } from '../pages/kanban/kanban.component';
 
 export const workspaceRoutes: Routes = [
   {
@@ -30,7 +30,7 @@ export const workspaceRoutes: Routes = [
       },
       {
         path: 'kanban',
-        component: KanbanPageComponent,
+        component: KanbanComponent,
       },
       {
         path: '**',
