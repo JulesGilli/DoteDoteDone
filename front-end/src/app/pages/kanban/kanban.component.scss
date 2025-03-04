@@ -1,0 +1,26 @@
+#kanban {
+  width: 100%;
+
+  .kanban {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media screen and (min-width: 666px) {
+  #kanban {
+    #kanban-lists {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+@media screen and (min-width: 922px) {
+  #kanban {
+    #kanban-lists {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}

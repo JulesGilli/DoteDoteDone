@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { ListComponent } from '../../components/list/list.component';
 
 @Component({
-  selector: 'app-kanban-page',
+  selector: 'app-kanban',
   imports: [ListComponent],
-  templateUrl: './kanban-page.component.html',
-  styleUrl: './kanban-page.component.scss',
+  templateUrl: './kanban.component.html',
+  styleUrl: './kanban.component.scss',
 })
-export class KanbanPageComponent {}
+export class KanbanComponent {}
