@@ -1,0 +1,13 @@
+@use '../../../variables.scss' as var;
+
+div {
+  margin: 1rem;
+
+  button {
+    width: 100%;
+    background-color: var.$lighter-dark;
+    border: 1px solid var.$lighter-dark;
+    border-radius: 5px;
+    color: var.$white;
+  }
+}
