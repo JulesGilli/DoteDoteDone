@@ -118,4 +118,16 @@ export class AllCardsComponent {
     this.tickets.push(newTicket);
     this.closeCreateModal();
   }
+
+  onDeleteTicket() {
+    if (this.selectedTicket) {
+      const index = this.tickets.findIndex(
+        ticket => ticket.ticketId === this.selectedTicket.ticketId
+      );
+      if (index > -1) {
+        this.tickets.splice(index, 1);
+      }
+      this.closeModal();
+    }
+  }
 }
