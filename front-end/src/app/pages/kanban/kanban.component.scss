@@ -1,26 +1,40 @@
-#kanban {
-  width: 100%;
+@use '../../../variables.scss' as var;
 
-  .kanban {
+#kanban-selectors {
+  div {
     margin: 1rem;
     display: flex;
     flex-direction: column;
+    max-width: 300px;
+  }
+
+  #board-selector {
+    max-width: 260px;
+  }
+
+  select {
+    background: var.$lighter-dark;
+    color: var.$white;
+    border: none;
+    border-radius: var.$radius;
+    padding: 10px 32px 10px 10px;
+    font-size: var.$p-size;
+
+    &:hover {
+      background: var.$light-dark-hover;
+    }
   }
 }
 
 @media screen and (min-width: 666px) {
-  #kanban {
-    #kanban-lists {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-    }
+  #kanban-lists {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media screen and (min-width: 922px) {
-  #kanban {
-    #kanban-lists {
-      grid-template-columns: repeat(3, 1fr);
-    }
+  #kanban-lists {
+    grid-template-columns: repeat(3, 1fr);
   }
 }

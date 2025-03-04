@@ -5,13 +5,19 @@ div {
 
   button {
     width: 100%;
+    height: 25px;
     background-color: var.$lighter-dark;
-    border: 1px solid var.$lighter-dark;
+    border: none;
     border-radius: 5px;
     color: var.$white;
+    font-size: var.$p-size;
+
+    &:hover {
+      background-color: var.$light-dark-hover;
+    }
   }
 
-  button:hover {
-    background-color: var.$white;
+  h2 {
+    font-size: var.$h2-size;
   }
 }
