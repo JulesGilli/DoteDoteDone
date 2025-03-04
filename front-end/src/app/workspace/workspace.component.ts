@@ -9,6 +9,7 @@ import { NavbarComponent } from '../components/navbar/navbar.component';
   styles: `
     div {
       display: flex;
+      width: 100dvw;
     }
   `,
 })
