@@ -59,7 +59,6 @@
   border: 1px solid var.$light-purple;
 }
 
-
 .title {
   min-height: 40px;
 }
@@ -88,7 +87,6 @@
 }
 
 .option-value {
-  display: block;
   width: 100%;
   background: var.$lighter-dark;
   border: 1px solid var.$purple;
@@ -98,8 +96,17 @@
   color: #fff;
   cursor: pointer;
   text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
+.difficulty-indicator {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  object-fit: cover;
+}
 
 .modal-footer {
   margin-top: auto;
@@ -126,7 +133,6 @@
   width: 100%;
 }
 
-
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -150,4 +156,3 @@
 .dropdown-menu li:hover {
   background: var.$lighter-dark;
 }
-

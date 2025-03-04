@@ -17,7 +17,6 @@
     </div>
 
     <div class="modal-right">
-      <!-- Dropdown pour Workspace -->
       <div class="option">
         <span class="option-label">Workspace</span>
         <div class="dropdown">
@@ -36,6 +35,11 @@
         <span class="option-label">Priorité</span>
         <div class="dropdown">
           <button class="option-value" (click)="toggleDropdown('statusCard')">
+            <img
+              class="difficulty-indicator"
+              [attr.src]="'/images/card-priority-' + (ticket?.statusCard || 'normal') + '.png'"
+              alt="priority"
+            />
             ▲ {{ ticket?.statusCard || 'Normal' }}
           </button>
           <ul class="dropdown-menu" *ngIf="isDropdownOpen('statusCard')">

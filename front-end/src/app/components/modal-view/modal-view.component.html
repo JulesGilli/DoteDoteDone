@@ -16,14 +16,24 @@
         <span class="option-label">Workspace</span>
         <span class="option-value">{{ ticket?.workspace || 'T-DEV' }}</span>
       </div>
+
       <div class="option">
         <span class="option-label">Priorité</span>
-        <span class="option-value">{{ ticket?.statusCard || 'Normal' }}</span>
+        <div class="option-value">
+          <img
+            class="status-indicator"
+            [attr.src]="'/images/card-priority-' + ticket?.statusCard + '.png'"
+            alt="priority"
+          />
+          {{ ticket?.statusCard || 'Normal' }}
+        </div>
       </div>
+
       <div class="option">
         <span class="option-label">Manager</span>
         <span class="option-value">{{ ticket?.manager || 'username' }}</span>
       </div>
+
       <div class="option">
         <span class="option-label">Board</span>
         <span class="option-value">{{ ticket?.board || 'Board name' }}</span>
