@@ -17,21 +17,63 @@
     </div>
 
     <div class="modal-right">
+      <!-- Dropdown pour Workspace -->
       <div class="option">
         <span class="option-label">Workspace</span>
-        <button class="option-value">▲ {{ ticket?.workspace || 'T-DEV' }}</button>
+        <div class="dropdown">
+          <button class="option-value" (click)="toggleDropdown('workspace')">
+            ▲ {{ ticket?.workspace || 'T-DEV' }}
+          </button>
+          <ul class="dropdown-menu" *ngIf="isDropdownOpen('workspace')">
+            <li (click)="selectOption('workspace', 'T-DEV')">T-DEV</li>
+            <li (click)="selectOption('workspace', 'Production')">Production</li>
+            <li (click)="selectOption('workspace', 'Autre')">Autre</li>
+          </ul>
+        </div>
       </div>
+
       <div class="option">
         <span class="option-label">Priorité</span>
-        <button class="option-value">▲ {{ ticket?.statusCard || 'Normal' }}</button>
+        <div class="dropdown">
+          <button class="option-value" (click)="toggleDropdown('statusCard')">
+            ▲ {{ ticket?.statusCard || 'Normal' }}
+          </button>
+          <ul class="dropdown-menu" *ngIf="isDropdownOpen('statusCard')">
+            <li (click)="selectOption('statusCard', 'normal')">Normal</li>
+            <li (click)="selectOption('statusCard', 'minor')">Minor</li>
+            <li (click)="selectOption('statusCard', 'medium')">Medium</li>
+            <li (click)="selectOption('statusCard', 'critical')">Critical</li>
+            <li (click)="selectOption('statusCard', 'blocking')">Blocking</li>
+          </ul>
+        </div>
       </div>
+
       <div class="option">
         <span class="option-label">Manager</span>
-        <button class="option-value">▲ {{ ticket?.manager || 'Not assigned' }}</button>
+        <div class="dropdown">
+          <button class="option-value" (click)="toggleDropdown('manager')">
+            ▲ {{ ticket?.manager || 'Not assigned' }}
+          </button>
+          <ul class="dropdown-menu" *ngIf="isDropdownOpen('manager')">
+            <li (click)="selectOption('manager', 'Not assigned')">Not assigned</li>
+            <li (click)="selectOption('manager', 'Manager1')">Manager1</li>
+            <li (click)="selectOption('manager', 'Manager2')">Manager2</li>
+          </ul>
+        </div>
       </div>
+
       <div class="option">
         <span class="option-label">Board</span>
-        <button class="option-value">▲ {{ ticket?.board || 'Board name' }}</button>
+        <div class="dropdown">
+          <button class="option-value" (click)="toggleDropdown('board')">
+            ▲ {{ ticket?.board || 'Board name' }}
+          </button>
+          <ul class="dropdown-menu" *ngIf="isDropdownOpen('board')">
+            <li (click)="selectOption('board', 'Board name')">Board name</li>
+            <li (click)="selectOption('board', 'Board1')">Board1</li>
+            <li (click)="selectOption('board', 'Board2')">Board2</li>
+          </ul>
+        </div>
       </div>
 
       <div class="modal-footer">
