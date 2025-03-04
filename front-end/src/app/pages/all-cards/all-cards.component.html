@@ -47,6 +47,13 @@
     (close)="closeModal()"
     (edit)="switchToEdit()"
   ></app-modal-view>
+  <app-modal-view
+    *ngIf="selectedTicket && !isEditMode"
+    [ticket]="selectedTicket"
+    (close)="closeModal()"
+    (edit)="switchToEdit()"
+    (delete)="onDeleteTicket()"
+  ></app-modal-view>
 
   <app-modal-edit
     *ngIf="selectedTicket && isEditMode"

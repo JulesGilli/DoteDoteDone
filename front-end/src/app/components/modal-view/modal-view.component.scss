@@ -39,6 +39,7 @@
 .modal-left {
   flex: 4;
   display: flex;
+  resize: none;
   flex-direction: column;
   gap: 15px;
 }
@@ -48,10 +49,15 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 5px;
   padding: 10px;
+  resize: none;
   color: var.$white;
   font-size: 16px;
   white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  height: auto;                 
 }
+
 
 .title {
   min-height: 40px;
@@ -124,4 +130,19 @@
   object-fit: cover;
 }
 
+.delete-btn {
+  display: block;
+  width: 100%;
+  background: #cf0037;
+  border: 1px solid #cf0037;
+  border-radius: 5px;
+  color: #fff;
+  padding: 8px 24px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
 
+.delete-btn:hover {
+  background: #a3002a;
+}
