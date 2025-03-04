@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CardComponent } from '../../components/card/card.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalViewComponent } from '../../components/modal-view/modal-view.component';
 import { ModalEditComponent } from '../../components/modal-edit/modal-edit.component';
+import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
+import { Workspace } from '../../models';
+import { GetService } from '../../services';
 
 @Component({
   selector: 'app-all-cards',
@@ -16,14 +19,19 @@ import { ModalEditComponent } from '../../components/modal-edit/modal-edit.compo
     FormsModule,
     ModalViewComponent,
     ModalEditComponent,
+    ModalCreateComponent,
   ],
   styleUrls: ['./all-cards.component.scss'],
 })
 export class AllCardsComponent {
-  selectedWorkspace = 'workspace1';
+  _getService = inject(GetService);
+  selectedWorkspace!: string | undefined;
+  workspaces: Workspace[] = [];
+
   selectedTicket: any = null;
 
   isEditMode: boolean = false;
+  isCreateMode: boolean = false;
 
   tickets = [
     {
@@ -70,6 +78,15 @@ export class AllCardsComponent {
     },
   ];
 
+  ngOnInit() {
+    this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
+      this.workspaces = data;
+      if (this.workspaces.length > 0) {
+        this.selectedWorkspace = this.workspaces[0].displayName;
+      }
+    });
+  }
+
   openModal(ticket: any) {
     this.selectedTicket = ticket;
     this.isEditMode = false;
@@ -86,5 +103,19 @@ export class AllCardsComponent {
 
   onValidEdit() {
     this.isEditMode = false;
+  }
+
+  openCreateModal() {
+    this.isCreateMode = true;
+    this.selectedTicket = null;
+  }
+
+  closeCreateModal() {
+    this.isCreateMode = false;
+  }
+
+  onCreateTicket(newTicket: any) {
+    this.tickets.push(newTicket);
+    this.closeCreateModal();
   }
 }

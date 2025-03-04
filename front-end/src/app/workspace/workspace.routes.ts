@@ -16,6 +16,10 @@ export const workspaceRoutes: Routes = [
         component: CallbackComponent,
       },
       {
+        path: 'sign-in',
+        component: SignInComponent,
+      },
+      {
         path: 'all-cards',
         component: AllCardsComponent,
       },

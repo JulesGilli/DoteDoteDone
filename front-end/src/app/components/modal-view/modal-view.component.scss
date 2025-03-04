@@ -107,3 +107,21 @@
     background: rgba(255, 255, 255, 0.2);
   }
 }
+
+.option-value {
+  background: var.$dark;
+  padding: 8px 8px 8px 0;
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-indicator {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+}
+
+
