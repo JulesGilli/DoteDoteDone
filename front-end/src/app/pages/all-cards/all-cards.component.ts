@@ -81,8 +81,8 @@ export class AllCardsComponent {
   ngOnInit() {
     this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
       this.workspaces = data;
-      if(this.workspaces.length>0){
-        this.selectedWorkspace=this.workspaces[0].displayName;
+      if (this.workspaces.length > 0) {
+        this.selectedWorkspace = this.workspaces[0].displayName;
       }
     });
   }

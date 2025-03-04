@@ -2,14 +2,16 @@
   <div class="top-bar">
     <div class="select-container">
       <select class="workspace-select" [(ngModel)]="selectedWorkspace">
-        @for(workspace of workspaces;track workspace.displayName){
-        <option [value]="workspace.displayName">
-          {{ workspace.displayName }}
-        </option>
-      }
+        @for (workspace of workspaces; track workspace.displayName) {
+          <option [value]="workspace.displayName">
+            {{ workspace.displayName }}
+          </option>
+        }
       </select>
     </div>
-    <button class="new-tickets-btn" (click)="openCreateModal()">New ticket</button>
+    <button class="new-tickets-btn" (click)="openCreateModal()">
+      New ticket
+    </button>
   </div>
 
   <h2 class="tickets-title">Tickets {{ tickets.length }}</h2>
@@ -25,8 +27,13 @@
     <tbody>
       <tr *ngFor="let ticket of tickets">
         <td>
-          <app-card [titre]="ticket.titre" [statusCard]="ticket.statusCard" [ticketId]="ticket.ticketId"
-            [manager]="ticket.manager" (cardClick)="openModal(ticket)"></app-card>
+          <app-card
+            [titre]="ticket.titre"
+            [statusCard]="ticket.statusCard"
+            [ticketId]="ticket.ticketId"
+            [manager]="ticket.manager"
+            (cardClick)="openModal(ticket)"
+          ></app-card>
         </td>
         <td>{{ ticket.ticketId }}</td>
         <td>{{ ticket.manager }}</td>
@@ -39,12 +46,25 @@
     [ticket]="selectedTicket"
     (close)="closeModal()"
     (edit)="switchToEdit()"
+  ></app-modal-view>
+  <app-modal-view
+    *ngIf="selectedTicket && !isEditMode"
+    [ticket]="selectedTicket"
+    (close)="closeModal()"
+    (edit)="switchToEdit()"
     (delete)="onDeleteTicket()"
   ></app-modal-view>
 
-  <app-modal-edit *ngIf="selectedTicket && isEditMode" [ticket]="selectedTicket" (close)="closeModal()"
-    (valid)="onValidEdit()"></app-modal-edit>
+  <app-modal-edit
+    *ngIf="selectedTicket && isEditMode"
+    [ticket]="selectedTicket"
+    (close)="closeModal()"
+    (valid)="onValidEdit()"
+  ></app-modal-edit>
 
-  <app-modal-create *ngIf="isCreateMode" (close)="closeCreateModal()"
-    (create)="onCreateTicket($event)"></app-modal-create>
+  <app-modal-create
+    *ngIf="isCreateMode"
+    (close)="closeCreateModal()"
+    (create)="onCreateTicket($event)"
+  ></app-modal-create>
 </div>

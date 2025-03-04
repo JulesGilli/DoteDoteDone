@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 
 import { SignInComponent } from '../pages/sign-in/sign-in.component';
-import { SignUpComponent } from '../pages/sign-up/sign-up.component';
 import { WorkspaceComponent } from './workspace.component';
 import { AllCardsComponent } from '../pages/all-cards/all-cards.component';
 import { CallbackComponent } from '../components/callback/callback.component';
+import { KanbanComponent } from '../pages/kanban/kanban.component';
 
 export const workspaceRoutes: Routes = [
   {
@@ -16,20 +16,16 @@ export const workspaceRoutes: Routes = [
         component: CallbackComponent,
       },
       {
-        path: 'sign-in',
-        component: SignInComponent,
-      },
-      {
-        path: 'sign-up',
-        component: SignUpComponent,
-      },
-      {
         path: 'all-cards',
         component: AllCardsComponent,
       },
       {
+        path: 'kanban',
+        component: KanbanComponent,
+      },
+      {
         path: '**',
-        redirectTo: 'workspace',
+        redirectTo: 'kanban',
       },
     ],
   },

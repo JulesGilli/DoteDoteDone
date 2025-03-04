@@ -15,11 +15,30 @@ html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
+app-all-cards,
+app-kanban,
 app-sign-in {
   width: 100%;
+}
+
+h1 {
+  font-size: var.$h1-size;
+}
+
+h2 {
+  font-size: var.$h2-size;
+}
+
+h3 {
+  font-size: var.$h3-size;
+}
+
+p {
+  font-size: var.$p-size;
 }
