@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../index';
 import { Observable } from 'rxjs';
-import { Workspace } from '../../../models';
+import { Board, Card, List, Workspace } from '../../../models';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class GetService {
   private apiTrello = 'https://api.trello.com/1';
   private http = inject(HttpClient);
 
-  getAllWorkspace(): Observable<Workspace> {
+  getAllWorkspace(): Observable<Workspace[]> {
     return new Observable((observer) => {
       this.getMemberId().subscribe((data: any) => {
         if (data) {
@@ -32,7 +32,7 @@ export class GetService {
     members: {id};
     }*/
 
-  getAllBoards(organizationsMembersObject: Object) {
+  getAllBoards(organizationsMembersObject: Object): Observable<Board[]> {
     return this.getAll('boards', organizationsMembersObject);
   }
   // organizationsMemberObject={
@@ -42,14 +42,14 @@ export class GetService {
   // }
   // }
 
-  getAllLists(boardsObject: Object) {
+  getAllLists(boardsObject: Object): Observable<List[]> {
     return this.getAll('lists', boardsObject);
   }
   //boardsObject={
   //   boards: {idBoard};
   // }
 
-  getAllCards(memberBoardOrListObject: Object): Observable<Object> {
+  getAllCards(memberBoardOrListObject: Object): Observable<Card[]> {
     return this.getAll('cards', memberBoardOrListObject);
   }
   /*
