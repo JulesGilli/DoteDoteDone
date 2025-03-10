@@ -33,7 +33,7 @@ export class AuthService {
   logout(): void {
     this.token = null;
     localStorage.removeItem('access_token');
-    this.router.navigate(['workspace/sign-in']);
+    this.router.navigate(['/']);
   }
   isAuthenticated(): boolean {
     return this.getToken() !== null;

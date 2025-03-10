@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth/auth.service';
+import { AuthService } from '../../services';
 @Component({
   selector: 'app-callback',
   imports: [],
@@ -20,7 +20,6 @@ export class CallbackComponent implements OnInit {
       const token = tokenMatch[1];
       this.authService.setToken(token);
       this.router.navigate(['/workspace/kanban']); // Redirect to dashboard after login
-      console.log(token);
     } else {
       console.error('Token not found in URL fragment or user denied access');
       this.router.navigate(['/']); // Redirect back to login if no token
