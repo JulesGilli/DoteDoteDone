@@ -5,8 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { ModalViewComponent } from '../../components/modal-view/modal-view.component';
 import { ModalEditComponent } from '../../components/modal-edit/modal-edit.component';
 import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
-import { Workspace } from '../../models';
-import { GetService } from '../../services';
+import { Workspace, Board, Card } from '../../models';
+import { GetService, PostService } from '../../services';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-all-cards',
@@ -17,73 +18,116 @@ import { GetService } from '../../services';
     NgForOf,
     NgIf,
     FormsModule,
-    ModalViewComponent,
-    ModalEditComponent,
+    //ModalViewComponent,
+    //ModalEditComponent,
     ModalCreateComponent,
   ],
   styleUrls: ['./all-cards.component.scss'],
 })
 export class AllCardsComponent {
-  _getService = inject(GetService);
+  private _getService = inject(GetService);
+  private _postService = inject(PostService);
+
   selectedWorkspace!: string | undefined;
   workspaces: Workspace[] = [];
 
   selectedTicket: any = null;
-
   isEditMode: boolean = false;
   isCreateMode: boolean = false;
+  tickets: any[] = [];
 
-  tickets = [
-    {
-      titre: 'Card name',
-      statusCard: 'normal',
-      ticketId: 'DEV-01',
-      manager: 'username',
-    },
-    {
-      titre: 'Card name',
-      statusCard: 'normal',
-      ticketId: 'DEV-02',
-      manager: 'username',
-    },
-    {
-      titre: 'Card name',
-      statusCard: 'medium',
-      ticketId: 'DEV-03',
-      manager: 'username',
-    },
-    {
-      titre: 'Card name',
-      statusCard: 'critical',
-      ticketId: 'DEV-04',
-      manager: 'username',
-    },
-    {
-      titre: 'Card name',
-      statusCard: 'minor',
-      ticketId: 'DEV-05',
-      manager: 'username',
-    },
-    {
-      titre: 'Card name',
-      statusCard: 'minor',
-      ticketId: 'DEV-06',
-      manager: 'username',
-    },
-    {
-      titre: 'Card name',
-      statusCard: 'blocking',
-      ticketId: 'DEV-07',
-      manager: 'username',
-    },
-  ];
+  availableBoards: Board[] = [];
 
   ngOnInit() {
     this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
       this.workspaces = data;
       if (this.workspaces.length > 0) {
-        this.selectedWorkspace = this.workspaces[0].displayName;
+        this.selectedWorkspace = this.workspaces[0].id;
+        this.loadBoardsAndCards();
       }
+    });
+  }
+
+  loadBoardsAndCards() {
+    if (!this.selectedWorkspace) {
+      return;
+    }
+    this._getService.getAllBoards({ organizations: this.selectedWorkspace })
+        .subscribe((boards: Board[]) => {
+          this.availableBoards = boards;
+          if (!boards || boards.length === 0) {
+            this.tickets = [];
+            return;
+          }
+          const cardsObservables = boards.map(board =>
+              this._getService.getAllCards({ boards: board.id })
+          );
+          forkJoin(cardsObservables).subscribe((cardsArrays: Card[][]) => {
+            const allCards = ([] as Card[]).concat(...cardsArrays);
+            this.tickets = allCards.map(card => ({
+              titre: card.name,
+              resume: card.desc,
+              statusCard: 'normal',
+              ticketId: card.id,
+              manager: card.idMembers && card.idMembers.length > 0 ? card.idMembers[0] : 'unknown',
+            }));
+          });
+        });
+  }
+
+
+  onWorkspaceChange() {
+    this.loadCards();
+  }
+
+  loadCards() {
+    if (!this.selectedWorkspace) {
+      return;
+    }
+    this._getService.getAllBoards({ organizations: this.selectedWorkspace })
+        .subscribe((boards: Board[]) => {
+          if (!boards || boards.length === 0) {
+            this.tickets = [];
+            return;
+          }
+          const cardsObservables = boards.map(board =>
+              this._getService.getAllCards({ boards: board.id })
+          );
+          forkJoin(cardsObservables).subscribe((cardsArrays: Card[][]) => {
+            const allCards = ([] as Card[]).concat(...cardsArrays);
+            this.tickets = allCards.map(card => ({
+              titre: card.name,
+              resume: card.desc,
+              statusCard: 'normal',
+              ticketId: card.id,
+              manager:
+                  card.idMembers && card.idMembers.length > 0
+                      ? card.idMembers[0]
+                      : 'unknown',
+            }));
+          });
+        });
+  }
+
+  onCreateTicket(newTicket: any) {
+    const payload = {
+      name: newTicket.titre,
+      desc: newTicket.resume,
+      idList: this.getIdListFromBoard(newTicket.board),
+    };
+
+    this._postService.postCard(payload).subscribe((card: Card) => {
+      const ticket = {
+        titre: card.name,
+        resume: card.desc,
+        statusCard: newTicket.statusCard,
+        ticketId: card.id,
+        manager: newTicket.manager,
+        board: newTicket.board,
+        workspace: newTicket.workspace,
+      };
+      this.tickets.push(ticket);
+      this.closeCreateModal();
     });
   }
 
@@ -101,10 +145,6 @@ export class AllCardsComponent {
     this.isEditMode = true;
   }
 
-  onValidEdit() {
-    this.isEditMode = false;
-  }
-
   openCreateModal() {
     this.isCreateMode = true;
     this.selectedTicket = null;
@@ -114,20 +154,7 @@ export class AllCardsComponent {
     this.isCreateMode = false;
   }
 
-  onCreateTicket(newTicket: any) {
-    this.tickets.push(newTicket);
-    this.closeCreateModal();
-  }
-
-  onDeleteTicket() {
-    if (this.selectedTicket) {
-      const index = this.tickets.findIndex(
-        ticket => ticket.ticketId === this.selectedTicket.ticketId
-      );
-      if (index > -1) {
-        this.tickets.splice(index, 1);
-      }
-      this.closeModal();
-    }
+  getIdListFromBoard(boardName: string): string {
+    return 'votre_idList_par_defaut';
   }
 }

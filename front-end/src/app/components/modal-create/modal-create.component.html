@@ -21,12 +21,13 @@
         <span class="option-label">Workspace</span>
         <div class="dropdown">
           <button class="option-value" (click)="toggleDropdown('workspace')">
-            ▲ {{ newTicket.workspace || 'T-DEV' }}
+            ▲ {{ getWorkspaceName() }}
           </button>
           <ul class="dropdown-menu" *ngIf="isDropdownOpen('workspace')">
-            <li (click)="newTicket.workspace = 'T-DEV'; closeDropdown('workspace')">T-DEV</li>
-            <li (click)="newTicket.workspace = 'Production'; closeDropdown('workspace')">Production</li>
-            <li (click)="newTicket.workspace = 'Autre'; closeDropdown('workspace')">Autre</li>
+            <li *ngFor="let workspace of workspaces"
+                (click)="newTicket.workspace = workspace.id; closeDropdown('workspace')">
+              {{ workspace.displayName }}
+            </li>
           </ul>
         </div>
       </div>
@@ -65,12 +66,13 @@
         <span class="option-label">Board</span>
         <div class="dropdown">
           <button class="option-value" (click)="toggleDropdown('board')">
-            ▲ {{ newTicket.board || 'Board name' }}
+            ▲ {{ getBoardName() }}
           </button>
           <ul class="dropdown-menu" *ngIf="isDropdownOpen('board')">
-            <li (click)="newTicket.board = 'Board name'; closeDropdown('board')">Board name</li>
-            <li (click)="newTicket.board = 'Board1'; closeDropdown('board')">Board1</li>
-            <li (click)="newTicket.board = 'Board2'; closeDropdown('board')">Board2</li>
+            <li *ngFor="let board of boards"
+                (click)="newTicket.board = board.id; closeDropdown('board')">
+              {{ board.name }}
+            </li>
           </ul>
         </div>
       </div>
