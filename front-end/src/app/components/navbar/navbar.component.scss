@@ -4,16 +4,9 @@
   background-color: var.$dark !important;
 }
 
-#littleMenu {
-  width: 60px;
-}
-
-#bigMenu {
-  width: 250px;
-}
-
 div {
-  transition: 0.3s ease-in-out;
+  width: 60px;
+  transition: width 0.3s ease-in-out;
   background-color: var.$dark;
   height: 100dvh;
   border-right: 1px solid var.$lighter-dark;
@@ -25,22 +18,48 @@ div {
 
   nav {
     margin-top: 5rem;
-
     display: flex;
     flex-direction: column;
     gap: 2rem;
     box-sizing: border-box;
 
     a {
-      padding: 0 1rem 0 1rem;
+      padding: 0 1rem;
       color: var.$white;
       text-decoration: none;
       display: flex;
       align-items: center;
-      flex-wrap: nowrap;
+
+      svg {
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+      }
 
       span {
         margin-left: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 0;
+        opacity: 0;
+        transition: max-width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      }
+
+      &:hover span {
+        color: var.$light-purple;
+      }
+    }
+  }
+}
+
+div.expanded {
+  width: 250px;
+
+  nav {
+    a {
+      span {
+        max-width: 200px;
+        opacity: 1;
       }
     }
   }
