@@ -18,7 +18,8 @@
     border: none;
     border-radius: var.$radius;
     padding: 10px 32px 10px 10px;
-    font-size: var.$p-size;
+    font-size: var.$h3-size;
+    font-weight: var.$semibold;
 
     &:hover {
       background: var.$light-dark-hover;
@@ -26,15 +27,8 @@
   }
 }
 
-@media screen and (min-width: 666px) {
-  #kanban-lists {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+#kanban-lists {
+  display: flex;
+  overflow-y: scroll;
 
-@media screen and (min-width: 922px) {
-  #kanban-lists {
-    grid-template-columns: repeat(3, 1fr);
-  }
 }

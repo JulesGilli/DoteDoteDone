@@ -1,16 +1,20 @@
 <div id="kanban-selectors">
   <div>
-    <select>
-      <option value="T-DEV">T-DEV</option>
-      <option value="B-DEV">B-DEV</option>
-      <option value="X-DEV">X-DEV</option>
+    <select class="workspace-select" [(ngModel)]="selectedWorkspace">
+      @for (workspace of workspaces; track workspace) {
+        <option [value]="workspace.displayName">
+          {{ workspace.displayName }}
+        </option>
+      }
     </select>
   </div>
   <div id="board-selector">
-    <select>
-      <option value="T-DEV">T-DEV</option>
-      <option value="B-DEV">B-DEV</option>
-      <option value="X-DEV">X-DEV</option>
+    <select class="board-select" [(ngModel)]="selectedBoard">
+      @for (board of boards; track board.name) {
+        <option [value]="board.name">
+          {{ board.name }}
+        </option>
+      }
     </select>
   </div>
 </div>
