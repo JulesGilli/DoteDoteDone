@@ -32,7 +32,7 @@ div {
 
       svg {
         flex-shrink: 0;
-        width: 24px;  
+        width: 24px;
         height: 24px;
       }
 
@@ -43,6 +43,10 @@ div {
         max-width: 0;
         opacity: 0;
         transition: max-width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      }
+
+      &:hover span {
+        color: var.$light-purple;
       }
     }
   }
