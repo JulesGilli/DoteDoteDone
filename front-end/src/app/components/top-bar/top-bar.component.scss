@@ -56,11 +56,15 @@
 }
 
 .user-icon-container .user-icon {
-  height: 32px;
+  height: 39px;
   cursor: pointer;
-  transition: opacity 0.3s ease;
+  transition: color 0.3s ease;
+  color: #D7D7EA;
 }
 
 .user-icon-container .user-icon:hover {
-  opacity: 0.8;
+  color: var.$light-purple;
 }
+
+
+
