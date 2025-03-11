@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../index';
 import { Observable } from 'rxjs';
-import { Board, Card, List, Workspace } from '../../../models';
+import { Board, Card, Label, List, Member, Workspace } from '../../../models';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,7 @@ export class GetService {
 
   getAllWorkspace(): Observable<Workspace[]> {
     return new Observable((observer) => {
-      this.getMemberId().subscribe((data: any) => {
+      this.getMemberIdByToken().subscribe((data: any) => {
         if (data) {
           const memberId = Object.values(data)[0];
           this.getAll('organizations', { members: memberId }).subscribe(
@@ -52,25 +52,42 @@ export class GetService {
   getAllCards(memberBoardOrListObject: Object): Observable<Card[]> {
     return this.getAll('cards', memberBoardOrListObject);
   }
+
+  getAllLabels(boards:Object):Observable<Label>{
+    return this.getAll('labels',boards);
+  }
+
   /*
   memberBoardOrListObject={
     members: {idMember}
     } || {
-    boards: {idBoard} 
+    boards: {idBoard}
     } || {
     lists:{idList}
     }
    */
-  getAll(typeQuest: String, fromWhatTable: Object): Observable<any> {
+  getAll(typeQuest: string | null, fromWhatTable: Object): Observable<any> {
     let uri = this.apiTrello;
-    uri += `/${Object.keys(fromWhatTable)[0]}/${Object.values(fromWhatTable)[0]}/${typeQuest}?`;
+    uri += `/${Object.keys(fromWhatTable)[0]}/${Object.values(fromWhatTable)[0]}`;
+    if (typeQuest) {
+      uri += `/${typeQuest}`;
+    }
+    uri+='?';
     uri += this._authService.getApiKeyTokenUrl();
     return this.http.get(uri, {
       responseType: 'json',
     });
   }
 
-  getMemberId(): Observable<Object> {
+  getAllMembersByBoard(boardId:Object){
+    return this.getAll('members',boardId)
+  }
+
+  getMemberIdByToken(): Observable<Member> {
     return this.getAll('member', { tokens: this._authService.getToken() });
+  }
+
+  getMemberById(membersId: string): Observable<Member> {
+    return this.getAll(null, { members: membersId });
   }
 }

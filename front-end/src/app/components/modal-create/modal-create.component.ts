@@ -1,19 +1,19 @@
-import {Component, Output, EventEmitter, inject, OnInit} from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import {NgIf} from '@angular/common';
-import {GetService} from '../../services';
-import {Board, Workspace} from '../../models';
+import { Component, Output, EventEmitter, inject, OnInit } from '@angular/core';
+import { GetService, PostService } from '../../services';
+import { Board, Card, Workspace } from '../../models';
+import {SharedModule} from '../../../shared.module';
 
 type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
 
 @Component({
   selector: 'app-modal-create',
   templateUrl: './modal-create.component.html',
-  imports: [FormsModule, NgIf],
+  imports: [SharedModule],
   styleUrls: ['./modal-create.component.scss']
 })
 export class ModalCreateComponent implements OnInit {
   private readonly _getService = inject(GetService);
+  private readonly _postService = inject(PostService);
 
   selectedWorkspace!: Workspace;
   workspaces: Workspace[] = [];
@@ -45,28 +45,46 @@ export class ModalCreateComponent implements OnInit {
   newTicket: any = {
     titre: '',
     resume: '',
-    workspace: 'T-DEV',
+    workspace: '',
     statusCard: 'normal',
     manager: 'Not assigned',
-    board: 'Board name'
+    board: '',
   };
 
   dropdowns: Record<DropdownOption, boolean> = {
     workspace: false,
     statusCard: false,
     manager: false,
-    board: false
+    board: false,
   };
 
   @Output() close = new EventEmitter<void>();
   @Output() create = new EventEmitter<any>();
 
-  closeModal(): void {
-    this.close.emit();
+  buttonCreateTicket() {
+    const payload = {
+      name: this.newTicket.titre,
+      desc: this.newTicket.resume,
+      // idList: this.getIdListFromBoard(newTicket.board),
+    };
+
+    this._postService.postCard(payload).subscribe((card: Card) => {
+      const ticket = {
+        titre: card.name,
+        resume: card.desc,
+        statusCard: this.newTicket.statusCard,
+        ticketId: card.id,
+        manager: this.newTicket.manager,
+        board: this.newTicket.board,
+        workspace: this.newTicket.workspace,
+      };
+      this.create.emit(ticket);
+      this.closeModal();
+    });
   }
 
-  createTicket(): void {
-    this.create.emit(this.newTicket);
+  closeModal(): void {
+    this.close.emit();
   }
 
   toggleDropdown(option: DropdownOption): void {

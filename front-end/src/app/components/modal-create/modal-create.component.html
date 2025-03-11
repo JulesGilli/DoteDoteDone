@@ -3,17 +3,8 @@
     <span class="close-btn" (click)="closeModal()">✖</span>
 
     <div class="modal-left">
-      <input
-        class="field title"
-        type="text"
-        [(ngModel)]="newTicket.titre"
-        placeholder="Card name"
-      />
-      <textarea
-        class="field resume"
-        [(ngModel)]="newTicket.resume"
-        placeholder="Task resume"
-      ></textarea>
+      <input class="field title" type="text" [(ngModel)]="newTicket.titre" placeholder="Card name" />
+      <textarea class="field resume" [(ngModel)]="newTicket.resume" placeholder="Task resume"></textarea>
     </div>
 
     <div class="modal-right">
@@ -57,7 +48,7 @@
       </div>
 
       <div class="modal-footer">
-        <button class="valid-btn" (click)="createTicket()" [disabled]="!newTicket.titre">
+        <button class="valid-btn" (click)="buttonCreateTicket()" [disabled]="!newTicket.titre">
           Create
         </button>
       </div>

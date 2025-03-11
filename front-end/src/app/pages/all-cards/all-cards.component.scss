@@ -2,14 +2,11 @@
 
 .all-cards-page {
   width: 100%;
-  min-height: 100vh;
   font-family: Arial, sans-serif;
-  padding: var.$spacing;
 }
 
 .top-bar {
   display: flex;
-  padding-top: 15px;
   align-items: center;
   justify-content: space-between;
   margin-bottom: var.$spacing;
@@ -40,8 +37,8 @@
   color: #fff;
   border: none;
   border-radius: 5px;
-  padding: 8px 24px;
-  margin: 15px;
+  padding: 6px 32px;
+  margin: 0 15px 0 0;
   cursor: pointer;
   transition:
     transform 0.2s ease,
@@ -58,7 +55,7 @@
 }
 
 .tickets-title {
-  margin: 13px;
+  margin: 0 0 0 15px;
   font-size: 20px;
   font-weight: 500;
 }

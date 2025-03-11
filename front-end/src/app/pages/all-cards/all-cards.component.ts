@@ -1,90 +1,74 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CardComponent } from '../../components/card/card.component';
-import { NgForOf, NgIf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ModalViewComponent } from '../../components/modal-view/modal-view.component';
-import { ModalEditComponent } from '../../components/modal-edit/modal-edit.component';
-import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
-import { Workspace } from '../../models';
+import { SharedModule } from '../../../shared.module';
+import { Workspace, Board, Card } from '../../models';
 import { GetService } from '../../services';
-import {SharedModule} from '../../../shared.module';
+import { forkJoin } from 'rxjs';
+import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
 
 @Component({
   selector: 'app-all-cards',
   templateUrl: './all-cards.component.html',
   standalone: true,
   imports: [
-    CardComponent,
-    FormsModule,
-    ModalViewComponent,
-    ModalEditComponent,
-    ModalCreateComponent,
     SharedModule,
+    CardComponent,
+    ModalCreateComponent,
   ],
   styleUrls: ['./all-cards.component.scss'],
 })
 export class AllCardsComponent implements OnInit {
-  _getService = inject(GetService);
-  selectedWorkspace!: string | undefined;
+  private _getService = inject(GetService);
+
+  selectedWorkspace!: Workspace;
   workspaces: Workspace[] = [];
+  boards: Board[] = [];
 
   selectedTicket: any = null;
 
   isEditMode: boolean = false;
   isCreateMode: boolean = false;
+  tickets: any[] = [];
 
-  tickets = [
-    {
-      titre: 'Card name',
-      statusCard: 'normal',
-      ticketId: 'DEV-01',
-      manager: 'username',
-    },
-    {
-      titre: 'Card name',
-      statusCard: 'normal',
-      ticketId: 'DEV-02',
-      manager: 'username',
-    },
-    {
-      titre: 'Card name',
-      statusCard: 'medium',
-      ticketId: 'DEV-03',
-      manager: 'username',
-    },
-    {
-      titre: 'Card name',
-      statusCard: 'critical',
-      ticketId: 'DEV-04',
-      manager: 'username',
-    },
-    {
-      titre: 'Card name',
-      statusCard: 'minor',
-      ticketId: 'DEV-05',
-      manager: 'username',
-    },
-    {
-      titre: 'Card name',
-      statusCard: 'minor',
-      ticketId: 'DEV-06',
-      manager: 'username',
-    },
-    {
-      titre: 'Card name',
-      statusCard: 'blocking',
-      ticketId: 'DEV-07',
-      manager: 'username',
-    },
-  ];
-
-  ngOnInit() {
+  ngOnInit(): void {
     this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
       this.workspaces = data;
       if (this.workspaces.length > 0) {
-        this.selectedWorkspace = this.workspaces[0].displayName;
+        this.selectedWorkspace = this.workspaces[0];
+        this.loadCards();
       }
     });
+  }
+
+  loadCards(): void {
+    if (!this.selectedWorkspace) {
+      return;
+    }
+    this._getService
+      .getAllBoards({ organizations: this.selectedWorkspace.id })
+      .subscribe((boards: Board[]) => {
+        if (!boards || boards.length === 0) {
+          this.tickets = [];
+          return;
+        }
+        this.boards = boards;
+        const cardsObservables = boards.map((board) =>
+          this._getService.getAllCards({ boards: board.id })
+        );
+        forkJoin(cardsObservables).subscribe((cardsArrays: Card[][]) => {
+          const allCards = ([] as Card[]).concat(...cardsArrays);
+          this.tickets = allCards.map((card) => ({
+            titre: card.name,
+            resume: card.desc,
+            statusCard: 'normal',
+            ticketId: card.id,
+            manager:
+              card.idMembers && card.idMembers.length > 0
+                ? card.idMembers[0]
+                : 'unknown',
+          }));
+        });
+      });
   }
 
   openModal(ticket: any) {
@@ -101,10 +85,6 @@ export class AllCardsComponent implements OnInit {
     this.isEditMode = true;
   }
 
-  onValidEdit() {
-    this.isEditMode = false;
-  }
-
   openCreateModal() {
     this.isCreateMode = true;
     this.selectedTicket = null;
@@ -112,22 +92,5 @@ export class AllCardsComponent implements OnInit {
 
   closeCreateModal() {
     this.isCreateMode = false;
-  }
-
-  onCreateTicket(newTicket: any) {
-    this.tickets.push(newTicket);
-    this.closeCreateModal();
-  }
-
-  onDeleteTicket() {
-    if (this.selectedTicket) {
-      const index = this.tickets.findIndex(
-        ticket => ticket.ticketId === this.selectedTicket.ticketId
-      );
-      if (index > -1) {
-        this.tickets.splice(index, 1);
-      }
-      this.closeModal();
-    }
   }
 }
