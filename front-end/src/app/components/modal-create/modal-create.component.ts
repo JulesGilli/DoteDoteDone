@@ -1,23 +1,26 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {NgIf} from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
 
 type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
 
 @Component({
   selector: 'app-modal-create',
   templateUrl: './modal-create.component.html',
-  imports: [FormsModule, NgIf],
+  imports: [FormsModule, NgIf, NgFor],
   styleUrls: ['./modal-create.component.scss']
 })
 export class ModalCreateComponent {
+  @Input() workspaces: any[] = [];
+  @Input() boards: any[] = [];
+
   newTicket: any = {
     titre: '',
     resume: '',
-    workspace: 'T-DEV',
+    workspace: '',
     statusCard: 'normal',
     manager: 'Not assigned',
-    board: 'Board name'
+    board: ''
   };
 
   dropdowns: Record<DropdownOption, boolean> = {
@@ -48,5 +51,15 @@ export class ModalCreateComponent {
 
   closeDropdown(option: DropdownOption): void {
     this.dropdowns[option] = false;
+  }
+
+  getWorkspaceName(): string {
+    const ws = this.workspaces.find(w => w.id === this.newTicket.workspace);
+    return ws ? ws.displayName : 'Sélectionnez un workspace';
+  }
+
+  getBoardName(): string {
+    const board = this.boards.find(b => b.id === this.newTicket.board);
+    return board ? board.name : 'Sélectionnez un board';
   }
 }
