@@ -29,11 +29,13 @@ div {
       text-decoration: none;
       display: flex;
       align-items: center;
+      transition: color 0.3s ease;
 
       svg {
         flex-shrink: 0;
         width: 24px;
         height: 24px;
+        transition: fill 0.3s ease, stroke 0.3s ease;
       }
 
       span {
@@ -42,10 +44,9 @@ div {
         overflow: hidden;
         max-width: 0;
         opacity: 0;
-        transition: max-width 0.3s ease-in-out, opacity 0.3s ease-in-out;
       }
 
-      &:hover span {
+      &:hover {
         color: var.$light-purple;
       }
     }
