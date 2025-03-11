@@ -23,7 +23,8 @@ app-root {
 app-navbar {
   height: 100vh;
 }
-.right-side{
+
+.right-side {
   height: 100vh;
   overflow: hidden;
 }
@@ -62,6 +63,8 @@ p {
 html {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
 select {
   background: var.$lighter-dark;
   color: var.$white;
