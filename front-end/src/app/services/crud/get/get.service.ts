@@ -83,7 +83,7 @@ export class GetService {
     return this.getAll('members',boardId)
   }
 
-  getMemberIdByToken(): Observable<Object> {
+  getMemberIdByToken(): Observable<Member> {
     return this.getAll('member', { tokens: this._authService.getToken() });
   }
 

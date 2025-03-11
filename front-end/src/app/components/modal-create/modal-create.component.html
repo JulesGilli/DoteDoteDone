@@ -3,17 +3,8 @@
     <span class="close-btn" (click)="closeModal()">✖</span>
 
     <div class="modal-left">
-      <input
-        class="field title"
-        type="text"
-        [(ngModel)]="newTicket.titre"
-        placeholder="Card name"
-      />
-      <textarea
-        class="field resume"
-        [(ngModel)]="newTicket.resume"
-        placeholder="Task resume"
-      ></textarea>
+      <input class="field title" type="text" [(ngModel)]="newTicket.titre" placeholder="Card name" />
+      <textarea class="field resume" [(ngModel)]="newTicket.resume" placeholder="Task resume"></textarea>
     </div>
 
     <div class="modal-right">
@@ -21,11 +12,10 @@
         <span class="option-label">Workspace</span>
         <div class="dropdown">
           <button class="option-value" (click)="toggleDropdown('workspace')">
-            ▲ {{ getWorkspaceName() }}
+            ▲ {{ selectedWorkspaceToggle.displayName }}
           </button>
           <ul class="dropdown-menu" *ngIf="isDropdownOpen('workspace')">
-            <li *ngFor="let workspace of workspaces"
-                (click)="newTicket.workspace = workspace.id; closeDropdown('workspace')">
+            <li *ngFor="let workspace of workspaces" (click)="changeWorkspace(workspace);">
               {{ workspace.displayName }}
             </li>
           </ul>
@@ -66,11 +56,10 @@
         <span class="option-label">Board</span>
         <div class="dropdown">
           <button class="option-value" (click)="toggleDropdown('board')">
-            ▲ {{ getBoardName() }}
+            ▲ {{ selectedBoardToggle.name }}
           </button>
           <ul class="dropdown-menu" *ngIf="isDropdownOpen('board')">
-            <li *ngFor="let board of boards"
-                (click)="newTicket.board = board.id; closeDropdown('board')">
+            <li *ngFor="let board of boardByWorkspace" (click)="changeBoard(board)">
               {{ board.name }}
             </li>
           </ul>
@@ -78,7 +67,7 @@
       </div>
 
       <div class="modal-footer">
-        <button class="valid-btn" (click)="createTicket()" [disabled]="!newTicket.titre">
+        <button class="valid-btn" (click)="buttonCreateTicket()" [disabled]="!newTicket.titre">
           Create
         </button>
       </div>
