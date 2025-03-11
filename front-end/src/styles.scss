@@ -55,6 +55,13 @@ p {
   font-size: var.$p-size;
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 select {
   background: var.$lighter-dark;
   color: var.$white;
