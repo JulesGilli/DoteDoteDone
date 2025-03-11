@@ -42,3 +42,15 @@ h3 {
 p {
   font-size: var.$p-size;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scrollbar-width: none;
+}
+
+html {
+  -ms-overflow-style: none;
+}
