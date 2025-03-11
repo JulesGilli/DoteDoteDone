@@ -49,6 +49,8 @@
 
   <app-modal-create
     *ngIf="isCreateMode"
+    [workspaces]="workspaces"
+    [selectedWorkspace]="selectedWorkspace"
     (close)="closeCreateModal()"
   ></app-modal-create>
 </div>
