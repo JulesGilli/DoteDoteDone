@@ -10,7 +10,7 @@ export const routes: Routes = [
   {
     path: 'workspace',
     loadChildren: () => import('./workspace').then((m) => m.workspaceRoutes),
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
   },
   {
     path: '**',

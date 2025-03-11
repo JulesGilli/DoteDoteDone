@@ -1,21 +1,46 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgIf, NgFor } from '@angular/common';
+import { Component, Output, EventEmitter, inject, OnInit } from '@angular/core';
 import { GetService, PostService } from '../../services';
 import { Board, Card, Workspace } from '../../models';
+import {SharedModule} from '../../../shared.module';
 
 type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
 
 @Component({
   selector: 'app-modal-create',
   templateUrl: './modal-create.component.html',
-  imports: [FormsModule, NgIf, NgFor],
-  styleUrls: ['./modal-create.component.scss'],
+  imports: [SharedModule],
+  styleUrls: ['./modal-create.component.scss']
 })
-export class ModalCreateComponent {
-  @Input() workspaces: Workspace[] = [];
-  @Input() boards: Board[] = [];
-  @Input() selectedWorkspace!: Workspace;
+export class ModalCreateComponent implements OnInit {
+  private readonly _getService = inject(GetService);
+  private readonly _postService = inject(PostService);
+
+  selectedWorkspace!: Workspace;
+  workspaces: Workspace[] = [];
+  boards: Board[] = [];
+  selectedBoard!: Board;
+
+  ngOnInit() {
+    this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
+      this.workspaces = data;
+      if (this.workspaces.length > 0) {
+        this.selectedWorkspace = this.workspaces[0];
+      }
+
+      this.updateBoards()
+    });
+  }
+
+  updateBoards() {
+    if (this.selectedWorkspace) {
+      this._getService.getAllBoards({organizations: this.selectedWorkspace.id}).subscribe((data: Board[]) => {
+        this.boards = data;
+        if (this.boards.length > 0) {
+          this.selectedBoard = this.boards[0];
+        }
+      });
+    }
+  }
 
   newTicket: any = {
     titre: '',
@@ -35,37 +60,6 @@ export class ModalCreateComponent {
 
   @Output() close = new EventEmitter<void>();
   @Output() create = new EventEmitter<any>();
-
-  private _postService = inject(PostService);
-
-  selectedWorkspaceToggle!: Workspace;
-
-  selectedBoardToggle!: Board;
-  boardByWorkspace!: Board[];
-
-  ngOnInit() {
-    this.selectedWorkspaceToggle = this.selectedWorkspace;
-    this.reloadBoards();
-  }
-  changeWorkspace(workspace: Workspace) {
-    this.newTicket.workspace = workspace.id;
-    this.selectedWorkspaceToggle = workspace;
-    this.reloadBoards();
-    this.closeDropdown('workspace');
-  }
-
-  reloadBoards() {
-    this.boardByWorkspace = this.boards.filter(
-      (b) => b.idOrganization === this.selectedWorkspaceToggle.id
-    );
-    this.selectedBoardToggle = this.boardByWorkspace[0];
-  }
-
-  changeBoard(board: Board) {
-    this.newTicket.board = board.id;
-    this.selectedBoardToggle = board;
-    this.closeDropdown('board');
-  }
 
   buttonCreateTicket() {
     const payload = {

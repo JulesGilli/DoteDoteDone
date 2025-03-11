@@ -1,4 +1,4 @@
-<div [class.expanded]="isExpanded">
+<div [class.expanded]="isExpanded" class="menu-container">
   <button (click)="toggleSidenav()">
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -13,6 +13,7 @@
     </svg>
   </button>
   <nav>
+    <div class="button-menu-container">
     <a href="/workspace/kanban">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +84,7 @@
       </svg>
       <span>All tickets</span>
     </a>
-
+    </div>
     <a (click)="logout()" style="cursor: pointer;">
       <svg
         viewBox="0 0 24 24"

@@ -1,30 +1,23 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CardComponent } from '../../components/card/card.component';
-import { NgForOf, NgIf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ModalViewComponent } from '../../components/modal-view/modal-view.component';
-import { ModalEditComponent } from '../../components/modal-edit/modal-edit.component';
-import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
+import { SharedModule } from '../../../shared.module';
 import { Workspace, Board, Card } from '../../models';
-import { GetService, PostService } from '../../services';
+import { GetService } from '../../services';
 import { forkJoin } from 'rxjs';
+import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
 
 @Component({
   selector: 'app-all-cards',
   templateUrl: './all-cards.component.html',
   standalone: true,
   imports: [
+    SharedModule,
     CardComponent,
-    NgForOf,
-    NgIf,
-    FormsModule,
-    //ModalViewComponent,
-    //ModalEditComponent,
     ModalCreateComponent,
   ],
   styleUrls: ['./all-cards.component.scss'],
 })
-export class AllCardsComponent {
+export class AllCardsComponent implements OnInit {
   private _getService = inject(GetService);
 
   selectedWorkspace!: Workspace;
@@ -32,11 +25,12 @@ export class AllCardsComponent {
   boards: Board[] = [];
 
   selectedTicket: any = null;
+
   isEditMode: boolean = false;
   isCreateMode: boolean = false;
   tickets: any[] = [];
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
       this.workspaces = data;
       if (this.workspaces.length > 0) {
@@ -46,7 +40,7 @@ export class AllCardsComponent {
     });
   }
 
-  loadCards() {
+  loadCards(): void {
     if (!this.selectedWorkspace) {
       return;
     }

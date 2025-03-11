@@ -9,61 +9,42 @@
 
     <div class="modal-right">
       <div class="option">
-        <span class="option-label">Workspace</span>
-        <div class="dropdown">
-          <button class="option-value" (click)="toggleDropdown('workspace')">
-            ▲ {{ selectedWorkspaceToggle.displayName }}
-          </button>
-          <ul class="dropdown-menu" *ngIf="isDropdownOpen('workspace')">
-            <li *ngFor="let workspace of workspaces" (click)="changeWorkspace(workspace);">
+        <label class="option-label">Workspace</label>
+        <select class="workspace-select" [(ngModel)]="selectedWorkspace" (change)="updateBoards()">
+          @for (workspace of workspaces; track workspace) {
+            <option [ngValue]="workspace">
               {{ workspace.displayName }}
-            </li>
-          </ul>
-        </div>
+            </option>
+          }
+        </select>
       </div>
-
       <div class="option">
-        <span class="option-label">Priorité</span>
-        <div class="dropdown">
-          <button class="option-value" (click)="toggleDropdown('statusCard')">
-            ▲ {{ newTicket.statusCard || 'normal' }}
-          </button>
-          <ul class="dropdown-menu" *ngIf="isDropdownOpen('statusCard')">
-            <li (click)="newTicket.statusCard = 'normal'; closeDropdown('statusCard')">Normal</li>
-            <li (click)="newTicket.statusCard = 'minor'; closeDropdown('statusCard')">Minor</li>
-            <li (click)="newTicket.statusCard = 'medium'; closeDropdown('statusCard')">Medium</li>
-            <li (click)="newTicket.statusCard = 'critical'; closeDropdown('statusCard')">Critical</li>
-            <li (click)="newTicket.statusCard = 'blocking'; closeDropdown('statusCard')">Blocking</li>
-          </ul>
-        </div>
+        <label class="option-label">Priorité</label>
+        <select [(ngModel)]="newTicket.statusCard">
+          <option value="normal">Normal</option>
+          <option value="minor">Minor</option>
+          <option value="medium">Medium</option>
+          <option value="critical">Critical</option>
+          <option value="blocking">Blocking</option>
+        </select>
       </div>
-
       <div class="option">
-        <span class="option-label">Manager</span>
-        <div class="dropdown">
-          <button class="option-value" (click)="toggleDropdown('manager')">
-            ▲ {{ newTicket.manager || 'Not assigned' }}
-          </button>
-          <ul class="dropdown-menu" *ngIf="isDropdownOpen('manager')">
-            <li (click)="newTicket.manager = 'Not assigned'; closeDropdown('manager')">Not assigned</li>
-            <li (click)="newTicket.manager = 'Manager1'; closeDropdown('manager')">Manager1</li>
-            <li (click)="newTicket.manager = 'Manager2'; closeDropdown('manager')">Manager2</li>
-          </ul>
-        </div>
+        <label class="option-label">Manager</label>
+        <select [(ngModel)]="newTicket.manager">
+          <option value="Not assigned">Not assigned</option>
+          <option value="Manager1">Manager1</option>
+          <option value="Manager2">Manager2</option>
+        </select>
       </div>
-
       <div class="option">
-        <span class="option-label">Board</span>
-        <div class="dropdown">
-          <button class="option-value" (click)="toggleDropdown('board')">
-            ▲ {{ selectedBoardToggle.name }}
-          </button>
-          <ul class="dropdown-menu" *ngIf="isDropdownOpen('board')">
-            <li *ngFor="let board of boardByWorkspace" (click)="changeBoard(board)">
+        <label class="option-label">Board</label>
+        <select class="board-select" [(ngModel)]="selectedBoard">
+          @for (board of boards; track board) {
+            <option [value]="board">
               {{ board.name }}
-            </li>
-          </ul>
-        </div>
+            </option>
+          }
+        </select>
       </div>
 
       <div class="modal-footer">
