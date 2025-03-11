@@ -29,7 +29,8 @@ export class PostService {
     return this.postGeneric('lists', bodyList);
   }
 
-  postCard(bodyCard: Object): Observable<Card> {
-    return this.postGeneric('cards', bodyCard);
+  postCard(cardData: any): Observable<Card> {
+    const uri = `${this.apiTrello}/cards?${this._auth.getApiKeyTokenUrl()}`;
+    return this._http.post<Card>(uri, cardData);
   }
 }

@@ -1,22 +1,22 @@
 <div class="all-cards-page">
   <div class="top-bar">
     <div class="select-container">
-      <select class="workspace-select" [(ngModel)]="selectedWorkspace">
-        @for (workspace of workspaces; track workspace.displayName) {
-          <option [value]="workspace.displayName">
-            {{ workspace.displayName }}
-          </option>
-        }
+      <select
+        class="workspace-select"
+        [(ngModel)]="selectedWorkspace"
+        (ngModelChange)="onWorkspaceChange()"
+      >
+        <option *ngFor="let workspace of workspaces" [value]="workspace.id">
+          {{ workspace.displayName }}
+        </option>
       </select>
     </div>
-  </div>
-
-  <div class="ticket-header">
-    <h2 class="tickets-title">Tickets {{ tickets.length }}</h2>
     <button class="new-tickets-btn" (click)="openCreateModal()">
       New ticket
     </button>
   </div>
+
+  <h2 class="tickets-title">Tickets {{ tickets.length }}</h2>
 
   <table class="tickets-table">
     <thead>
@@ -43,12 +43,8 @@
     </tbody>
   </table>
 
-  <app-modal-view
-    *ngIf="selectedTicket && !isEditMode"
-    [ticket]="selectedTicket"
-    (close)="closeModal()"
-    (edit)="switchToEdit()"
-  ></app-modal-view>
+
+  <!--
   <app-modal-view
     *ngIf="selectedTicket && !isEditMode"
     [ticket]="selectedTicket"
@@ -56,15 +52,20 @@
     (edit)="switchToEdit()"
     (delete)="onDeleteTicket()"
   ></app-modal-view>
+
   <app-modal-edit
     *ngIf="selectedTicket && isEditMode"
     [ticket]="selectedTicket"
     (close)="closeModal()"
     (valid)="onValidEdit()"
   ></app-modal-edit>
+-->
   <app-modal-create
     *ngIf="isCreateMode"
+    [workspaces]="workspaces"
+    [boards]="availableBoards"
     (close)="closeCreateModal()"
     (create)="onCreateTicket($event)"
   ></app-modal-create>
+
 </div>
