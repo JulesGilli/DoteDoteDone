@@ -1,5 +1,6 @@
 <div id="kanban-selectors">
   <div>
+    <label for="">Workspace</label>
     <select class="workspace-select" [(ngModel)]="selectedWorkspace" (change)="updateBoards()">
       @for (workspace of workspaces; track workspace) {
         <option [ngValue]="workspace">
@@ -9,6 +10,7 @@
     </select>
   </div>
   <div id="board-selector">
+    <label for="">Board</label>
     <select class="board-select" [(ngModel)]="selectedBoard">
       @for (board of boards; track board) {
         <option [value]="board">

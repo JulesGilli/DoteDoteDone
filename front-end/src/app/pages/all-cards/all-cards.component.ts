@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { CardComponent } from '../../components/card/card.component';
 import { NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +7,7 @@ import { ModalEditComponent } from '../../components/modal-edit/modal-edit.compo
 import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
 import { Workspace } from '../../models';
 import { GetService } from '../../services';
+import {SharedModule} from '../../../shared.module';
 
 @Component({
   selector: 'app-all-cards',
@@ -14,16 +15,15 @@ import { GetService } from '../../services';
   standalone: true,
   imports: [
     CardComponent,
-    NgForOf,
-    NgIf,
     FormsModule,
     ModalViewComponent,
     ModalEditComponent,
     ModalCreateComponent,
+    SharedModule,
   ],
   styleUrls: ['./all-cards.component.scss'],
 })
-export class AllCardsComponent {
+export class AllCardsComponent implements OnInit {
   _getService = inject(GetService);
   selectedWorkspace!: string | undefined;
   workspaces: Workspace[] = [];
