@@ -4,9 +4,9 @@
       <select
         class="workspace-select"
         [(ngModel)]="selectedWorkspace"
-        (ngModelChange)="onWorkspaceChange()"
+        (ngModelChange)="loadCards()"
       >
-        <option *ngFor="let workspace of workspaces" [value]="workspace.id">
+        <option *ngFor="let workspace of workspaces" [ngValue]="workspace">
           {{ workspace.displayName }}
         </option>
       </select>
@@ -49,9 +49,6 @@
 
   <app-modal-create
     *ngIf="isCreateMode"
-    [workspaces]="workspaces"
-    [boards]="availableBoards"
     (close)="closeCreateModal()"
-    (create)="onCreateTicket($event)"
   ></app-modal-create>
 </div>
