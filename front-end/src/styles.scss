@@ -13,7 +13,20 @@ body {
 
 html,
 body {
-  height: 100dvh;
+  height: 100vh;
+}
+app-root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+app-navbar {
+  height: 100vh;
+}
+
+.right-side {
+  height: 100vh;
+  overflow: hidden;
 }
 
 body {
@@ -50,6 +63,8 @@ p {
 html {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
 select {
   background: var.$lighter-dark;
   color: var.$white;
