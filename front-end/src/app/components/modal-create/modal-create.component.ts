@@ -1,7 +1,14 @@
-import { Component, Output, EventEmitter, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  Output,
+  EventEmitter,
+  inject,
+  OnInit,
+  Input,
+} from '@angular/core';
 import { GetService, PostService } from '../../services';
-import { Board, Card, Workspace } from '../../models';
-import {SharedModule} from '../../../shared.module';
+import { Board, Card, Member, Workspace } from '../../models';
+import { SharedModule } from '../../../shared.module';
 
 type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
 
@@ -9,37 +16,58 @@ type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
   selector: 'app-modal-create',
   templateUrl: './modal-create.component.html',
   imports: [SharedModule],
-  styleUrls: ['./modal-create.component.scss']
+  styleUrls: ['./modal-create.component.scss'],
 })
 export class ModalCreateComponent implements OnInit {
+  @Input() selectedWorkspaceFromMain!: Workspace;
+  @Input() allWorkspacesFromMain: Workspace[] = [];
+  @Input() allBoardsFromMain: Record<string, Board[]> = {};
+
   private readonly _getService = inject(GetService);
   private readonly _postService = inject(PostService);
 
   selectedWorkspace!: Workspace;
   workspaces: Workspace[] = [];
+
+  allBoards: Record<string, Board[]> = {};
   boards: Board[] = [];
   selectedBoard!: Board;
 
-  ngOnInit() {
-    this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
-      this.workspaces = data;
-      if (this.workspaces.length > 0) {
-        this.selectedWorkspace = this.workspaces[0];
-      }
+  allMembers!:Record<string,Member[]>;
+  selectedMember!:Member;
+  members!:Member[];
 
-      this.updateBoards()
-    });
+  ngOnInit() {
+    if (this.allWorkspacesFromMain) {
+      if (this.allWorkspacesFromMain.length !== 0) {
+        this.workspaces = this.allWorkspacesFromMain;
+        this.selectedWorkspace = this.selectedWorkspaceFromMain;
+        if (this.allBoardsFromMain) {
+          this.boards = this.allBoardsFromMain[this.selectedWorkspace.id];
+          this.allBoards = this.allBoardsFromMain;
+        }
+      }
+    }
+    this.updateBoards();
   }
 
   updateBoards() {
-    if (this.selectedWorkspace) {
-      this._getService.getAllBoards({organizations: this.selectedWorkspace.id}).subscribe((data: Board[]) => {
+    if (this.selectedWorkspace && this.allBoards[this.selectedWorkspace.id]) {
+      this.boards = this.allBoards[this.selectedWorkspace.id];
+      if (this.boards.length !== 0) {
+        this.selectedBoard = this.boards[0];
+      }
+      return;
+    }
+    this._getService
+      .getAllBoards({ organizations: this.selectedWorkspace.id })
+      .subscribe((data: Board[]) => {
+        this.allBoards[this.selectedWorkspace.id] = data;
         this.boards = data;
         if (this.boards.length > 0) {
           this.selectedBoard = this.boards[0];
         }
       });
-    }
   }
 
   newTicket: any = {
@@ -65,7 +93,7 @@ export class ModalCreateComponent implements OnInit {
     const payload = {
       name: this.newTicket.titre,
       desc: this.newTicket.resume,
-      // idList: this.getIdListFromBoard(newTicket.board),
+      // idList: this.template.getDefaultIdListFromBoard(newTicket.board),
     };
 
     this._postService.postCard(payload).subscribe((card: Card) => {
