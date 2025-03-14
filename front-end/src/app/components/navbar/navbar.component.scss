@@ -25,40 +25,46 @@
     height: 100%;
     box-sizing: border-box;
 
-  .button-menu-container{
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-
+    .button-menu-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
     }
-      a {
-        padding: 0 1rem;
-        color: var.$white;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
 
-        svg {
-          flex-shrink: 0;
-          width: 24px;
-          height: 24px;
-        }
+    a {
+      padding: 0 1rem;
+      color: var.$white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      svg {
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+        transition: color 0.3s ease-in-out;
+      }
 
+      span {
+        margin-left: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 0;
+        opacity: 0;
+        transition: max-width 0.3s ease-in-out, opacity 0.3s ease-in-out, color 0.3s ease-in-out;
+      }
+
+      &:hover {
         span {
-          margin-left: 1rem;
-          white-space: nowrap;
-          overflow: hidden;
-          max-width: 0;
-          opacity: 0;
-          transition: max-width 0.3s ease-in-out, opacity 0.3s ease-in-out;
-        }
-
-        &:hover span {
           color: var.$light-purple;
         }
       }
     }
   }
+}
+
+.menu-container nav a:hover svg {
+  color: var.$light-purple;
+}
 
 .menu-container.expanded {
   width: 250px;
