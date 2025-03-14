@@ -49,7 +49,7 @@
   margin-bottom: 10%;
   opacity: 0;
   animation: fadeIn 1s ease forwards;
-  animation-delay: 2s;
+  animation-delay: 1.5s;
 }
 
 .login-button {
@@ -63,7 +63,7 @@
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
   animation: fadeIn 1s ease forwards;
-  animation-delay: 2.5s;
+  animation-delay: 1.8s;
 
   &:hover {
     background-color: #7e65c1;
