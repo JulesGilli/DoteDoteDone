@@ -1,20 +1,21 @@
-<div class="user-page-container">
+<div [@fadeInAnimation] class="user-page-container">
   <div *ngIf="loading" class="loading">
     Chargement en cours...
   </div>
-
   <div *ngIf="!loading && error" class="error">
     <p>Une erreur est survenue : {{ error | json }}</p>
   </div>
+  <div class="content-user-page">
 
-  <div *ngIf="!loading && userInfo">
-    <h1>Bienvenue, {{ userInfo.fullName }}</h1>
-    <div class="user-info-cards">
-      <div class="info-card">
-        <p><strong>Nom d'utilisateur :</strong> {{ userInfo.username }}</p>
-      </div>
-      <div class="info-card">
-        <p><strong>ID :</strong> {{ userInfo.id }}</p>
+    <div *ngIf="!loading && userInfo">
+      <h1>Bienvenue, {{ userInfo.fullName }}</h1>
+      <div class="user-info-cards">
+        <div class="info-card">
+          <p><strong>Nom d'utilisateur :</strong> {{ userInfo.username }}</p>
+        </div>
+        <div class="info-card">
+          <p><strong>ID :</strong> {{ userInfo.id }}</p>
+        </div>
       </div>
     </div>
   </div>
