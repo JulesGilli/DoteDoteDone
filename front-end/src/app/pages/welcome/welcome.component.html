@@ -1,0 +1,8 @@
+<div class="welcome-container">
+  <img
+    [src]="userInfo?.avatarUrl || '/images/default-profile.png'"
+    alt="Profile Image"
+    class="profile-image"
+  />
+  <h2>Bienvenue, {{ userInfo?.fullName }} !</h2>
+</div>
