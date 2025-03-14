@@ -35,3 +35,17 @@ p {
   font-size: 16px;
   margin: 5px 0;
 }
+
+.content-user-page {
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
