@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { CardComponent } from '../../components/card/card.component';
 import { SharedModule } from '../../../shared.module';
 import { Workspace, Board, Card, Member } from '../../models';
@@ -12,12 +13,22 @@ import { ModalCreateComponent } from '../../components/modal-create/modal-create
   standalone: true,
   imports: [SharedModule, CardComponent, ModalCreateComponent],
   styleUrls: ['./all-cards.component.scss'],
+  animations: [
+    trigger('fadeInAnimation', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('1s ease-in-out', style({ opacity: 1 }))
+      ])
+    ])
+  ]
 })
 export class AllCardsComponent implements OnInit {
   private _getService = inject(GetService);
 
   isEditMode: boolean = false;
   isCreateMode: boolean = false;
+  loading: boolean = true;
+  error: any = null;
 
   selectedWorkspace!: Workspace;
   workspaces: Workspace[] = [];
@@ -30,11 +41,21 @@ export class AllCardsComponent implements OnInit {
   membersFromTicket: Record<string, string> = {};
 
   ngOnInit(): void {
-    this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
-      this.workspaces = data;
-      if (this.workspaces.length > 0) {
-        this.selectedWorkspace = this.workspaces[0];
-        this.loadCards();
+    this.loading = true;
+    this._getService.getAllWorkspace().subscribe({
+      next: (data: Workspace[]) => {
+        this.workspaces = data;
+        if (this.workspaces.length > 0) {
+          this.selectedWorkspace = this.workspaces[0];
+          this.loadCards();
+        } else {
+          this.loading = false;
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = err;
+        this.loading = false;
       }
     });
   }
@@ -43,21 +64,27 @@ export class AllCardsComponent implements OnInit {
     if (!this.selectedWorkspace) {
       return;
     }
+    this.loading = true;
     if (!this.boards[this.selectedWorkspace.id]) {
-      this._getService
-        .getAllBoards({ organizations: this.selectedWorkspace.id })
-        .subscribe((boards: Board[]) => {
+      this._getService.getAllBoards({ organizations: this.selectedWorkspace.id }).subscribe({
+        next: (boards: Board[]) => {
           if (!boards || boards.length === 0) {
+            this.loading = false;
             return;
           }
           this.boards[this.selectedWorkspace.id] = boards;
           console.log(boards);
           this.loadCardsFromBoard(boards);
-        });
+        },
+        error: (err) => {
+          console.error(err);
+          this.error = err;
+          this.loading = false;
+        }
+      });
     } else {
-      this.tickets = this.formatOfTickets(
-        this.allTickets[this.selectedWorkspace.id]
-      );
+      this.tickets = this.formatOfTickets(this.allTickets[this.selectedWorkspace.id]);
+      this.loading = false;
     }
   }
 
@@ -65,11 +92,19 @@ export class AllCardsComponent implements OnInit {
     const cardsObservables = boards.map((board) =>
       this._getService.getAllCards({ boards: board.id })
     );
-    forkJoin(cardsObservables).subscribe((cardsArrays: Card[][]) => {
-      const allCards = ([] as Card[]).concat(...cardsArrays);
-      this.allTickets[this.selectedWorkspace.id] = allCards;
-      this.tickets = this.formatOfTickets(allCards);
-      console.log(allCards);
+    forkJoin(cardsObservables).subscribe({
+      next: (cardsArrays: Card[][]) => {
+        const allCards = ([] as Card[]).concat(...cardsArrays);
+        this.allTickets[this.selectedWorkspace.id] = allCards;
+        this.tickets = this.formatOfTickets(allCards);
+        console.log(allCards);
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = err;
+        this.loading = false;
+      }
     });
   }
 
@@ -95,7 +130,6 @@ export class AllCardsComponent implements OnInit {
 
       return ticket;
     });
-
     return tickets;
   }
 
