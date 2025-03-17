@@ -3,11 +3,10 @@ import { CardListComponent } from '../card-list/card-list.component';
 import {Card, List} from '../../models';
 import {UtilsService} from '../../services/utils/utils.service';
 import {SharedModule} from '../../../shared.module';
-import {ModalCreateComponent} from '../modal-create/modal-create.component';
 
 @Component({
   selector: 'app-list',
-  imports: [CardListComponent, SharedModule, ModalCreateComponent],
+  imports: [CardListComponent, SharedModule],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',
 })
