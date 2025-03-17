@@ -13,7 +13,7 @@
         <select class="workspace-select" [(ngModel)]="selectedWorkspace" (change)="updateBoards()">
           @for (workspace of workspaces; track workspace) {
             <option [ngValue]="workspace">
-              {{ workspace.displayName }}
+              {{ workspace.displayName || "No workspace"}}
             </option>
           }
         </select>
@@ -41,7 +41,7 @@
         <select class="board-select" [(ngModel)]="selectedBoard">
           @for (board of boards; track board) {
             <option [value]="board">
-              {{ board.name }}
+              {{ board.name || "No boards for this workspace" }}
             </option>
           }
         </select>
