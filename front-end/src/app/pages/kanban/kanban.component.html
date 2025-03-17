@@ -1,27 +1,31 @@
 <div id="kanban-selectors">
   <div>
-    <label for="">Workspace</label>
-    <select class="workspace-select" [(ngModel)]="selectedWorkspace" (change)="updateBoards()">
-      @for (workspace of workspaces; track workspace) {
+    <label>Workspace</label>
+    <select class="workspace-select"
+            [ngModel]="_utilsService.selectedWorkspace()"
+            (ngModelChange)="_utilsService.setWorkspace($event)">
+      @for (workspace of _utilsService.workspaces(); track workspace) {
         <option [ngValue]="workspace">
           {{ workspace.displayName }}
         </option>
       }
     </select>
   </div>
+
   <div id="board-selector">
-    <label for="">Board</label>
-    <select class="board-select" [(ngModel)]="selectedBoard">
-      @for (board of boards; track board) {
-        <option [value]="board">
+    <label>Board</label>
+    <select class="board-select"
+            [ngModel]="_utilsService.selectedBoard()"
+            (ngModelChange)="_utilsService.setBoard($event)">
+      @for (board of _utilsService.boards(); track board) {
+        <option [ngValue]="board">
           {{ board.name }}
         </option>
       }
     </select>
   </div>
 </div>
+
 <div id="kanban-lists">
-  <app-list></app-list>
-  <app-list></app-list>
-  <app-list></app-list>
+  <app-list *ngFor="let list of _utilsService.lists()" [list]="list"></app-list>
 </div>

@@ -1,16 +1,13 @@
 <div class="all-cards-page">
-  <div class="top-bar">
-    <div class="select-container">
-      <select
-        class="workspace-select"
-        [(ngModel)]="selectedWorkspace"
-        (ngModelChange)="loadCards()"
-      >
-        <option *ngFor="let workspace of workspaces" [ngValue]="workspace">
-          {{ workspace.displayName }}
-        </option>
-      </select>
-    </div>
+  <div id="all-cards-selector">
+    <label>Workspace</label>
+    <select class="workspace-select"
+            [(ngModel)]="selectedWorkspace"
+            (ngModelChange)="loadCards()">
+      <option *ngFor="let workspace of workspaces" [ngValue]="workspace">
+        {{ workspace.displayName }}
+      </option>
+    </select>
   </div>
 
   <div class="ticket-header">

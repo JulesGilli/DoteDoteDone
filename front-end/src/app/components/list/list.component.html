@@ -1,8 +1,10 @@
 <div>
-  <h2>To do</h2>
-  <app-card-list></app-card-list>
-  <app-card-list></app-card-list>
-  <app-card-list></app-card-list>
-  <app-card-list></app-card-list>
-  <button>+</button>
+  <h2>{{ list.name }}</h2>
+    <app-card-list *ngFor="let card of getCardsForList()" [card]="card"></app-card-list>
+  <button (click)="openCreateModal()">+</button>
 </div>
+
+<!--<app-modal-create-->
+<!--  *ngIf="openCreateModal"-->
+<!--  (close)="closeCreateModal()"-->
+<!--&gt;</app-modal-create>-->
