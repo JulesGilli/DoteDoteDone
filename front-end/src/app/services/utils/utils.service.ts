@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Board, List, Workspace } from '../../models';
+import { Board, Card, List, Workspace } from '../../models';
 import { GetService } from '../crud/get/get.service';
 
 @Injectable({
@@ -15,6 +15,8 @@ export class UtilsService {
   selectedBoard = signal<Board | null>(null);
 
   lists = signal<List[]>([]);
+
+  tickets = signal<Card[]>([]);
 
   public loadWorkspaces(): void {
     this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
@@ -43,13 +45,17 @@ export class UtilsService {
 
   public setBoard(board: Board) {
     this.selectedBoard.set(board);
-    this.loadLists();
+    this.loadListsWithCards();
   }
 
-  public loadLists(): void {
+  public loadListsWithCards(): void {
     if (this.selectedBoard()) {
-      this._getService.getAllLists({ boards: this.selectedBoard()!.id }).subscribe((data: List[]) => {
-        this.lists.set(data);
+      this._getService.getAllLists({ boards: this.selectedBoard()!.id }).subscribe((lists: List[]) => {
+        this.lists.set(lists);
+
+        this._getService.getAllCards({ boards: this.selectedBoard()!.id }).subscribe((cards: Card[]) => {
+          this.tickets.set(cards);
+        });
       });
     }
   }

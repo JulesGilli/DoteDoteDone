@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ListComponent } from '../../components/list/list.component';
 import { SharedModule } from '../../../shared.module';
 import { UtilsService } from '../../services/utils/utils.service';
+import {ModalCreateComponent} from '../../components/modal-create/modal-create.component';
 
 @Component({
   selector: 'app-kanban',

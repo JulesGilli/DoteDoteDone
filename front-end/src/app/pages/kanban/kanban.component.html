@@ -27,7 +27,5 @@
 </div>
 
 <div id="kanban-lists">
-  <app-list></app-list>
-  <app-list></app-list>
-  <app-list></app-list>
+  <app-list *ngFor="let list of _utilsService.lists()" [list]="list"></app-list>
 </div>
