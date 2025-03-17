@@ -70,5 +70,8 @@
 
     <app-modal-create *ngIf="isCreateMode" [selectedWorkspaceFromMain]="selectedWorkspace"
                       [allWorkspacesFromMain]="workspaces" [allBoardsFromMain]="boards" (close)="closeCreateModal()"></app-modal-create>
+
+    <app-modal-edit *ngIf="isEditMode" [ticket]="selectedTicket" (close)="closeModal()" (valid)="updateTicket()"></app-modal-edit>
+
   </div>
 </div>

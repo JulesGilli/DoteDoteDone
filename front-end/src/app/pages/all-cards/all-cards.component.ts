@@ -3,15 +3,16 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { CardComponent } from '../../components/card/card.component';
 import { SharedModule } from '../../../shared.module';
 import { Workspace, Board, Card, Member } from '../../models';
-import { GetService } from '../../services';
+import { GetService, PostService } from '../../services';
 import { forkJoin, lastValueFrom } from 'rxjs';
 import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
+import {ModalEditComponent} from '../../components/modal-edit/modal-edit.component';
 
 @Component({
   selector: 'app-all-cards',
   templateUrl: './all-cards.component.html',
   standalone: true,
-  imports: [SharedModule, CardComponent, ModalCreateComponent],
+  imports: [SharedModule, CardComponent, ModalCreateComponent, ModalEditComponent],
   styleUrls: ['./all-cards.component.scss'],
   animations: [
     trigger('fadeInAnimation', [
@@ -24,6 +25,7 @@ import { ModalCreateComponent } from '../../components/modal-create/modal-create
 })
 export class AllCardsComponent implements OnInit {
   private _getService = inject(GetService);
+  private _postService = inject(PostService);
 
   isEditMode: boolean = false;
   isCreateMode: boolean = false;
@@ -145,17 +147,13 @@ export class AllCardsComponent implements OnInit {
   }
 
   openModal(ticket: any) {
-    this.selectedTicket = ticket;
-    this.isEditMode = false;
+    this.selectedTicket = { ...ticket };
+    this.isEditMode = true;
   }
 
   closeModal() {
     this.selectedTicket = null;
     this.isEditMode = false;
-  }
-
-  switchToEdit() {
-    this.isEditMode = true;
   }
 
   openCreateModal() {
@@ -166,4 +164,25 @@ export class AllCardsComponent implements OnInit {
   closeCreateModal() {
     this.isCreateMode = false;
   }
+
+  updateTicket(): void {
+    this._postService.updateCard(this.selectedTicket.ticketId, {
+      name: this.selectedTicket.titre,
+      desc: this.selectedTicket.resume,
+    }).subscribe({
+      next: (updatedCard) => {
+        console.log('Ticket mis à jour', updatedCard);
+        const index = this.tickets.findIndex(ticket => ticket.ticketId === updatedCard.id);
+        if (index > -1) {
+          this.tickets[index] = {
+            ...this.tickets[index],
+            titre: updatedCard.name,
+            resume: updatedCard.desc,
+          };
+        }
+      },
+    });
+    this.closeModal();
+  }
+
 }
