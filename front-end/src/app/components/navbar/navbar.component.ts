@@ -1,24 +1,23 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services';
+import { SharedModule } from '../../../shared.module';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [SharedModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
+  private readonly _authService = inject(AuthService);
   isExpanded = false;
-
-  constructor(private authService: AuthService) {}
 
   toggleSidenav() {
     this.isExpanded = !this.isExpanded;
   }
 
   logout(): void {
-    this.authService.logout();
+    this._authService.logout();
   }
 }

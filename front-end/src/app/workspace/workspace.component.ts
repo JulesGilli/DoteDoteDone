@@ -20,13 +20,25 @@ import { TopBarComponent } from '../components/top-bar/top-bar.component';
   styles: [
     `
       .workspace-layout {
-        display: flex;
         width: 100vw;
+        height: 100vh;
       }
+
       .right-side {
         flex: 1;
         display: flex;
         flex-direction: column;
+      }
+
+      .app-top-bar {
+        position: relative;
+        z-index: 999;
+      }
+
+      @media (min-width: 500px) {
+        .workspace-layout {
+          display: flex;
+        }
       }
     `,
   ],
