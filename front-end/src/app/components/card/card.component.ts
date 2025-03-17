@@ -2,9 +2,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-card',
-  imports: [],
   templateUrl: './card.component.html',
-  styleUrl: './card.component.scss'
+  styleUrls: ['./card.component.scss']
 })
 export class CardComponent {
   @Input() titre!: string;
@@ -13,8 +12,7 @@ export class CardComponent {
   @Input() manager!: string;
   @Output() cardClick = new EventEmitter<void>();
 
-  onTitleClick(event: Event) {
-    event.stopPropagation();
+  onCardClick(): void {
     this.cardClick.emit();
   }
 }
