@@ -111,7 +111,6 @@
   width: 100%;
   border-collapse: collapse;
   background: var.$lighter-dark;
-  border-radius: var.$radius;
   overflow: hidden;
 
   tr {
@@ -191,6 +190,44 @@
 
 .clickable-row:hover .card {
   background-color: var.$white;
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.workspace-select {
+  width: 100%;
+  font-size: 16px;
+  appearance: none;
+  padding: 12px 32px 12px 10px;
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 10px;
+  top: 55%;
+  transform: translateY(-50%) rotate(180deg);
+  pointer-events: none;
+  transition: transform 0.3s ease;
+
+  svg {
+    width: 30px;
+    height: auto;
+  }
+}
+
+.select-wrapper:focus-within .select-arrow {
+  transform: translateY(-50%) rotate(0deg);
+  top: 60%;
 }
 
 

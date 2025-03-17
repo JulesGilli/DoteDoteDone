@@ -13,13 +13,27 @@
   <div *ngIf="!loading" [@fadeInAnimation]>
     <div id="all-cards-selector">
       <label>Workspace</label>
-      <select class="workspace-select"
-              [(ngModel)]="selectedWorkspace"
-              (ngModelChange)="loadCards()">
-        <option *ngFor="let workspace of workspaces" [ngValue]="workspace">
-          {{ workspace.displayName }}
-        </option>
-      </select>
+      <div class="select-wrapper">
+        <select class="workspace-select"
+                [(ngModel)]="selectedWorkspace"
+                (ngModelChange)="loadCards()">
+          <option *ngFor="let workspace of workspaces" [ngValue]="workspace">
+            {{ workspace.displayName }}
+          </option>
+        </select>
+        <div class="select-arrow">
+          <svg width="40" height="20" viewBox="0 0 40 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_59_348)">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M18.815 16.9283L9.38664 7.49998L11.7433 5.14331L19.9933 13.3933L28.2433 5.14331L30.6 7.49998L21.1716 16.9283C20.8591 17.2408 20.4352 17.4163 19.9933 17.4163C19.5514 17.4163 19.1275 17.2408 18.815 16.9283Z" fill="#D7D7EA"/>
+            </g>
+            <defs>
+              <clipPath id="clip0_59_348">
+                <rect width="20" height="40" fill="white" transform="matrix(0 1 -1 0 40 0)"/>
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+      </div>
     </div>
 
     <div class="ticket-header">
