@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Card } from '../../models';
+import {SharedModule} from '../../../shared.module';
 
 @Component({
   selector: 'app-card-list',
-  imports: [],
+  imports: [SharedModule],
   templateUrl: './card-list.component.html',
   styleUrl: './card-list.component.scss',
 })
-export class CardListComponent {}
+export class CardListComponent {
+  @Input() card!: Card;
+}
