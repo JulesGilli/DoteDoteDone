@@ -2,16 +2,17 @@ import { Component, inject, OnInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CardComponent } from '../../components/card/card.component';
 import { SharedModule } from '../../../shared.module';
-import { Workspace, Board, Card, Member } from '../../models';
-import { GetService } from '../../services';
+import { Workspace, Board, Card } from '../../models';
+import { GetService, PostService } from '../../services';
 import { forkJoin, lastValueFrom } from 'rxjs';
 import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
+import { ModalEditComponent } from '../../components/modal-edit/modal-edit.component';
 
 @Component({
   selector: 'app-all-cards',
   templateUrl: './all-cards.component.html',
   standalone: true,
-  imports: [SharedModule, CardComponent, ModalCreateComponent],
+  imports: [SharedModule, CardComponent, ModalCreateComponent, ModalEditComponent],
   styleUrls: ['./all-cards.component.scss'],
   animations: [
     trigger('fadeInAnimation', [
@@ -24,6 +25,7 @@ import { ModalCreateComponent } from '../../components/modal-create/modal-create
 })
 export class AllCardsComponent implements OnInit {
   private _getService = inject(GetService);
+  private _postService = inject(PostService);
 
   isEditMode: boolean = false;
   isCreateMode: boolean = false;
@@ -44,13 +46,10 @@ export class AllCardsComponent implements OnInit {
     this.loading = true;
     this._getService.getAllWorkspace().subscribe({
       next: (data: Workspace[]) => {
-        this.workspaces = data;
-        if (this.workspaces.length > 0) {
-          this.selectedWorkspace = this.workspaces[0];
-          this.loadCards();
-        } else {
-          this.loading = false;
-        }
+        const allCardsOption: Workspace = { id: 'all', displayName: 'All Tickets' } as Workspace;
+        this.workspaces = [allCardsOption, ...data];
+        this.selectedWorkspace = this.workspaces[0];
+        this.loadCards();
       },
       error: (err) => {
         console.error(err);
@@ -61,20 +60,33 @@ export class AllCardsComponent implements OnInit {
   }
 
   loadCards(): void {
-    if (!this.selectedWorkspace) {
-      return;
-    }
     this.loading = true;
-    if (!this.boards[this.selectedWorkspace.id]) {
-      this._getService.getAllBoards({ organizations: this.selectedWorkspace.id }).subscribe({
-        next: (boards: Board[]) => {
-          if (!boards || boards.length === 0) {
-            this.loading = false;
-            return;
-          }
-          this.boards[this.selectedWorkspace.id] = boards;
-          console.log(boards);
-          this.loadCardsFromBoard(boards);
+
+    if (this.selectedWorkspace.id === 'all') {
+      const workspacesToLoad = this.workspaces.filter(ws => ws.id !== 'all');
+      const boardsObservables = workspacesToLoad.map(ws =>
+        this._getService.getAllBoards({ organizations: ws.id })
+      );
+
+      forkJoin(boardsObservables).subscribe({
+        next: (boardsArrays: Board[][]) => {
+          const allBoards = ([] as Board[]).concat(...boardsArrays);
+          const cardsObservables = allBoards.map(board =>
+            this._getService.getAllCards({ boards: board.id })
+          );
+
+          forkJoin(cardsObservables).subscribe({
+            next: (cardsArrays: Card[][]) => {
+              const allCards = ([] as Card[]).concat(...cardsArrays);
+              this.tickets = this.formatOfTickets(allCards);
+              this.loading = false;
+            },
+            error: (err) => {
+              console.error(err);
+              this.error = err;
+              this.loading = false;
+            }
+          });
         },
         error: (err) => {
           console.error(err);
@@ -82,14 +94,33 @@ export class AllCardsComponent implements OnInit {
           this.loading = false;
         }
       });
+
     } else {
-      this.tickets = this.formatOfTickets(this.allTickets[this.selectedWorkspace.id]);
-      this.loading = false;
+      if (!this.boards[this.selectedWorkspace.id]) {
+        this._getService.getAllBoards({ organizations: this.selectedWorkspace.id }).subscribe({
+          next: (boards: Board[]) => {
+            if (!boards || boards.length === 0) {
+              this.loading = false;
+              return;
+            }
+            this.boards[this.selectedWorkspace.id] = boards;
+            this.loadCardsFromBoard(boards);
+          },
+          error: (err) => {
+            console.error(err);
+            this.error = err;
+            this.loading = false;
+          }
+        });
+      } else {
+        this.tickets = this.formatOfTickets(this.allTickets[this.selectedWorkspace.id]);
+        this.loading = false;
+      }
     }
   }
 
-  loadCardsFromBoard(boards: Board[]) {
-    const cardsObservables = boards.map((board) =>
+  loadCardsFromBoard(boards: Board[]): void {
+    const cardsObservables = boards.map(board =>
       this._getService.getAllCards({ boards: board.id })
     );
     forkJoin(cardsObservables).subscribe({
@@ -97,7 +128,6 @@ export class AllCardsComponent implements OnInit {
         const allCards = ([] as Card[]).concat(...cardsArrays);
         this.allTickets[this.selectedWorkspace.id] = allCards;
         this.tickets = this.formatOfTickets(allCards);
-        console.log(allCards);
         this.loading = false;
       },
       error: (err) => {
@@ -108,26 +138,25 @@ export class AllCardsComponent implements OnInit {
     });
   }
 
-  formatOfTickets(cards: Card[]) {
-    const tickets = cards.map((card) => {
+  formatOfTickets(cards: Card[]): any[] {
+    const tickets = cards.map(card => {
       const ticket = {
         titre: card.name,
         resume: card.desc,
         statusCard: 'normal',
         ticketId: card.id,
-        manager: 'No one',
+        manager: 'No one'
       };
 
       if (card.idMembers && card.idMembers.length > 0) {
         if (!this.membersFromTicket[card.idMembers[0]]) {
-          this.getMembers(card.idMembers[0]).then((name) => {
+          this.getMembers(card.idMembers[0]).then(name => {
             ticket.manager = name;
           });
         } else {
           ticket.manager = this.membersFromTicket[card.idMembers[0]];
         }
       }
-
       return ticket;
     });
     return tickets;
@@ -137,33 +166,50 @@ export class AllCardsComponent implements OnInit {
     if (this.membersFromTicket[idMember]) {
       return this.membersFromTicket[idMember];
     } else {
-      const data = await lastValueFrom(
-        this._getService.getMemberById(idMember)
-      );
+      const data = await lastValueFrom(this._getService.getMemberById(idMember));
       return data.fullName;
     }
   }
 
-  openModal(ticket: any) {
-    this.selectedTicket = ticket;
-    this.isEditMode = false;
+  openModal(ticket: any): void {
+    this.selectedTicket = { ...ticket };
+    this.isEditMode = true;
   }
 
-  closeModal() {
+  closeModal(): void {
     this.selectedTicket = null;
     this.isEditMode = false;
   }
 
-  switchToEdit() {
-    this.isEditMode = true;
-  }
-
-  openCreateModal() {
+  openCreateModal(): void {
     this.isCreateMode = true;
     this.selectedTicket = null;
   }
 
-  closeCreateModal() {
+  closeCreateModal(): void {
     this.isCreateMode = false;
+  }
+
+  updateTicket(): void {
+    this._postService.updateCard(this.selectedTicket.ticketId, {
+      name: this.selectedTicket.titre,
+      desc: this.selectedTicket.resume,
+    }).subscribe({
+      next: (updatedCard) => {
+        console.log('Ticket mis à jour', updatedCard);
+        const index = this.tickets.findIndex(ticket => ticket.ticketId === updatedCard.id);
+        if (index > -1) {
+          this.tickets[index] = {
+            ...this.tickets[index],
+            titre: updatedCard.name,
+            resume: updatedCard.desc,
+          };
+        }
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+    this.closeModal();
   }
 }
