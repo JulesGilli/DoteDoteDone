@@ -33,19 +33,22 @@
       <table class="tickets-table">
         <thead>
         <tr>
-          <th>Resume</th>
+          <th>Ticket</th>
           <th>ID</th>
           <th>Manager</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let ticket of tickets">
-          <td>
-            <app-card [titre]="ticket.titre" [statusCard]="ticket.statusCard" [ticketId]="ticket.ticketId"
-                      [manager]="ticket.manager" (cardClick)="openModal(ticket)"></app-card>
+          <td colspan="3">
+            <app-card
+              [titre]="ticket.titre"
+              [statusCard]="ticket.statusCard"
+              [ticketId]="ticket.ticketId"
+              [manager]="ticket.manager"
+              (cardClick)="openModal(ticket)"
+            ></app-card>
           </td>
-          <td>{{ ticket.ticketId }}</td>
-          <td>{{ ticket.manager }}</td>
         </tr>
         </tbody>
       </table>
