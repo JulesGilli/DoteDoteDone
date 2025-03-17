@@ -3,6 +3,32 @@
 .card {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px;
+  border-radius: var.$radius;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+  background-color: var.$dark;
+
+  &:hover {
+    background-color: var.$lighter-dark;
+  }
+}
+
+.card-part {
+  display: flex;
+  align-items: center;
+}
+
+.card-part-title {
+  flex: 2;
+}
+
+.card-part-id,
+.card-part-manager {
+  flex: 1;
+  text-align: center;
 }
 
 .status-indicator {
@@ -16,14 +42,4 @@
   font-size: 0.95rem;
   font-weight: 500;
   color: #fff;
-}
-
-
-.clickable {
-  cursor: pointer;
-  color: var.$white;
-}
-
-.clickable:hover {
-  color: var.$light-purple
 }
