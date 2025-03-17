@@ -205,6 +205,12 @@
   padding: 12px 32px 12px 10px;
 }
 
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
 .select-arrow {
   position: absolute;
   right: 10px;
@@ -212,10 +218,15 @@
   transform: translateY(-50%) rotate(180deg);
   pointer-events: none;
   transition: transform 0.3s ease;
+
+  svg {
+    width: 30px;
+    height: auto;
+  }
 }
 
 .select-wrapper:focus-within .select-arrow {
-  transform: translateY(-50%);
+  transform: translateY(-50%) rotate(0deg);
   top: 60%;
 }
 
