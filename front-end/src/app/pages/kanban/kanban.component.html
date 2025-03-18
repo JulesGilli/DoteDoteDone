@@ -1,4 +1,5 @@
 <div id="kanban-selectors">
+  <div *ngIf="_utilsService.loading()"><app-loading /></div>
   <div>
     <label>Workspace</label>
     <select class="workspace-select"
