@@ -8,9 +8,10 @@ import { ModalCreateComponent } from '../modal-create/modal-create.component';
 import { PostService } from '../../services';
 import { DragDropService } from '../../services/drag-drop.service';
 
+
 @Component({
   selector: 'app-list',
-  imports: [CardListComponent, SharedModule, ModalCreateComponent],
+  imports: [CardListComponent, SharedModule],
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
