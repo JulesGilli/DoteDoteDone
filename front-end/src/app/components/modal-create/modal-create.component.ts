@@ -9,6 +9,7 @@ import {
 import { GetService, PostService } from '../../services';
 import { Board, Card, Member, Workspace } from '../../models';
 import { SharedModule } from '../../../shared.module';
+import { UtilsService } from '../../services/utils/utils.service';
 
 type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
 
@@ -25,6 +26,7 @@ export class ModalCreateComponent implements OnInit {
 
   private readonly _getService = inject(GetService);
   private readonly _postService = inject(PostService);
+  private readonly _util = inject(UtilsService);
 
   selectedWorkspace!: Workspace;
   workspaces: Workspace[] = [];
@@ -33,9 +35,11 @@ export class ModalCreateComponent implements OnInit {
   boards: Board[] = [];
   selectedBoard!: Board;
 
-  allMembers!:Record<string,Member[]>;
-  selectedMember!:Member;
-  members!:Member[];
+  allMembers!: Record<string, Member[]>;
+  selectedMember!: Member;
+  members!: Member[];
+
+  // idListDefault:Record<string,string>;
 
   ngOnInit() {
     if (this.allWorkspacesFromMain) {
@@ -90,22 +94,23 @@ export class ModalCreateComponent implements OnInit {
   @Output() create = new EventEmitter<any>();
 
   buttonCreateTicket() {
+    this._util.setBoard(this.selectedBoard);
+    this._util.loadListsWithCards();
     const payload = {
       name: this.newTicket.titre,
       desc: this.newTicket.resume,
-      // idList: this.template.getDefaultIdListFromBoard(newTicket.board),
+      idList: this._util.lists()[this.selectedBoard.id][0].id,
     };
 
     this._postService.postCard(payload).subscribe((card: Card) => {
-      const ticket = {
-        titre: card.name,
-        resume: card.desc,
-        statusCard: this.newTicket.statusCard,
-        ticketId: card.id,
-        manager: this.newTicket.manager,
-        board: this.newTicket.board,
-        workspace: this.newTicket.workspace,
-      };
+      console.log(card);
+      const ticket:Card={
+        id:card.id,
+        name:this.newTicket.titre,
+        desc: this.newTicket.resume,
+        idList: this._util.lists()[this.selectedBoard.id][0].id,
+        idBoard:this.selectedBoard.id,
+      }
       this.create.emit(ticket);
       this.closeModal();
     });

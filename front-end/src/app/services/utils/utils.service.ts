@@ -3,7 +3,7 @@ import { Board, Card, List, Workspace } from '../../models';
 import { GetService } from '../crud/get/get.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UtilsService {
   private readonly _getService = inject(GetService);
@@ -14,7 +14,7 @@ export class UtilsService {
   boards = signal<Board[]>([]);
   selectedBoard = signal<Board | null>(null);
 
-  lists = signal<List[]>([]);
+  lists = signal<Record<string, List[]>>({});
 
   tickets = signal<Card[]>([]);
 
@@ -34,12 +34,14 @@ export class UtilsService {
 
   public loadBoards(): void {
     if (this.selectedWorkspace()) {
-      this._getService.getAllBoards({ organizations: this.selectedWorkspace()!.id }).subscribe((data: Board[]) => {
-        this.boards.set(data);
-        if (this.boards().length > 0) {
-          this.setBoard(data[0]);
-        }
-      });
+      this._getService
+        .getAllBoards({ organizations: this.selectedWorkspace()!.id })
+        .subscribe((data: Board[]) => {
+          this.boards.set(data);
+          if (this.boards().length > 0) {
+            this.setBoard(data[0]);
+          }
+        });
     }
   }
 
@@ -50,13 +52,26 @@ export class UtilsService {
 
   public loadListsWithCards(): void {
     if (this.selectedBoard()) {
-      this._getService.getAllLists({ boards: this.selectedBoard()!.id }).subscribe((lists: List[]) => {
-        this.lists.set(lists);
+      if (!this.lists()[this.selectedBoard()!.id]) {
+        this._getService
+          .getAllLists({ boards: this.selectedBoard()!.id })
+          .subscribe((lists: List[]) => {
+            this.lists.update((prevLists) => ({
+              ...prevLists,
+              [this.selectedBoard()!.id]: lists,
+            }));
 
-        this._getService.getAllCards({ boards: this.selectedBoard()!.id }).subscribe((cards: Card[]) => {
-          this.tickets.set(cards);
-        });
-      });
+            this._getService
+              .getAllCards({ boards: this.selectedBoard()!.id })
+              .subscribe((cards: Card[]) => {
+                this.tickets.set(cards);
+              });
+          });
+      }
     }
+  }
+
+  public getAllListsInArray():List[]{
+    return Object.values(this.lists()).flat();
   }
 }
