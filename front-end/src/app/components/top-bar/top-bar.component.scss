@@ -1,0 +1,67 @@
+@use '../../../variables.scss' as var;
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 20px;
+  background-color: var.$dark;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.logo-part {
+  height: 24px;
+  opacity: 1;
+  transition: margin-left 0.3s ease;
+}
+
+.logo-part1 {
+  animation-delay: 0.6s;
+  z-index: 3;
+}
+
+.logo-part2 {
+  animation-delay: 0.3s;
+  z-index: 2;
+}
+
+.logo-part3 {
+  animation-delay: 0s;
+  z-index: 1;
+}
+
+.logo-part:not(:first-child) {
+  margin-left: -13px;
+}
+
+.logo-wrapper:hover .logo-part:not(:first-child) {
+  margin-left: -5px;
+}
+
+.logo-title {
+  width: 100px;
+  height: auto;
+}
+
+.user-icon-container .user-icon {
+  height: 32px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  color: var.$white;
+}
+
+.user-icon-container .user-icon:hover {
+  color: var.$light-purple;
+}
