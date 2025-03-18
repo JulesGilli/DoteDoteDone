@@ -1,6 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild, AfterViewInit, inject} from '@angular/core';
 import { CdkDragMove } from '@angular/cdk/drag-drop';
-import { UtilsService } from '../../services/utils/utils.service';
 import { ListComponent } from '../../components/list/list.component';
 import { SharedModule } from '../../../shared.module';
 import { UtilsService } from '../../services/utils/utils.service';
