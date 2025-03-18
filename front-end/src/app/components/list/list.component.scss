@@ -47,4 +47,9 @@ div {
     color: var.$grey;
     margin-bottom: 0.5rem;
   }
+
+  .drop-container .cdk-drag {
+    transition: transform 0.3s ease;
+  }
+
 }
