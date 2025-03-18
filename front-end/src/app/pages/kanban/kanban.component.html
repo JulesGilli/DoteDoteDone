@@ -26,6 +26,9 @@
   </div>
 </div>
 
-<div id="kanban-lists">
-  <app-list *ngFor="let list of _utilsService.lists()" [list]="list"></app-list>
+<div id="kanban-lists" cdkDropListGroup #kanbanContainer>
+  <app-list *ngFor="let list of _utilsService.lists()"
+            [list]="list"
+            (cardDragMoved)="onDragMoved($event)">
+  </app-list>
 </div>
