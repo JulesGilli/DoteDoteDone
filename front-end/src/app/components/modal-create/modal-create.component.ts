@@ -103,7 +103,6 @@ export class ModalCreateComponent implements OnInit {
     };
 
     this._postService.postCard(payload).subscribe((card: Card) => {
-      console.log(card);
       const ticket:Card={
         id:card.id,
         name:this.newTicket.titre,

@@ -242,5 +242,6 @@ export class AllCardsComponent implements OnInit {
       this.allTickets[workspaceIdFound!].push(newTicket);
       // this.allTickets['all'].push(newTicket);
     }
+    this.closeModal();
   }
 }
