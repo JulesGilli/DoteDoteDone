@@ -22,22 +22,47 @@ import { TopBarComponent } from '../components/top-bar/top-bar.component';
       .workspace-layout {
         width: 100vw;
         height: 100vh;
-      }
 
-      .right-side {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-      }
+        app-navbar {
+          position: absolute;
+          z-index: 999;
+          width: 100%;
+        }
 
-      .app-top-bar {
-        position: relative;
-        z-index: 999;
+        app-navbar.hidden {
+          pointer-events: none;
+        }
+
+        app-navbar {
+          width: 100%;
+          height: 60px;
+        }
+
+        app-navbar.hidden {
+          visibility: hidden;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .right-side {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+
+          position: relative;
+          z-index: 1;
+        }
       }
 
       @media (min-width: 500px) {
         .workspace-layout {
           display: flex;
+
+          app-navbar {
+            position: relative;
+            width: fit-content;
+            height: 100vh;
+          }
         }
       }
     `,
