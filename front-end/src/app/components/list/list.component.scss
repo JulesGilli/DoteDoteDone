@@ -1,6 +1,14 @@
 @use '../../../variables.scss' as var;
 
+.list-container {
+  background-color: var.$dark-less-dark;
+  border-radius: 8px;
+  padding:  0.5rem 0.2rem 0.5rem 0.2rem;
+  margin: 2px 2px 1rem;
+}
+
 div {
+
   button {
     width: 95%;
     height: 25px;
@@ -18,6 +26,7 @@ div {
 
   h2 {
     font-size: var.$h2-size;
+    padding-left: 0.5rem;
   }
 
   .card-preview {
@@ -40,7 +49,6 @@ div {
     overflow-y: auto;
   }
 
-
   .empty-dropzone {
     border: 2px dashed var.$grey;
     min-height: 80px;
@@ -53,6 +61,66 @@ div {
 
   .drop-container .cdk-drag {
     transition: transform 0.3s ease;
+  }
+
+  .list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .dropdown-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .menu-button {
+    background: none;
+    width: 25px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 0;
+    background-color: var.$lighter-dark;
+    border: 1px solid var.$grey;
+    border-radius: 4px;
+    z-index: 100;
+    min-width: 150px;
+
+    button {
+      background: none;
+      border: none;
+      color: var.$white;
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.5rem;
+      margin: 0;
+
+      &:hover {
+        background-color: var.$light-dark-hover;
+      }
+    }
+  }
+
+  .list-header input {
+    font-size: var.$h2-size;
+    color: var.$white;
+    background-color: var.$lighter-dark;
+    border: 1px solid var.$grey;
+    border-radius: 4px;
+    outline: none;
+
+    &:focus {
+      border-color: var.$light-dark-hover;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
   }
 
 }
