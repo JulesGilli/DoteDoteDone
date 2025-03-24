@@ -36,8 +36,6 @@ export class PostService {
   postCard(cardData: any): Observable<Card> {
     this.initializeUri('cards');
     return this._http.post<Card>(this.uri, cardData);
-    // const uri = `${this.apiTrello}/cards?${this._auth.getApiKeyTokenUrl()}`;
-    // return this._http.post<Card>(uri, cardData);
   }
 
   updateCard(cardId: string, cardData: any): Observable<Card> {
