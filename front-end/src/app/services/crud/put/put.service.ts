@@ -10,32 +10,29 @@ import { Board, Card, List, Workspace } from '../../../models';
 export class PutService {
   private readonly _http = inject(HttpClient);
   private readonly _auth = inject(AuthService);
-
+  private uri: string = '';
   private apiTrello = 'https://api.trello.com/1';
-  putGeneric(tableName: Object, objectId:string, bodyUpdate: Object): Observable<any> {
-
-    let uri = this.apiTrello + `/${tableName}/${objectId}?${this._auth.getApiKeyTokenUrl}`;
-    return this._http.put(uri,bodyUpdate);
+  initializeUri(tableName: string,idObject:string): void {
+    this.uri =
+      this.apiTrello + `/${tableName}/${idObject}?${this._auth.getApiKeyTokenUrl()}`;
   }
 
-  // putWorspace(idWorkspace:string, bodyWorspace: Object): Observable<Workspace> {
-  //   return this.putGeneric('organizations',idWorkspace, bodyWorspace);
-  // }
-  // putBoard(bodyBoard: Object): Observable<Board> {
-  //   return this.putGeneric('boards', bodyBoard);
-  // }
+  putWorspace(idWorkspace:string, bodyWorspace: Object): Observable<Workspace> {
+    this.initializeUri('organizations',idWorkspace);
+    return this._http.put<Workspace>(this.uri,bodyWorspace);
+  }
+  putBoard(idBoard:string,bodyBoard: Object): Observable<Board> {
+    this.initializeUri('boards',idBoard);
+    return this._http.put<Board>(this.uri,bodyBoard);
+  }
 
-  // putList(bodyList: Object): Observable<List> {
-  //   return this.putGeneric('lists', bodyList);
-  // }
+  putList(idList:string,bodyList: Object): Observable<List> {
+    this.initializeUri('lists',idList);
+    return this._http.put<List>(this.uri,bodyList);
+  }
 
-  // putCard(cardData: any): Observable<Card> {
-  //   const uri = `${this.apiTrello}/cards?${this._auth.getApiKeyTokenUrl()}`;
-  //   return this._http.put<Card>(uri, cardData);
-  // }
-
-  // updateCard(cardId: string, cardData: any): Observable<Card> {
-  //   const uri = `${this.apiTrello}/cards/${cardId}?${this._auth.getApiKeyTokenUrl()}`;
-  //   return this._http.put<Card>(uri, cardData);
-  // }
+  putCard(idCard:string,bodyCard: Object): Observable<Card> {
+    this.initializeUri('cards',idCard);
+    return this._http.put<Card>(this.uri,bodyCard);
+  }
 }
