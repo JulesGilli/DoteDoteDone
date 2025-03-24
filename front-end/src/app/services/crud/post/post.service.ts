@@ -10,29 +10,34 @@ import { Observable } from 'rxjs';
 export class PostService {
   private readonly _http = inject(HttpClient);
   private readonly _auth = inject(AuthService);
+  private uri: string = '';
 
   private apiTrello = 'https://api.trello.com/1';
-  postGeneric(tableName: string, bodyCreation: Object): Observable<any> {
-    let uri = this.apiTrello + `/${tableName}/`;
-    let body = { ...bodyCreation, ...this._auth.getApiKeyTokenJson };
-    return this._http.post(uri, body);
+  initializeUri(tableName: string): void {
+    this.uri =
+      this.apiTrello + `/${tableName}?${this._auth.getApiKeyTokenUrl()}`;
   }
 
   postWorkspace(bodyWorkspace: Object): Observable<Workspace> {
-    return this.postGeneric('organizations', bodyWorkspace);
+    this.initializeUri('organizations');
+    return this._http.post<Workspace>(this.uri, bodyWorkspace);
   }
 
   postBoard(bodyBoard: Object): Observable<Board> {
-    return this.postGeneric('boards', bodyBoard);
+    this.initializeUri('boards');
+    return this._http.post<Board>(this.uri, bodyBoard);
   }
 
   postList(bodyList: Object): Observable<List> {
-    return this.postGeneric('lists', bodyList);
+    this.initializeUri('lists');
+    return this._http.post<List>(this.uri, bodyList);
   }
 
   postCard(cardData: any): Observable<Card> {
-    const uri = `${this.apiTrello}/cards?${this._auth.getApiKeyTokenUrl()}`;
-    return this._http.post<Card>(uri, cardData);
+    this.initializeUri('cards');
+    return this._http.post<Card>(this.uri, cardData);
+    // const uri = `${this.apiTrello}/cards?${this._auth.getApiKeyTokenUrl()}`;
+    // return this._http.post<Card>(uri, cardData);
   }
 
   updateCard(cardId: string, cardData: any): Observable<Card> {

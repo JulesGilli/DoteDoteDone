@@ -10,7 +10,7 @@ import { GetService, PostService } from '../../services';
 import { Board, Card, Member, Workspace } from '../../models';
 import { SharedModule } from '../../../shared.module';
 import { forkJoin } from 'rxjs';
-import {GetDataService} from '../../services/data/get/get-data.service';
+import { GetDataService } from '../../services/data/get/get-data.service';
 
 type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
 
@@ -55,6 +55,7 @@ export class ModalCreateComponent implements OnInit {
         }
         if (this.allBoardsFromMain) {
           this.boards = this.allBoardsFromMain[this.selectedWorkspace.id];
+
           this.allBoards = this.allBoardsFromMain;
         }
       }
@@ -68,6 +69,7 @@ export class ModalCreateComponent implements OnInit {
 
       if (this.boards.length !== 0) {
         this.selectedBoard = this.boards[0];
+        this._getDataService.setBoard(this.selectedBoard);
       }
       this.updateMembers();
     } else {
@@ -78,6 +80,7 @@ export class ModalCreateComponent implements OnInit {
           this.boards = data;
           if (this.boards.length > 0) {
             this.selectedBoard = this.boards[0];
+            this._getDataService.setBoard(this.selectedBoard);
           }
           this.updateMembers();
         });
