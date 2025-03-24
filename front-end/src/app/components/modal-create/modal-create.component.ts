@@ -10,6 +10,7 @@ import { GetService, PostService } from '../../services';
 import { Board, Card, Member, Workspace } from '../../models';
 import { SharedModule } from '../../../shared.module';
 import { UtilsService } from '../../services/utils/utils.service';
+import { forkJoin } from 'rxjs';
 
 type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
 
@@ -35,7 +36,7 @@ export class ModalCreateComponent implements OnInit {
   boards: Board[] = [];
   selectedBoard!: Board;
 
-  allMembers!: Record<string, Member[]>;
+  allMembers: Record<string, Member[]> = {};
   selectedMember!: Member;
   members!: Member[];
 
@@ -44,8 +45,14 @@ export class ModalCreateComponent implements OnInit {
   ngOnInit() {
     if (this.allWorkspacesFromMain) {
       if (this.allWorkspacesFromMain.length !== 0) {
-        this.workspaces = this.allWorkspacesFromMain;
-        this.selectedWorkspace = this.selectedWorkspaceFromMain;
+        this.workspaces = this.allWorkspacesFromMain.filter(
+          (workspace) => workspace.id !== 'all'
+        );
+        if (this.selectedWorkspaceFromMain.id !== 'all') {
+          this.selectedWorkspace = this.selectedWorkspaceFromMain;
+        } else {
+          this.selectedWorkspace = this.workspaces[0];
+        }
         if (this.allBoardsFromMain) {
           this.boards = this.allBoardsFromMain[this.selectedWorkspace.id];
           this.allBoards = this.allBoardsFromMain;
@@ -58,20 +65,42 @@ export class ModalCreateComponent implements OnInit {
   updateBoards() {
     if (this.selectedWorkspace && this.allBoards[this.selectedWorkspace.id]) {
       this.boards = this.allBoards[this.selectedWorkspace.id];
+
       if (this.boards.length !== 0) {
         this.selectedBoard = this.boards[0];
       }
-      return;
+      this.updateMembers();
+    } else {
+      this._getService
+        .getAllBoards({ organizations: this.selectedWorkspace.id })
+        .subscribe((data: Board[]) => {
+          this.allBoards[this.selectedWorkspace.id] = data;
+          this.boards = data;
+          if (this.boards.length > 0) {
+            this.selectedBoard = this.boards[0];
+          }
+          this.updateMembers();
+        });
     }
-    this._getService
-      .getAllBoards({ organizations: this.selectedWorkspace.id })
-      .subscribe((data: Board[]) => {
-        this.allBoards[this.selectedWorkspace.id] = data;
-        this.boards = data;
-        if (this.boards.length > 0) {
-          this.selectedBoard = this.boards[0];
-        }
+  }
+
+  updateMembers() {
+    if (this.allMembers[this.selectedBoard.id]) {
+      this.members = this.allMembers[this.selectedBoard.id];
+      this.selectedMember = this.members[0];
+    } else {
+      const memberRequests = this.boards.map((board) =>
+        this._getService.getAllMembersByBoard(board.id)
+      );
+
+      forkJoin(memberRequests).subscribe((memberDataArray) => {
+        this.boards.forEach((board, index) => {
+          this.allMembers[board.id] = memberDataArray[index];
+        });
+        this.members = this.allMembers[this.selectedBoard.id];
+        this.selectedMember = this.members[0];
       });
+    }
   }
 
   newTicket: any = {
@@ -94,8 +123,6 @@ export class ModalCreateComponent implements OnInit {
   @Output() create = new EventEmitter<any>();
 
   buttonCreateTicket() {
-    this._util.setBoard(this.selectedBoard);
-    this._util.loadListsWithCards();
     const payload = {
       name: this.newTicket.titre,
       desc: this.newTicket.resume,
@@ -103,13 +130,13 @@ export class ModalCreateComponent implements OnInit {
     };
 
     this._postService.postCard(payload).subscribe((card: Card) => {
-      const ticket:Card={
-        id:card.id,
-        name:this.newTicket.titre,
+      const ticket: Card = {
+        id: card.id,
+        name: this.newTicket.titre,
         desc: this.newTicket.resume,
         idList: this._util.lists()[this.selectedBoard.id][0].id,
-        idBoard:this.selectedBoard.id,
-      }
+        idBoard: this.selectedBoard.id,
+      };
       this.create.emit(ticket);
       this.closeModal();
     });
