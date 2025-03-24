@@ -13,7 +13,12 @@ export class AuthService {
   constructor(private router: Router) {}
 
   getApiKeyTokenUrl(): string {
-    return `&key=${environment.apiKey}&token=${this.getToken()}`;
+    if (this.getToken()) {
+      return `&key=${environment.apiKey}&token=${this.getToken()}`;
+    } else {
+      this.router.navigate(['/workspace']);
+      return '';
+    }
   }
 
   getApiKeyTokenJson(): string {

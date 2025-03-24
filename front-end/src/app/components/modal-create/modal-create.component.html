@@ -30,11 +30,13 @@
       </div>
       <div class="option">
         <label class="option-label">Manager</label>
-        <select [(ngModel)]="newTicket.manager">
-          <option value="Not assigned">Not assigned</option>
-          <option value="Manager1">Manager1</option>
-          <option value="Manager2">Manager2</option>
-        </select>
+        <select class="member-select" [(ngModel)]="selectedMember">
+          @for (member of members; track member) {
+            <option [ngValue]="member">
+              {{ member.fullName || "No member"}}
+            </option>
+          }
+        </select> 
       </div>
       <div class="option">
         <label class="option-label">Board</label>

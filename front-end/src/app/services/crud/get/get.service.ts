@@ -53,8 +53,8 @@ export class GetService {
     return this.getAll('cards', memberBoardOrListObject);
   }
 
-  getAllLabels(boards:Object):Observable<Label>{
-    return this.getAll('labels',boards);
+  getAllLabels(boards: Object): Observable<Label> {
+    return this.getAll('labels', boards);
   }
 
   /*
@@ -72,15 +72,15 @@ export class GetService {
     if (typeQuest) {
       uri += `/${typeQuest}`;
     }
-    uri+='?';
+    uri += '?';
     uri += this._authService.getApiKeyTokenUrl();
     return this.http.get(uri, {
       responseType: 'json',
     });
   }
 
-  getAllMembersByBoard(boardId:Object){
-    return this.getAll('members',boardId)
+  getAllMembersByBoard(boardId: Object) {
+    return this.getAll('members', { boards: boardId });
   }
 
   getMemberIdByToken(): Observable<Member> {

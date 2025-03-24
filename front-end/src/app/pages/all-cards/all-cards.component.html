@@ -72,7 +72,8 @@
                       [selectedWorkspaceFromMain]="selectedWorkspace"
                       [allWorkspacesFromMain]="workspaces"
                       [allBoardsFromMain]="boards"
-                      (close)="closeCreateModal()">
+                      (close)="closeCreateModal()"
+                      (create)="createTicket($event)">
     </app-modal-create>
 
     <app-modal-edit *ngIf="isEditMode"
