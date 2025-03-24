@@ -1,9 +1,9 @@
-import {inject, Injectable, signal} from '@angular/core';
-import {GetService} from '../../crud/get/get.service';
-import {Board, Card, List, Workspace} from '../../../models';
+import { inject, Injectable, signal } from '@angular/core';
+import { GetService } from '../../crud/get/get.service';
+import { Board, Card, List, Workspace } from '../../../models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GetDataService {
   private readonly _getService = inject(GetService);
@@ -20,6 +20,7 @@ export class GetDataService {
   lists = signal<Record<string, List[]>>({});
 
   tickets = signal<Card[]>([]);
+  allTickets = signal<Record<string, Card[]>>({});
 
   public loadWorkspaces(): void {
     this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
@@ -74,10 +75,12 @@ export class GetDataService {
             this._getService
               .getAllCards({ boards: this.selectedBoard()!.id })
               .subscribe((cards: Card[]) => {
+                this.allTickets()[this.selectedBoard()!.id] = cards;
                 this.tickets.set(cards);
               });
           });
       } else {
+        this.tickets.set(this.allTickets()[this.selectedBoard()!.id]);
       }
     }
 
@@ -85,7 +88,7 @@ export class GetDataService {
   }
 
   public getAllListsInArray(): List[] {
-    return Object.values(this.lists()).flat();
+    return Object.values(this.lists()[this.selectedBoard()!.id]).flat();
   }
 
   public getAllListFromBoard(boardId: string) {
