@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
-import {UtilsService} from '../../services/utils/utils.service';
 import {SharedModule} from '../../../shared.module';
 import {animate, style, transition, trigger} from '@angular/animations';
+import {GetDataService} from '../../services/data/get/get-data.service';
 
 @Component({
   selector: 'app-loading',
@@ -18,5 +18,5 @@ import {animate, style, transition, trigger} from '@angular/animations';
   ]
 })
 export class LoadingComponent {
-  public readonly _utilsService = inject(UtilsService);
+  public readonly _getDataService = inject(GetDataService);
 }

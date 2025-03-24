@@ -2,8 +2,8 @@ import {Component, ElementRef, OnInit, ViewChild, AfterViewInit, inject} from '@
 import { CdkDragMove } from '@angular/cdk/drag-drop';
 import { ListComponent } from '../../components/list/list.component';
 import { SharedModule } from '../../../shared.module';
-import { UtilsService } from '../../services/utils/utils.service';
 import {LoadingComponent} from '../../components/loading/loading.component';
+import {GetDataService} from '../../services/data/get/get-data.service';
 
 @Component({
   selector: 'app-kanban',
@@ -12,7 +12,7 @@ import {LoadingComponent} from '../../components/loading/loading.component';
   styleUrls: ['./kanban.component.scss']
 })
 export class KanbanComponent implements OnInit, AfterViewInit {
-  public readonly _utilsService = inject(UtilsService);
+  public readonly _getDataService = inject(GetDataService);
 
   // Récupérer le conteneur Kanban via le template reference
   @ViewChild('kanbanContainer') kanbanContainer!: ElementRef<HTMLDivElement>;
@@ -21,7 +21,7 @@ export class KanbanComponent implements OnInit, AfterViewInit {
   scrollSpeed = 10;
 
   ngOnInit(): void {
-    this._utilsService.loadWorkspaces();
+    this._getDataService.loadWorkspaces();
     debugger;
   }
 

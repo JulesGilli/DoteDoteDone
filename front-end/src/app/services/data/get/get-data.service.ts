@@ -1,11 +1,11 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { Board, Card, List, Workspace } from '../../models';
-import { GetService } from '../crud/get/get.service';
+import {inject, Injectable, signal} from '@angular/core';
+import {GetService} from '../../crud/get/get.service';
+import {Board, Card, List, Workspace} from '../../../models';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class UtilsService {
+export class GetDataService {
   private readonly _getService = inject(GetService);
 
   loading = signal<boolean>(true);
