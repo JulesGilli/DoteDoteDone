@@ -22,12 +22,14 @@ import {
   CdkDragPreview
 } from '@angular/cdk/drag-drop';
 import { Card, List } from '../../models';
-import { UtilsService } from '../../services/utils/utils.service';
 import { PostService } from '../../services';
 import { DragDropService } from '../../services/drag-drop.service';
 import { FormsModule } from '@angular/forms';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { CardListComponent } from '../card-list/card-list.component';
+import { SharedModule } from '../../../shared.module';
+import {GetDataService} from '../../services/data/get/get-data.service';
+
 
 @Component({
   selector: 'app-list',
@@ -60,13 +62,13 @@ export class ListComponent implements OnInit {
   isEditingTitle = false;
   isMenuOpen = false;
 
-  private readonly _utilsService = inject(UtilsService);
+  private readonly _getDataService = inject(GetDataService);
   private readonly _postService = inject(PostService);
 
   @ViewChild('dropdownContainer', { static: false }) dropdownContainer!: ElementRef;
 
   cards = computed(() =>
-    this._utilsService.tickets().filter(card => card.idList === this.list.id && card.id !== this.draggedCardId)
+    this._getDataService.tickets().filter(card => card.idList === this.list.id && card.id !== this.draggedCardId)
   );
 
   ngOnInit(): void {}

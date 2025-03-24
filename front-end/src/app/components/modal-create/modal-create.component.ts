@@ -9,8 +9,8 @@ import {
 import { GetService, PostService } from '../../services';
 import { Board, Card, Member, Workspace } from '../../models';
 import { SharedModule } from '../../../shared.module';
-import { UtilsService } from '../../services/utils/utils.service';
 import { forkJoin } from 'rxjs';
+import { GetDataService } from '../../services/data/get/get-data.service';
 
 type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
 
@@ -27,7 +27,7 @@ export class ModalCreateComponent implements OnInit {
 
   private readonly _getService = inject(GetService);
   private readonly _postService = inject(PostService);
-  private readonly _util = inject(UtilsService);
+  private readonly _getDataService = inject(GetDataService);
 
   selectedWorkspace!: Workspace;
   workspaces: Workspace[] = [];
@@ -55,6 +55,7 @@ export class ModalCreateComponent implements OnInit {
         }
         if (this.allBoardsFromMain) {
           this.boards = this.allBoardsFromMain[this.selectedWorkspace.id];
+
           this.allBoards = this.allBoardsFromMain;
         }
       }
@@ -68,6 +69,7 @@ export class ModalCreateComponent implements OnInit {
 
       if (this.boards.length !== 0) {
         this.selectedBoard = this.boards[0];
+        this._getDataService.setBoard(this.selectedBoard);
       }
       this.updateMembers();
     } else {
@@ -78,6 +80,7 @@ export class ModalCreateComponent implements OnInit {
           this.boards = data;
           if (this.boards.length > 0) {
             this.selectedBoard = this.boards[0];
+            this._getDataService.setBoard(this.selectedBoard);
           }
           this.updateMembers();
         });
@@ -95,7 +98,7 @@ export class ModalCreateComponent implements OnInit {
 
       forkJoin(memberRequests).subscribe((memberDataArray) => {
         this.boards.forEach((board, index) => {
-          this.allMembers[board.id] = memberDataArray[index];
+          // this.allMembers[board.id] = memberDataArray[index];
         });
         this.members = this.allMembers[this.selectedBoard.id];
         this.selectedMember = this.members[0];
@@ -126,7 +129,7 @@ export class ModalCreateComponent implements OnInit {
     const payload = {
       name: this.newTicket.titre,
       desc: this.newTicket.resume,
-      idList: this._util.lists()[this.selectedBoard.id][0].id,
+      idList: this._getDataService.lists()[this.selectedBoard.id][0].id,
     };
 
     this._postService.postCard(payload).subscribe((card: Card) => {
@@ -134,7 +137,7 @@ export class ModalCreateComponent implements OnInit {
         id: card.id,
         name: this.newTicket.titre,
         desc: this.newTicket.resume,
-        idList: this._util.lists()[this.selectedBoard.id][0].id,
+        idList: this._getDataService.lists()[this.selectedBoard.id][0].id,
         idBoard: this.selectedBoard.id,
       };
       this.create.emit(ticket);
