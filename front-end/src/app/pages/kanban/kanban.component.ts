@@ -24,7 +24,6 @@ export class KanbanComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this._getDataService.loadWorkspaces();
-    debugger;
   }
 
   ngAfterViewInit(): void {
@@ -41,20 +40,5 @@ export class KanbanComponent implements OnInit, AfterViewInit {
     if (pointerX < containerRect.left + this.autoScrollThreshold) {
       containerEl.scrollLeft -= this.scrollSpeed;
     }
-  }
-
-  createWorkspace(): void {
-    const workspaceName = prompt('Enter the name of the workspace you want to create');
-
-    if (!workspaceName) {
-      return;
-    }
-
-    const workspaceToCreate = {
-      displayName: workspaceName,
-      desc: 'Workspace created via Trello API'
-    };
-
-    this._postDataService.createWorkspace(workspaceToCreate);
   }
 }
