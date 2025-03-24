@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UtilsService } from './utils.service';
+import { PostDataService } from './post-data.service';
 
-describe('UtilsService', () => {
-  let service: UtilsService;
+describe('PostDataService', () => {
+  let service: PostDataService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(UtilsService);
+    service = TestBed.inject(PostDataService);
   });
 
   it('should be created', () => {
