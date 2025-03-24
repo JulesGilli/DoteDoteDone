@@ -1,33 +1,40 @@
 <div id="kanban-selectors">
-  <div>
-    <label>Workspace</label>
-    <select class="workspace-select"
-            [ngModel]="_utilsService.selectedWorkspace()"
-            (ngModelChange)="_utilsService.setWorkspace($event)">
-      @for (workspace of _utilsService.workspaces(); track workspace) {
-        <option [ngValue]="workspace">
-          {{ workspace.displayName }}
-        </option>
-      }
-    </select>
+  <div *ngIf="_getDataService.loading()"><app-loading /></div>
+    <div class="selectors">
+      <label>Workspace</label>
+      <div class="selector">
+      <select class="workspace-select"
+              [ngModel]="_getDataService.selectedWorkspace()"
+              (ngModelChange)="_getDataService.setWorkspace($event)">
+        @for (workspace of _getDataService.workspaces(); track workspace) {
+          <option [ngValue]="workspace">
+            {{ workspace.displayName }}
+          </option>
+        }
+      </select>
+      <button (click)="createWorkspace()">+</button>
+      </div>
   </div>
 
-  <div id="board-selector">
+  <div class="selectors">
     <label>Board</label>
-    <select class="board-select"
-            [ngModel]="_utilsService.selectedBoard()"
-            (ngModelChange)="_utilsService.setBoard($event)">
-      @for (board of _utilsService.boards(); track board) {
-        <option [ngValue]="board">
-          {{ board.name }}
-        </option>
-      }
-    </select>
+    <div class="selector">
+      <select class="board-select"
+              [ngModel]="_getDataService.selectedBoard()"
+              (ngModelChange)="_getDataService.setBoard($event)">
+        @for (board of _getDataService.boards(); track board) {
+          <option [ngValue]="board">
+            {{ board.name }}
+          </option>
+        }
+      </select>
+      <button>+</button>
+    </div>
   </div>
 </div>
 
 <div id="kanban-lists" cdkDropListGroup #kanbanContainer>
-  <app-list *ngFor="let list of _utilsService.getAllListsInArray()"
+  <app-list *ngFor="let list of _getDataService.getAllListsInArray()"
   [list]="list"
   (cardDragMoved)="onDragMoved($event)"></app-list>
 </div>

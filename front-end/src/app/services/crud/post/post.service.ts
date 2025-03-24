@@ -18,10 +18,11 @@ export class PostService {
       this.apiTrello + `/${tableName}?${this._auth.getApiKeyTokenUrl()}`;
   }
 
-  postWorspace(bodyWorspace: Object): Observable<Workspace> {
+  postWorkspace(bodyWorkspace: Object): Observable<Workspace> {
     this.initializeUri('organizations');
-    return this._http.post<Workspace>(this.uri, bodyWorspace);
+    return this._http.post<Workspace>(this.uri, bodyWorkspace);
   }
+
   postBoard(bodyBoard: Object): Observable<Board> {
     this.initializeUri('boards');
     return this._http.post<Board>(this.uri, bodyBoard);

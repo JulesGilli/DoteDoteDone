@@ -2,11 +2,10 @@ import { Component, EventEmitter, inject, Input, OnInit, Output, computed } from
 import {CdkDragDrop, moveItemInArray, transferArrayItem, CdkDragMove, DropListRef} from '@angular/cdk/drag-drop';
 import { CardListComponent } from '../card-list/card-list.component';
 import { Card, List } from '../../models';
-import { UtilsService } from '../../services/utils/utils.service';
 import { SharedModule } from '../../../shared.module';
-import { ModalCreateComponent } from '../modal-create/modal-create.component';
 import { PostService } from '../../services';
 import { DragDropService } from '../../services/drag-drop.service';
+import {GetDataService} from '../../services/data/get/get-data.service';
 
 
 @Component({
@@ -24,11 +23,11 @@ export class ListComponent implements OnInit {
   draggedCardId: string | null = null;
   isDragging: DragDropService = inject(DragDropService);
 
-  private readonly _utilsService = inject(UtilsService);
+  private readonly _getDataService = inject(GetDataService);
   private readonly _postService = inject(PostService);
 
   cards = computed(() =>
-    this._utilsService.tickets().filter(card => card.idList === this.list.id && card.id !== this.draggedCardId)
+    this._getDataService.tickets().filter(card => card.idList === this.list.id && card.id !== this.draggedCardId)
   );
 
   ngOnInit(): void {}
