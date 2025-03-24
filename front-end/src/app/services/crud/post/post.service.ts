@@ -44,4 +44,10 @@ export class PostService {
     const uri = `${this.apiTrello}/cards/${cardId}?${this._auth.getApiKeyTokenUrl()}`;
     return this._http.put<Card>(uri, cardData);
   }
+  updateList(listId: string, listData: any): Observable<List> {
+    const uri = `${this.apiTrello}/lists/${listId}?${this._auth.getApiKeyTokenUrl()}`;
+    return this._http.put<List>(uri, listData);
+  }
+
+
 }
