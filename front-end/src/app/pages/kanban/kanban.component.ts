@@ -3,9 +3,9 @@ import { CdkDragMove } from '@angular/cdk/drag-drop';
 import { List } from '../../models';
 import { ListComponent } from '../../components/list/list.component';
 import { SharedModule } from '../../../shared.module';
-import { UtilsService } from '../../services/utils/utils.service';
 import {LoadingComponent} from '../../components/loading/loading.component';
 import {GetDataService} from '../../services/data/get/get-data.service';
+import {PostService} from '../../services';
 import {PostDataService} from '../../services/data/post/post-data.service';
 
 @Component({
@@ -15,8 +15,8 @@ import {PostDataService} from '../../services/data/post/post-data.service';
   styleUrls: ['./kanban.component.scss']
 })
 export class KanbanComponent implements OnInit, AfterViewInit {
-  public readonly _utilsService = inject(UtilsService);
   public readonly _getDataService = inject(GetDataService);
+  public readonly _postService = inject(PostService);
   public readonly _postDataService = inject(PostDataService);
 
   @ViewChild('kanbanContainer') kanbanContainer!: ElementRef<HTMLDivElement>;
@@ -46,11 +46,11 @@ export class KanbanComponent implements OnInit, AfterViewInit {
   }
 
   onMoveList(event: { list: List; direction: 'left' | 'right' }): void {
-    const boardId = this._utilsService.selectedBoard()?.id;
+    const boardId = this._getDataService.selectedBoard()?.id;
     if (!boardId) {
       return;
     }
-    this._utilsService.lists.update(prev => {
+    this._getDataService.lists.update(prev => {
       const boardLists = prev[boardId] || [];
       const currentIndex = boardLists.findIndex(l => l.id === event.list.id);
       if (currentIndex === -1) {
@@ -80,11 +80,11 @@ export class KanbanComponent implements OnInit, AfterViewInit {
   }
 
   onDeleteList(deletedListId: string): void {
-    const boardId = this._utilsService.selectedBoard()?.id;
+    const boardId = this._getDataService.selectedBoard()?.id;
     if (!boardId) {
       return;
     }
-    this._utilsService.lists.update(prev => {
+    this._getDataService.lists.update(prev => {
       const boardLists = prev[boardId] || [];
       const updatedLists = boardLists.filter(l => l.id !== deletedListId);
       return {
@@ -92,7 +92,8 @@ export class KanbanComponent implements OnInit, AfterViewInit {
         [boardId]: updatedLists
       };
     });
-    
+  }
+
   createWorkspace(): void {
     const workspaceName = prompt('Enter the name of the workspace you want to create');
 
