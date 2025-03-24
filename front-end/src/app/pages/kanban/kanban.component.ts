@@ -1,4 +1,11 @@
-import {Component, ElementRef, OnInit, ViewChild, AfterViewInit, inject} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  inject,
+} from '@angular/core';
 import { CdkDragMove } from '@angular/cdk/drag-drop';
 import { List } from '../../models';
 import { ListComponent } from '../../components/list/list.component';
@@ -12,7 +19,7 @@ import {PostDataService} from '../../services/data/post/post-data.service';
   selector: 'app-kanban',
   imports: [ListComponent, LoadingComponent, SharedModule],
   templateUrl: 'kanban.component.html',
-  styleUrls: ['./kanban.component.scss']
+  styleUrls: ['./kanban.component.scss'],
 })
 export class KanbanComponent implements OnInit, AfterViewInit {
   public readonly _getDataService = inject(GetDataService);
@@ -26,11 +33,9 @@ export class KanbanComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this._getDataService.loadWorkspaces();
-    debugger;
   }
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
   onDragMoved(event: CdkDragMove<any>): void {
     const containerEl = this.kanbanContainer.nativeElement;
@@ -95,7 +100,9 @@ export class KanbanComponent implements OnInit, AfterViewInit {
   }
 
   createWorkspace(): void {
-    const workspaceName = prompt('Enter the name of the workspace you want to create');
+    const workspaceName = prompt(
+      'Enter the name of the workspace you want to create'
+    );
 
     if (!workspaceName) {
       return;
@@ -103,7 +110,7 @@ export class KanbanComponent implements OnInit, AfterViewInit {
 
     const workspaceToCreate = {
       displayName: workspaceName,
-      desc: 'Workspace created via Trello API'
+      desc: 'Workspace created via Trello API',
     };
 
     this._postDataService.createWorkspace(workspaceToCreate);

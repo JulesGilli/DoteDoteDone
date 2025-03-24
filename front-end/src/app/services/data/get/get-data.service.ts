@@ -1,25 +1,13 @@
-import {inject, Injectable, signal} from '@angular/core';
-import {GetService} from '../../crud/get/get.service';
-import {Board, Card, List, Workspace} from '../../../models';
+import { inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { GetService } from '../../crud/get/get.service';
+import { Board, Card, List, Workspace } from '../../../models';
+import { DataService } from '../data.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class GetDataService {
-  private readonly _getService = inject(GetService);
-
-  loading = signal<boolean>(true);
-
-  workspaces = signal<Workspace[]>([]);
-  selectedWorkspace = signal<Workspace | null>(null);
-
-  boards = signal<Board[]>([]);
-  selectedBoard = signal<Board | null>(null);
-  allBoards = signal<Record<string, Board[]>>({});
-
-  lists = signal<Record<string, List[]>>({});
-
-  tickets = signal<Card[]>([]);
+export class GetDataService extends DataService {
+  readonly _getService = inject(GetService);
 
   public loadWorkspaces(): void {
     this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
@@ -66,18 +54,22 @@ export class GetDataService {
         this._getService
           .getAllLists({ boards: this.selectedBoard()!.id })
           .subscribe((lists: List[]) => {
+            let listsNotClosed: List[] = lists.filter((l) => !l.closed);
             this.lists.update((prevLists) => ({
               ...prevLists,
-              [this.selectedBoard()!.id]: lists,
+              [this.selectedBoard()!.id]: listsNotClosed,
             }));
 
             this._getService
               .getAllCards({ boards: this.selectedBoard()!.id })
               .subscribe((cards: Card[]) => {
-                this.tickets.set(cards);
+                let cardsNotClosed = cards.filter((c)=>!c.closed);
+                this.allTickets()[this.selectedBoard()!.id] = cardsNotClosed;
+                this.tickets.set(cardsNotClosed);
               });
           });
       } else {
+        this.tickets.set(this.allTickets()[this.selectedBoard()!.id]);
       }
     }
 
@@ -85,10 +77,6 @@ export class GetDataService {
   }
 
   public getAllListsInArray(): List[] {
-    return Object.values(this.lists()).flat();
-  }
-
-  public getAllListFromBoard(boardId: string) {
-    this;
+    return Object.values(this.lists()[this.selectedBoard()!.id]).flat();
   }
 }
