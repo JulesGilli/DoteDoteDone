@@ -23,7 +23,7 @@ export class CallbackComponent implements OnInit {
       this.router.navigate(['/workspace/welcome']);
     } else {
       console.error('Token not found in URL fragment or user denied access');
-      this.router.navigate(['/']);
+      this.router.navigate(['/workspace']);
     }
   }
 }
