@@ -22,6 +22,7 @@ export class KanbanComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this._utilsService.loadWorkspaces();
+    debugger;
   }
 
   ngAfterViewInit(): void {

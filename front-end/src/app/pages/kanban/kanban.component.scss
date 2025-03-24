@@ -2,7 +2,6 @@
 
 #kanban-selectors {
   div {
-    margin: 1rem;
     display: flex;
     flex-direction: column;
     max-width: 300px;
@@ -10,6 +9,28 @@
 
   #board-selector {
     max-width: 260px;
+  }
+
+  .selectors {
+    margin: 1rem;
+
+    .selector {
+      display: flex;
+      flex-direction: row;
+
+      button {
+        margin: 0.5rem 0.5rem 0;
+        padding: 0 1rem;
+        border-radius: var.$radius;
+        border: none;
+        background: var.$lighter-dark;
+        color: var.$white;
+
+        &:hover {
+          background-color: var.$light-dark-hover;
+        }
+      }
+    }
   }
 }
 

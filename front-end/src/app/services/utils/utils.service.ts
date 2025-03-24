@@ -21,7 +21,6 @@ export class UtilsService {
   tickets = signal<Card[]>([]);
 
   public loadWorkspaces(): void {
-    this.loading.set(true);
     this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
       this.workspaces.set(data);
       if (this.workspaces().length > 0) {
@@ -31,13 +30,11 @@ export class UtilsService {
   }
 
   public setWorkspace(workspace: Workspace) {
-    this.loading.set(true);
     this.selectedWorkspace.set(workspace);
     this.loadBoards();
   }
 
   public loadBoards(): void {
-    this.loading.set(true);
     if (this.selectedWorkspace()) {
       this._getService.getAllBoards({ organizations: this.selectedWorkspace()!.id }).subscribe((data: Board[]) => {
         this.boards.set(data);
@@ -49,10 +46,8 @@ export class UtilsService {
   }
 
   public setBoard(board: Board) {
-    this.loading.set(true);
     this.selectedBoard.set(board);
     this.loadListsWithCards();
-    this.loading.set(false);
   }
 
   public loadListsWithCards(): void {
@@ -65,5 +60,7 @@ export class UtilsService {
         });
       });
     }
+
+    this.loading.set(false);
   }
 }
