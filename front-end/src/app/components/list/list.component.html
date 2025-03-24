@@ -14,9 +14,9 @@
     <div class="dropdown-container" #dropdownContainer>
       <button (click)="toggleMenu()" class="menu-button">⋯</button>
       <div *ngIf="isMenuOpen" class="menu-dropdown">
-        <button (click)="deleteList()">Supprimer la liste</button>
-        <button (click)="moveList('left')">Déplacer à gauche</button>
-        <button (click)="moveList('right')">Déplacer à droite</button>
+        <button (click)="deleteList()">Delete list</button>
+        <button (click)="moveList('left')">Move left</button>
+        <button (click)="moveList('right')">Move right</button>
       </div>
     </div>
   </div>
