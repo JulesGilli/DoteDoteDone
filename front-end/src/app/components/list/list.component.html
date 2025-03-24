@@ -1,5 +1,26 @@
-<div>
-  <h2>{{ list.name }}</h2>
+<div class="list-container">
+  <div class="list-header">
+    <ng-container *ngIf="!isEditingTitle; else editTitle">
+      <h2 (dblclick)="editTitleMode()">{{ list.name }}</h2>
+    </ng-container>
+    <ng-template #editTitle>
+      <input
+        type="text"
+        [(ngModel)]="list.name"
+        (blur)="saveTitle()"
+        (keydown.enter)="saveTitle()"
+      />
+    </ng-template>
+    <div class="dropdown-container" #dropdownContainer>
+      <button (click)="toggleMenu()" class="menu-button">⋯</button>
+      <div *ngIf="isMenuOpen" class="menu-dropdown">
+        <button (click)="deleteList()">Delete list</button>
+        <button (click)="moveList('left')">Move left</button>
+        <button (click)="moveList('right')">Move right</button>
+      </div>
+    </div>
+  </div>
+
   <div
     cdkDropList
     [cdkDropListData]="cards()"
@@ -9,7 +30,6 @@
     <div *ngIf="cards().length === 0 && (isDragging.isDragging$ | async)" class="empty-dropzone">
       Deposit your card here
     </div>
-
     <div
       *ngFor="let card of cards()"
       cdkDrag
@@ -22,11 +42,9 @@
           <app-card-list [card]="card"></app-card-list>
         </div>
       </ng-template>
-
       <ng-template cdkDragPlaceholder>
         <div class="card-placeholder"></div>
       </ng-template>
-
       <app-card-list [card]="card"></app-card-list>
     </div>
   </div>
