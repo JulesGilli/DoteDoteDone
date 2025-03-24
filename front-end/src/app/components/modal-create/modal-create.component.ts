@@ -55,6 +55,7 @@ export class ModalCreateComponent implements OnInit {
         }
         if (this.allBoardsFromMain) {
           this.boards = this.allBoardsFromMain[this.selectedWorkspace.id];
+
           this.allBoards = this.allBoardsFromMain;
         }
       }
@@ -68,6 +69,7 @@ export class ModalCreateComponent implements OnInit {
 
       if (this.boards.length !== 0) {
         this.selectedBoard = this.boards[0];
+        this._util.setBoard(this.selectedBoard);
       }
       this.updateMembers();
     } else {
@@ -78,6 +80,7 @@ export class ModalCreateComponent implements OnInit {
           this.boards = data;
           if (this.boards.length > 0) {
             this.selectedBoard = this.boards[0];
+            this._util.setBoard(this.selectedBoard);
           }
           this.updateMembers();
         });
