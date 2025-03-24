@@ -95,7 +95,7 @@ export class ModalCreateComponent implements OnInit {
 
       forkJoin(memberRequests).subscribe((memberDataArray) => {
         this.boards.forEach((board, index) => {
-          this.allMembers[board.id] = memberDataArray[index];
+          // this.allMembers[board.id] = memberDataArray[index];
         });
         this.members = this.allMembers[this.selectedBoard.id];
         this.selectedMember = this.members[0];

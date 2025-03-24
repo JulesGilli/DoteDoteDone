@@ -18,9 +18,10 @@ export class PostService {
     return this._http.post(uri, body);
   }
 
-  postWorspace(bodyWorspace: Object): Observable<Workspace> {
-    return this.postGeneric('organizations', bodyWorspace);
+  postWorkspace(bodyWorkspace: Object): Observable<Workspace> {
+    return this.postGeneric('organizations', bodyWorkspace);
   }
+
   postBoard(bodyBoard: Object): Observable<Board> {
     return this.postGeneric('boards', bodyBoard);
   }
