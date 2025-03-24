@@ -34,8 +34,12 @@
 </div>
 
 <div id="kanban-lists" cdkDropListGroup #kanbanContainer>
-  <app-list *ngFor="let list of _getDataService.getAllListsInArray()"
-  [list]="list"
-  (cardDragMoved)="onDragMoved($event)"></app-list>
+  <app-list
+    *ngFor="let list of _getDataService.getAllListsInArray()"
+    [list]="list"
+    (cardDragMoved)="onDragMoved($event)"
+    (moveListEvent)="onMoveList($event)"
+    (deleteListEvent)="onDeleteList($event)">
+  </app-list>
 </div>
 

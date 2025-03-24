@@ -15,6 +15,7 @@ export class GetDataService {
 
   boards = signal<Board[]>([]);
   selectedBoard = signal<Board | null>(null);
+  allBoards = signal<Record<string, Board[]>>({});
 
   lists = signal<Record<string, List[]>>({});
 
@@ -36,14 +37,21 @@ export class GetDataService {
 
   public loadBoards(): void {
     if (this.selectedWorkspace()) {
-      this._getService
-        .getAllBoards({ organizations: this.selectedWorkspace()!.id })
-        .subscribe((data: Board[]) => {
-          this.boards.set(data);
-          if (this.boards().length > 0) {
-            this.setBoard(data[0]);
-          }
-        });
+      if (!this.allBoards()[this.selectedWorkspace()!.id]) {
+        this._getService
+          .getAllBoards({ organizations: this.selectedWorkspace()!.id })
+          .subscribe((data: Board[]) => {
+            this.boards.set(data);
+            if (this.boards().length > 0) {
+              this.setBoard(data[0]);
+            }
+          });
+      } else {
+        this.boards.set(this.allBoards()[this.selectedWorkspace()!.id]);
+        if (this.boards().length > 0) {
+          this.setBoard(this.boards()[0]);
+        }
+      }
     }
   }
 
@@ -69,13 +77,18 @@ export class GetDataService {
                 this.tickets.set(cards);
               });
           });
+      } else {
       }
     }
 
     this.loading.set(false);
   }
 
-  public getAllListsInArray():List[]{
+  public getAllListsInArray(): List[] {
     return Object.values(this.lists()).flat();
+  }
+
+  public getAllListFromBoard(boardId: string) {
+    this;
   }
 }
