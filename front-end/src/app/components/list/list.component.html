@@ -1,10 +1,34 @@
 <div>
   <h2>{{ list.name }}</h2>
-    <app-card-list *ngFor="let card of getCardsForList()" [card]="card"></app-card-list>
+  <div
+    cdkDropList
+    [cdkDropListData]="cards()"
+    (cdkDropListDropped)="drop($event)"
+    class="drop-container"
+  >
+    <div *ngIf="cards().length === 0 && (isDragging.isDragging$ | async)" class="empty-dropzone">
+      Deposit your card here
+    </div>
+
+    <div
+      *ngFor="let card of cards()"
+      cdkDrag
+      (cdkDragStarted)="onDragStarted(card)"
+      (cdkDragEnded)="onDragEnded(card)"
+      (cdkDragMoved)="onCardDragMoved($event)"
+    >
+      <ng-template cdkDragPreview>
+        <div class="card-preview">
+          <app-card-list [card]="card"></app-card-list>
+        </div>
+      </ng-template>
+
+      <ng-template cdkDragPlaceholder>
+        <div class="card-placeholder"></div>
+      </ng-template>
+
+      <app-card-list [card]="card"></app-card-list>
+    </div>
+  </div>
   <button (click)="openCreateModal()">+</button>
 </div>
-
-<!--<app-modal-create-->
-<!--  *ngIf="openCreateModal"-->
-<!--  (close)="closeCreateModal()"-->
-<!--&gt;</app-modal-create>-->
