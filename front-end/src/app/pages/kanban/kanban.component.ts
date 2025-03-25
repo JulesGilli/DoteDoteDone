@@ -10,7 +10,6 @@ import { CdkDragMove } from '@angular/cdk/drag-drop';
 import { List } from '../../models';
 import { ListComponent } from '../../components/list/list.component';
 import { SharedModule } from '../../../shared.module';
-import { LoadingComponent } from '../../components/loading/loading.component';
 import {
   GetDataService,
   PostService,
@@ -18,12 +17,21 @@ import {
   DelDataService,
 } from '../../services';
 import { DataService } from '../../services/data/data.service';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-kanban',
-  imports: [ListComponent, LoadingComponent, SharedModule],
+  imports: [ListComponent, SharedModule],
   templateUrl: 'kanban.component.html',
   styleUrls: ['./kanban.component.scss'],
+  animations: [
+    trigger('fadeInAnimation', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('1s ease-in-out', style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
 export class KanbanComponent implements OnInit, AfterViewInit {
   public readonly _dataService = inject(DataService);
