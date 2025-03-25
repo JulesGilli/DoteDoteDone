@@ -28,7 +28,7 @@ import { FormsModule } from '@angular/forms';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { CardListComponent } from '../card-list/card-list.component';
 import { SharedModule } from '../../../shared.module';
-import {GetDataService} from '../../services/data/get/get-data.service';
+import { DataService } from '../../services/data/data.service';
 
 
 @Component({
@@ -52,7 +52,7 @@ export class ListComponent implements OnInit {
   @Input() list!: List;
   @Output() cardDragMoved = new EventEmitter<CdkDragMove<any>>();
   @Output() moveListEvent = new EventEmitter<{ list: List; direction: 'left' | 'right' }>();
-  @Output() deleteListEvent = new EventEmitter<string>();
+  @Output() deleteListEvent = new EventEmitter<List>();
 
   isCreateMode = false;
   selectedTicket: any = null;
@@ -62,13 +62,13 @@ export class ListComponent implements OnInit {
   isEditingTitle = false;
   isMenuOpen = false;
 
-  private readonly _getDataService = inject(GetDataService);
+  private readonly _dataService = inject(DataService);
   private readonly _postService = inject(PostService);
 
   @ViewChild('dropdownContainer', { static: false }) dropdownContainer!: ElementRef;
 
   cards = computed(() =>
-    this._getDataService.tickets().filter(card => card.idList === this.list.id && card.id !== this.draggedCardId)
+    this._dataService.tickets().filter(card => card.idList === this.list.id && card.id !== this.draggedCardId)
   );
 
   ngOnInit(): void {}
@@ -129,9 +129,7 @@ export class ListComponent implements OnInit {
   }
 
   deleteList(): void {
-    this._postService.updateList(this.list.id, { closed: true }).subscribe(() => {
-      this.deleteListEvent.emit(this.list.id);
-    });
+    this.deleteListEvent.emit(this.list);
     this.isMenuOpen = false;
   }
 

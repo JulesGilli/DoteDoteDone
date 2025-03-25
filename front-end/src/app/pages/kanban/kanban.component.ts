@@ -10,10 +10,14 @@ import { CdkDragMove } from '@angular/cdk/drag-drop';
 import { List } from '../../models';
 import { ListComponent } from '../../components/list/list.component';
 import { SharedModule } from '../../../shared.module';
-import {LoadingComponent} from '../../components/loading/loading.component';
-import {GetDataService} from '../../services/data/get/get-data.service';
-import {PostService} from '../../services';
-import {PostDataService} from '../../services/data/post/post-data.service';
+import { LoadingComponent } from '../../components/loading/loading.component';
+import {
+  GetDataService,
+  PostService,
+  PostDataService,
+  DelDataService,
+} from '../../services';
+import { DataService } from '../../services/data/data.service';
 
 @Component({
   selector: 'app-kanban',
@@ -22,9 +26,11 @@ import {PostDataService} from '../../services/data/post/post-data.service';
   styleUrls: ['./kanban.component.scss'],
 })
 export class KanbanComponent implements OnInit, AfterViewInit {
+  public readonly _dataService = inject(DataService);
   public readonly _getDataService = inject(GetDataService);
   public readonly _postService = inject(PostService);
   public readonly _postDataService = inject(PostDataService);
+  public readonly _delDataService = inject(DelDataService);
 
   @ViewChild('kanbanContainer') kanbanContainer!: ElementRef<HTMLDivElement>;
 
@@ -51,20 +57,23 @@ export class KanbanComponent implements OnInit, AfterViewInit {
   }
 
   onMoveList(event: { list: List; direction: 'left' | 'right' }): void {
-    const boardId = this._getDataService.selectedBoard()?.id;
+    const boardId = this._dataService.selectedBoard()?.id;
     if (!boardId) {
       return;
     }
-    this._getDataService.lists.update(prev => {
+    this._dataService.lists.update((prev) => {
       const boardLists = prev[boardId] || [];
-      const currentIndex = boardLists.findIndex(l => l.id === event.list.id);
+      const currentIndex = boardLists.findIndex((l) => l.id === event.list.id);
       if (currentIndex === -1) {
         return prev;
       }
       let newIndex = currentIndex;
       if (event.direction === 'left' && currentIndex > 0) {
         newIndex = currentIndex - 1;
-      } else if (event.direction === 'right' && currentIndex < boardLists.length - 1) {
+      } else if (
+        event.direction === 'right' &&
+        currentIndex < boardLists.length - 1
+      ) {
         newIndex = currentIndex + 1;
       }
       if (newIndex !== currentIndex) {
@@ -77,26 +86,19 @@ export class KanbanComponent implements OnInit, AfterViewInit {
         });
         return {
           ...prev,
-          [boardId]: updatedLists
+          [boardId]: updatedLists,
         };
       }
       return prev;
     });
   }
 
-  onDeleteList(deletedListId: string): void {
-    const boardId = this._getDataService.selectedBoard()?.id;
-    if (!boardId) {
+  onDeleteList(list: List): void {
+    const selectedBoard = this._dataService.selectedBoard();
+    if (!selectedBoard) {
       return;
     }
-    this._getDataService.lists.update(prev => {
-      const boardLists = prev[boardId] || [];
-      const updatedLists = boardLists.filter(l => l.id !== deletedListId);
-      return {
-        ...prev,
-        [boardId]: updatedLists
-      };
-    });
+    this._delDataService.deleteList(list);
   }
 
   createWorkspace(): void {
