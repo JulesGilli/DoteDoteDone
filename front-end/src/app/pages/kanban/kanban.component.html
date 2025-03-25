@@ -12,7 +12,7 @@
           </option>
         }
       </select>
-      <button>+</button>
+      <button (click)="openWorkspaceModal()">+</button>
       </div>
   </div>
 
@@ -28,7 +28,7 @@
           </option>
         }
       </select>
-      <button>+</button>
+      <button (click)="openBoardModal()">+</button>
     </div>
   </div>
 </div>
@@ -42,4 +42,8 @@
     (deleteListEvent)="onDeleteList($event)">
   </app-list>
 </div>
+
+<app-create-workspace-modal #createWorkspaceModal></app-create-workspace-modal>
+
+<app-create-board-modal #createBoardModal></app-create-board-modal>
 

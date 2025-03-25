@@ -6,20 +6,22 @@ import { SharedModule } from '../../../shared.module';
 import {LoadingComponent} from '../../components/loading/loading.component';
 import {GetDataService} from '../../services/data/get/get-data.service';
 import {PostService} from '../../services';
-import {PostDataService} from '../../services/data/post/post-data.service';
+import {CreateWorkspaceModalComponent} from '../../components/create-workspace-modal/create-workspace-modal.component';
+import {CreateBoardModalComponent} from '../../components/create-board-modal/create-board-modal.component';
 
 @Component({
   selector: 'app-kanban',
-  imports: [ListComponent, LoadingComponent, SharedModule],
+  imports: [ListComponent, LoadingComponent, SharedModule, CreateWorkspaceModalComponent, CreateBoardModalComponent],
   templateUrl: 'kanban.component.html',
-  styleUrls: ['./kanban.component.scss']
+  styleUrl: './kanban.component.scss'
 })
 export class KanbanComponent implements OnInit, AfterViewInit {
   public readonly _getDataService = inject(GetDataService);
   public readonly _postService = inject(PostService);
-  public readonly _postDataService = inject(PostDataService);
 
   @ViewChild('kanbanContainer') kanbanContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('createWorkspaceModal') createWorkspaceModal!: CreateWorkspaceModalComponent;
+  @ViewChild('createBoardModal') createBoardModal!: CreateBoardModalComponent;
 
   autoScrollThreshold = 100;
   scrollSpeed = 10;
@@ -30,6 +32,15 @@ export class KanbanComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    console.log('CreateWorkspaceModalComponent:', this.createWorkspaceModal);
+  }
+
+  openWorkspaceModal(): void {
+    this.createWorkspaceModal.openModal();
+  }
+
+  openBoardModal(): void {
+    this.createBoardModal.openModal();
   }
 
   onDragMoved(event: CdkDragMove<any>): void {
@@ -92,20 +103,5 @@ export class KanbanComponent implements OnInit, AfterViewInit {
         [boardId]: updatedLists
       };
     });
-  }
-
-  createWorkspace(): void {
-    const workspaceName = prompt('Enter the name of the workspace you want to create');
-
-    if (!workspaceName) {
-      return;
-    }
-
-    const workspaceToCreate = {
-      displayName: workspaceName,
-      desc: 'Workspace created via Trello API'
-    };
-
-    this._postDataService.createWorkspace(workspaceToCreate);
   }
 }
