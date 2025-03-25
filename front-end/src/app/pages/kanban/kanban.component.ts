@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild, AfterViewInit, inject} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, inject} from '@angular/core';
 import { CdkDragMove } from '@angular/cdk/drag-drop';
 import { List } from '../../models';
 import { ListComponent } from '../../components/list/list.component';
@@ -15,7 +15,7 @@ import {CreateBoardModalComponent} from '../../components/create-board-modal/cre
   templateUrl: 'kanban.component.html',
   styleUrl: './kanban.component.scss'
 })
-export class KanbanComponent implements OnInit, AfterViewInit {
+export class KanbanComponent implements OnInit {
   public readonly _getDataService = inject(GetDataService);
   public readonly _postService = inject(PostService);
 
@@ -29,10 +29,6 @@ export class KanbanComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this._getDataService.loadWorkspaces();
     debugger;
-  }
-
-  ngAfterViewInit(): void {
-    console.log('CreateWorkspaceModalComponent:', this.createWorkspaceModal);
   }
 
   openWorkspaceModal(): void {
