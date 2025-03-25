@@ -23,12 +23,7 @@ export class CreateBoardModalComponent {
   private readonly _getDataService = inject(GetDataService);
 
   isOpened = signal<boolean>(false);
-  boardName = signal<string>("");
-
-  boardToCreate = {
-    name: this.boardName,
-    desc: 'Board created via Trello API'
-  };
+  boardName: string = "";
 
   selectedOption: string | null = null;
 
@@ -41,13 +36,15 @@ export class CreateBoardModalComponent {
   }
 
   create(): void {
-    if (!this.boardName) {
-      return;
-    }
+    const board = {
+      name: this.boardName,
+      desc: 'Board created via Trello API'
+    };
 
-    this._postDataService.postBoard(this.boardToCreate);
+    this._postDataService.postBoard(board);
 
     this._getDataService.loadWorkspaces();
+    this._getDataService.loadBoards();
 
     this.closeModal();
   }

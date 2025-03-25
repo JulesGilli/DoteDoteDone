@@ -6,7 +6,7 @@
     </div>
     <div class="create-board-form">
       <label>Board name :</label>
-      <input type="text" placeholder="Enter your board name..." [(ngModel)]="boardToCreate.name" />
+      <input type="text" placeholder="Enter your board name..." [(ngModel)]="boardName" />
     </div>
     <div class="container">
       <button
@@ -22,7 +22,7 @@
     </div>
     <div class="modal-actions">
       <button (click)="closeModal()">&#10005; Cancel</button>
-      <button (click)="create()" [disabled]="!boardToCreate.name">&#10003; Confirm</button>
+      <button (click)="create()" [disabled]="!boardName">&#10003; Confirm</button>
     </div>
   </div>
 </div>

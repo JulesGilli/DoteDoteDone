@@ -9,4 +9,5 @@ export interface Card {
   pos?: number;
   idMembers?: string[];
   labels?: Label[];
+  closed?:boolean;
 }

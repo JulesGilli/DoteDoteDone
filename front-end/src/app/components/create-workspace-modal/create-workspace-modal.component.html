@@ -6,10 +6,10 @@
     </div>
     <div id="create-workspace-form">
       <label for="workspace">Workspace Name:</label>
-      <input id="workspace" type="text" placeholder="Enter your workspace name..." [(ngModel)]="workspaceToCreate.displayName" (ngModelChange)="change()" />
+      <input id="workspace" type="text" placeholder="Enter your workspace name..." [(ngModel)]="workspaceName" />
     </div>
     <div class="modal-actions">
-      <button (click)="create()" [disabled]="!workspaceToCreate.displayName">&#10003; Confirm</button>
+      <button (click)="create()" [disabled]="!workspaceName">&#10003; Confirm</button>
     </div>
   </div>
 </div>
