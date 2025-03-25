@@ -10,7 +10,7 @@ import {PostDataService, PostService} from '../../services';
   styleUrl: './create-workspace-modal.component.scss'
 })
 export class CreateWorkspaceModalComponent {
-  private readonly _postDataService = inject(PostDataService);
+  private readonly _postDataService = inject(PostService);
   private readonly _getDataService = inject(GetDataService);
 
   isOpened = signal<boolean>(false);
@@ -30,7 +30,7 @@ export class CreateWorkspaceModalComponent {
       desc: 'Workspace created via Trello API'
     };
 
-    this._postDataService.createWorkspace(workspace);
+    this._postDataService.postWorkspace(workspace).subscribe();
 
     this._getDataService.loadWorkspaces();
     this.closeModal();

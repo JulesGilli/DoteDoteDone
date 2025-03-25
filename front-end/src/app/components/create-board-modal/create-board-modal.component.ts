@@ -1,6 +1,6 @@
 import {Component, inject, signal} from '@angular/core';
-import {PostService} from '../../services';
-import {GetDataService} from '../../services/data/get/get-data.service';
+import {DelDataService, PostService} from '../../services';
+import {GetDataService} from '../../services';
 import {SharedModule} from '../../../shared.module';
 
 interface Option {
@@ -21,11 +21,17 @@ interface Option {
 export class CreateBoardModalComponent {
   private readonly _postDataService = inject(PostService);
   private readonly _getDataService = inject(GetDataService);
+  private readonly _delDataService = inject(DelDataService);
 
   isOpened = signal<boolean>(false);
   boardName: string = "";
+  selectedOption: string = "scrum";
 
-  selectedOption: string | null = null;
+  options: Option[] = [
+    { id: 'scrum', title: 'Scrum', description: 'Plan and deliver incremental improvements through a series of sprints.', icon: '🔄' },
+    { id: 'kanban', title: 'Kanban', description: 'Visualize workflows based on supply and demand, limiting work in progress for each team.', icon: '♾️' },
+    { id: 'management', title: 'Project management', description: 'Automatically assign tickets to sprints by linking sprints to all values in a custom field.', icon: '📊' },
+  ];
 
   openModal(): void {
     this.isOpened.set(true);
@@ -35,27 +41,47 @@ export class CreateBoardModalComponent {
     this.isOpened.set(false);
   }
 
+  selectOption(id: string) {
+    this.selectedOption = id;
+  }
+
   create(): void {
     const board = {
       name: this.boardName,
       desc: 'Board created via Trello API'
     };
 
-    this._postDataService.postBoard(board);
+    this._postDataService.postBoard(board).subscribe((createdBoard) => {
+      const listsToDelete = ["À faire", "En cours", "Terminé"];
 
-    this._getDataService.loadWorkspaces();
-    this._getDataService.loadBoards();
+      // listsToDelete.forEach(list => {
+      //   this._delDataService.deleteList(list).subscribe(() => {
+      //     console.log(`Liste supprimée : ${list}`);
+      //   });
+      // });
 
-    this.closeModal();
+      const lists = this.getListsForTemplate(this.selectedOption);
+
+      for (let i = 0; i < lists.length; i++) {
+        const listBody = { name: lists[i], idBoard: createdBoard.id, pos: i };
+        this._postDataService.postList(listBody).subscribe();
+      }
+
+      this._getDataService.loadBoards();
+      this.closeModal();
+    });
   }
 
-  options: Option[] = [
-    { id: 'scrum', title: 'Scrum', description: 'Plan and deliver incremental improvements through a series of sprints.', icon: '🔄' },
-    { id: 'kanban', title: 'Kanban', description: 'Visualize workflows based on supply and demand, limiting work in progress for each team.', icon: '♾️' },
-    { id: 'management', title: 'Project management', description: 'Automatically assign tickets to sprints by linking sprints to all values in a custom field.', icon: '📊' },
-  ];
-
-  selectOption(id: string) {
-    this.selectedOption = id;
+  private getListsForTemplate(template: string): Array<string> {
+    switch (template) {
+      case 'scrum':
+        return ['Backlog', 'To Do', 'In Progress', 'Done'];
+      case 'kanban':
+        return ['To Do', 'Doing', 'Review', 'Done'];
+      case 'management':
+        return ['Ideas', 'Planning', 'Execution', 'Completed'];
+      default:
+        return [];
+    }
   }
 }

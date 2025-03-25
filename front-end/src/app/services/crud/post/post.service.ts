@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../index';
 import { Workspace, Board, Card, List } from '../../../models';
 import { Observable } from 'rxjs';
+import {log} from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
 
 @Injectable({
   providedIn: 'root',
@@ -20,17 +21,18 @@ export class PostService {
 
   postWorkspace(bodyWorkspace: Object): Observable<Workspace> {
     this.initializeUri('organizations');
-    this._http.post<Workspace>(this.uri, bodyWorkspace).subscribe();
     return this._http.post<Workspace>(this.uri, bodyWorkspace);
   }
 
   postBoard(bodyBoard: Object): Observable<Board> {
     this.initializeUri('boards');
+    this._http.post<Board>(this.uri, bodyBoard);
     return this._http.post<Board>(this.uri, bodyBoard);
   }
 
   postList(bodyList: Object): Observable<List> {
     this.initializeUri('lists');
+    this._http.post<List>(this.uri, bodyList);
     return this._http.post<List>(this.uri, bodyList);
   }
 
