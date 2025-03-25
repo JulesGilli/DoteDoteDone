@@ -211,7 +211,6 @@ export class AllCardsComponent implements OnInit {
       })
       .subscribe({
         next: (updatedCard) => {
-          console.log('Ticket mis à jour', updatedCard);
           const index = this.tickets.findIndex(
             (ticket) => ticket.ticketId === updatedCard.id
           );
