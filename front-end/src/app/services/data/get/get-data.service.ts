@@ -24,7 +24,7 @@ export class GetDataService {
 
   public setWorkspace(workspace: Workspace) {
     this._dataService.selectedWorkspace.set(workspace);
-    if ((workspace.id = 'all')) {
+    if ((workspace.id === 'all')) {
       this._dataService.workspaces().forEach((w) => this.setWorkspace(w));
     } else {
       this.loadBoards();

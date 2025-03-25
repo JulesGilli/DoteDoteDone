@@ -31,7 +31,7 @@
       <div class="option">
         <label class="option-label">Manager</label>
         <select class="member-select" [(ngModel)]="selectedMember">
-          @for (member of members; track member) {
+          @for (member of this.members; track member) {
             <option [ngValue]="member">
               {{ member.fullName || "No member"}}
             </option>

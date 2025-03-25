@@ -16,6 +16,7 @@ import {
   PostService,
   PostDataService,
   DelDataService,
+  PutService,
 } from '../../services';
 import { DataService } from '../../services/data/data.service';
 
@@ -27,8 +28,11 @@ import { DataService } from '../../services/data/data.service';
 })
 export class KanbanComponent implements OnInit, AfterViewInit {
   public readonly _dataService = inject(DataService);
-  public readonly _getDataService = inject(GetDataService);
   public readonly _postService = inject(PostService);
+  public readonly _putService = inject(PutService);
+
+  public readonly _getDataService = inject(GetDataService);
+
   public readonly _postDataService = inject(PostDataService);
   public readonly _delDataService = inject(DelDataService);
 
@@ -82,7 +86,7 @@ export class KanbanComponent implements OnInit, AfterViewInit {
         updatedLists.splice(newIndex, 0, movedList);
         updatedLists.forEach((l, index) => {
           l.pos = index;
-          this._postService.updateList(l.id, { pos: index }).subscribe();
+          this._putService.putList(l.id, { pos: index }).subscribe();
         });
         return {
           ...prev,
