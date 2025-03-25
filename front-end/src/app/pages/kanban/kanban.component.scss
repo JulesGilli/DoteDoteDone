@@ -1,5 +1,88 @@
 @use '../../../variables.scss' as var;
 
+.loading, .error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 18px;
+  height: 100vh;
+}
+
+.logo-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  margin-top: -200px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-part {
+  width: 80px;
+  opacity: 0;
+  animation: logoSlideCycle 2.5s ease-in-out infinite;
+}
+
+.logo-part:not(:first-child) {
+  margin-left: -40px;
+}
+
+.logo-part1 {
+  animation-delay: 0.6s;
+  z-index: 3;
+}
+
+.logo-part2 {
+  animation-delay: 0.3s;
+  z-index: 2;
+}
+
+.logo-part3 {
+  animation-delay: 0s;
+  z-index: 1;
+}
+
+@keyframes logoSlideCycle {
+  0% {
+    transform: translateX(-150%);
+    opacity: 0;
+  }
+  20% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  67% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  76% {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+}
+
+.loading-text {
+  margin-top: 20px;
+  font-size: 20px;
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 #kanban-selectors {
   div {
     display: flex;
