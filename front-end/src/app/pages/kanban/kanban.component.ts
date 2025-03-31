@@ -3,6 +3,7 @@ import {
   ElementRef,
   OnInit,
   ViewChild,
+  HostListener,
   inject,
 } from '@angular/core';
 import { CdkDragMove } from '@angular/cdk/drag-drop';
@@ -25,7 +26,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
   selector: 'app-kanban',
   imports: [ListComponent, SharedModule, CreateWorkspaceModalComponent, CreateBoardModalComponent],
   templateUrl: 'kanban.component.html',
-  styleUrl: './kanban.component.scss',
+  styleUrls: ['./kanban.component.scss'],
   animations: [
     trigger('fadeInAnimation', [
       transition(':enter', [
@@ -39,36 +40,29 @@ export class KanbanComponent implements OnInit {
   public readonly _dataService = inject(DataService);
   public readonly _postService = inject(PostService);
   public readonly _putService = inject(PutService);
-
   public readonly _getDataService = inject(GetDataService);
-
   public readonly _postDataService = inject(PostDataService);
   public readonly _delDataService = inject(DelDataService);
-
   @ViewChild('kanbanContainer') kanbanContainer!: ElementRef<HTMLDivElement>;
   @ViewChild('createWorkspaceModal') createWorkspaceModal!: CreateWorkspaceModalComponent;
   @ViewChild('createBoardModal') createBoardModal!: CreateBoardModalComponent;
-
+  public isBoardMenuOpen: boolean = false;
+  public isWorkspaceMenuOpen: boolean = false;
   autoScrollThreshold = 100;
   scrollSpeed = 10;
-
   ngOnInit(): void {
     this._getDataService.loadWorkspaces();
   }
-
   openWorkspaceModal(): void {
     this.createWorkspaceModal.openModal();
   }
-
   openBoardModal(): void {
     this.createBoardModal.openModal();
   }
-
   onDragMoved(event: CdkDragMove<any>): void {
     const containerEl = this.kanbanContainer.nativeElement;
     const containerRect = containerEl.getBoundingClientRect();
     const pointerX = event.pointerPosition.x;
-
     if (pointerX > containerRect.right - this.autoScrollThreshold) {
       containerEl.scrollLeft += this.scrollSpeed;
     }
@@ -76,7 +70,6 @@ export class KanbanComponent implements OnInit {
       containerEl.scrollLeft -= this.scrollSpeed;
     }
   }
-
   onMoveList(event: { list: List; direction: 'left' | 'right' }): void {
     const boardId = this._dataService.selectedBoard()?.id;
     if (!boardId) {
@@ -91,10 +84,7 @@ export class KanbanComponent implements OnInit {
       let newIndex = currentIndex;
       if (event.direction === 'left' && currentIndex > 0) {
         newIndex = currentIndex - 1;
-      } else if (
-        event.direction === 'right' &&
-        currentIndex < boardLists.length - 1
-      ) {
+      } else if (event.direction === 'right' && currentIndex < boardLists.length - 1) {
         newIndex = currentIndex + 1;
       }
       if (newIndex !== currentIndex) {
@@ -113,7 +103,6 @@ export class KanbanComponent implements OnInit {
       return prev;
     });
   }
-
   onDeleteList(list: List): void {
     const selectedBoard = this._dataService.selectedBoard();
     if (!selectedBoard) {
@@ -121,7 +110,6 @@ export class KanbanComponent implements OnInit {
     }
     this._delDataService.deleteList(list);
   }
-
   onDeleteBoard(): void {
     const selectedBoard = this._dataService.selectedBoard();
     if (!selectedBoard) {
@@ -129,12 +117,39 @@ export class KanbanComponent implements OnInit {
     }
     this._delDataService.deleteBoard(selectedBoard);
   }
-
   onDeleteWorkspace(): void {
     const selectedWorkspace = this._dataService.selectedWorkspace();
     if (!selectedWorkspace) {
       return;
     }
     this._delDataService.deleteWorkspace(selectedWorkspace);
+  }
+  toggleBoardMenu(): void {
+    this.isBoardMenuOpen = !this.isBoardMenuOpen;
+  }
+  enterRenameBoardMode(): void {
+    this.isBoardMenuOpen = false;
+  }
+  deleteBoard(): void {
+    this.isBoardMenuOpen = false;
+    this.onDeleteBoard();
+  }
+  toggleWorkspaceMenu(): void {
+    this.isWorkspaceMenuOpen = !this.isWorkspaceMenuOpen;
+  }
+  enterRenameWorkspaceMode(): void {
+    this.isWorkspaceMenuOpen = false;
+  }
+  deleteWorkspace(): void {
+    this.isWorkspaceMenuOpen = false;
+    this.onDeleteWorkspace();
+  }
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const dropdown = (event.target as HTMLElement).closest('.dropdown-container');
+    if (!dropdown) {
+      this.isBoardMenuOpen = false;
+      this.isWorkspaceMenuOpen = false;
+    }
   }
 }
