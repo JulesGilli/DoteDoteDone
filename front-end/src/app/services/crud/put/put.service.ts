@@ -11,11 +11,11 @@ export class PutService {
   private readonly _http = inject(HttpClient);
   private readonly _auth = inject(AuthService);
   private uri: string = '';
-  private apiTrello = 'https://api.trello.com/1';
+  private apiTrello = 'https://api.trello.com/1/';
   initializeUri(tableName: string, idObject: string): void {
     this.uri =
       this.apiTrello +
-      `/${tableName}/${idObject}?${this._auth.getApiKeyTokenUrl()}`;
+      `${tableName}/${idObject}?${this._auth.getApiKeyTokenUrl()}`;
   }
 
   putWorkspace(

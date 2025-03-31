@@ -3,7 +3,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { CardComponent } from '../../components/card/card.component';
 import { SharedModule } from '../../../shared.module';
 import { Workspace, Board, Card } from '../../models';
-import { GetService, PostService } from '../../services';
+import { GetService, PostService, PutService } from '../../services';
 import { forkJoin, lastValueFrom } from 'rxjs';
 import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
 import { ModalEditComponent } from '../../components/modal-edit/modal-edit.component';
@@ -31,6 +31,7 @@ import { ModalEditComponent } from '../../components/modal-edit/modal-edit.compo
 export class AllCardsComponent implements OnInit {
   private _getService = inject(GetService);
   private _postService = inject(PostService);
+  private _putService = inject(PutService);
 
   isEditMode: boolean = false;
   isCreateMode: boolean = false;
@@ -204,8 +205,8 @@ export class AllCardsComponent implements OnInit {
   }
 
   updateTicket(): void {
-    this._postService
-      .updateCard(this.selectedTicket.ticketId, {
+    this._putService
+      .putCard(this.selectedTicket.ticketId, {
         name: this.selectedTicket.titre,
         desc: this.selectedTicket.resume,
       })

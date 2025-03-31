@@ -8,7 +8,7 @@ import {
   computed,
   HostListener,
   ElementRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import {
   CdkDragDrop,
@@ -19,17 +19,16 @@ import {
   CdkDropList,
   CdkDrag,
   CdkDragPlaceholder,
-  CdkDragPreview
+  CdkDragPreview,
 } from '@angular/cdk/drag-drop';
 import { Card, List } from '../../models';
-import { PostService } from '../../services';
+import { PostService, PutService } from '../../services';
 import { DragDropService } from '../../services/drag-drop.service';
 import { FormsModule } from '@angular/forms';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { CardListComponent } from '../card-list/card-list.component';
 import { SharedModule } from '../../../shared.module';
 import { DataService } from '../../services/data/data.service';
-
 
 @Component({
   selector: 'app-list',
@@ -44,14 +43,17 @@ import { DataService } from '../../services/data/data.service';
     CardListComponent,
     CdkDragPreview,
     CdkDragPlaceholder,
-    FormsModule
+    FormsModule,
   ],
-  styleUrls: ['./list.component.scss']
+  styleUrls: ['./list.component.scss'],
 })
 export class ListComponent implements OnInit {
   @Input() list!: List;
   @Output() cardDragMoved = new EventEmitter<CdkDragMove<any>>();
-  @Output() moveListEvent = new EventEmitter<{ list: List; direction: 'left' | 'right' }>();
+  @Output() moveListEvent = new EventEmitter<{
+    list: List;
+    direction: 'left' | 'right';
+  }>();
   @Output() deleteListEvent = new EventEmitter<List>();
 
   isCreateMode = false;
@@ -64,11 +66,17 @@ export class ListComponent implements OnInit {
 
   private readonly _dataService = inject(DataService);
   private readonly _postService = inject(PostService);
+  private readonly _putService = inject(PutService);
 
-  @ViewChild('dropdownContainer', { static: false }) dropdownContainer!: ElementRef;
+  @ViewChild('dropdownContainer', { static: false })
+  dropdownContainer!: ElementRef;
 
   cards = computed(() =>
-    this._dataService.tickets().filter(card => card.idList === this.list.id && card.id !== this.draggedCardId)
+    this._dataService
+      .tickets()
+      .filter(
+        (card) => card.idList === this.list.id && card.id !== this.draggedCardId
+      )
   );
 
   ngOnInit(): void {}
@@ -92,7 +100,7 @@ export class ListComponent implements OnInit {
       );
       const movedCard = event.container.data[event.currentIndex];
       movedCard.idList = this.list.id;
-      this._postService.updateCard(movedCard.id, movedCard).subscribe();
+      this._putService.putCard(movedCard.id, movedCard).subscribe();
     }
   }
 
@@ -106,7 +114,6 @@ export class ListComponent implements OnInit {
     this.isDragging.setDragging(false);
   }
 
-
   onCardDragMoved(event: CdkDragMove<any>): void {
     this.cardDragMoved.emit(event);
   }
@@ -117,11 +124,11 @@ export class ListComponent implements OnInit {
 
   saveTitle(): void {
     this.isEditingTitle = false;
-    this._postService.updateList(this.list.id, { name: this.list.name }).subscribe(
-      (updatedList) => {
+    this._putService
+      .putList(this.list.id, { name: this.list.name })
+      .subscribe((updatedList) => {
         this.list = updatedList;
-      }
-    );
+      });
   }
 
   toggleMenu(): void {
@@ -140,7 +147,10 @@ export class ListComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (this.dropdownContainer && !this.dropdownContainer.nativeElement.contains(event.target)) {
+    if (
+      this.dropdownContainer &&
+      !this.dropdownContainer.nativeElement.contains(event.target)
+    ) {
       this.isMenuOpen = false;
     }
   }
