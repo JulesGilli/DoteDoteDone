@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import {ConfirmPopupComponent} from '../confirm-popup/confirm-popup.component';
+import {DeleteCardComponent} from '../confirm-popup/delete-card/delete-card.component';
 import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-modal-view',
   templateUrl: './modal-view.component.html',
   imports: [
-    ConfirmPopupComponent,
+    DeleteCardComponent,
     NgIf
   ],
   styleUrls: ['./modal-view.component.scss']

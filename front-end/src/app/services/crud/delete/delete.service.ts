@@ -9,14 +9,14 @@ import { Card, List } from '../../../models';
 })
 export class DeleteService {
   private readonly _http = inject(HttpClient);
-  private readonly _auth = inject(AuthService);
+  private readonly _authService = inject(AuthService);
   private readonly _update = inject(PutService);
 
   private deleteGeneric(
     tableName: string,
     objectId: string
   ): Observable<string> {
-    let uri = `https://api.trello.com/1/${tableName}/${objectId}`;
+    let uri = `https://api.trello.com/1/${tableName}/${objectId}?${this._authService.getApiKeyTokenUrl()}`;
     return this._http.delete<string>(uri);
   }
 

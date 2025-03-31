@@ -46,10 +46,11 @@
     </div>
   </div>
 
-  <app-confirm-popup
+  <app-delete-card
     *ngIf="isConfirmVisible"
     [message]="'Do you really want to remove this card?'"
+    [cardToDel]="ticket?.id"
     (confirm)="onDeleteConfirmed()"
     (cancel)="onDeleteCancelled()"
-  ></app-confirm-popup>
+  ></app-delete-card>
 </div>
