@@ -24,8 +24,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
   selector: 'app-kanban',
   imports: [ListComponent, SharedModule, CreateWorkspaceModalComponent, CreateBoardModalComponent],
   templateUrl: 'kanban.component.html',
-  styleUrl: './kanban.component.scss'
-  styleUrls: ['./kanban.component.scss'],
+  styleUrl: './kanban.component.scss',
   animations: [
     trigger('fadeInAnimation', [
       transition(':enter', [
@@ -117,5 +116,21 @@ export class KanbanComponent implements OnInit {
       return;
     }
     this._delDataService.deleteList(list);
+  }
+
+  onDeleteBoard(): void {
+    const selectedBoard = this._dataService.selectedBoard();
+    if (!selectedBoard) {
+      return;
+    }
+    this._delDataService.deleteBoard(selectedBoard);
+  }
+
+  onDeleteWorkspace(): void {
+    const selectedWorkspace = this._dataService.selectedWorkspace();
+    if (!selectedWorkspace) {
+      return;
+    }
+    this._delDataService.deleteWorkspace(selectedWorkspace);
   }
 }
