@@ -1,3 +1,31 @@
+<div class="kanban-page">
+  <div *ngIf="_dataService.loading()" class="loading">
+    <div class="logo-loading">
+      <div class="logo-container">
+        <img src="/images/Logo_1.png" alt="Logo Part 1" class="logo-part logo-part1" />
+        <img src="/images/Logo_2.png" alt="Logo Part 2" class="logo-part logo-part2" />
+        <img src="/images/Logo_3.png" alt="Logo Part 3" class="logo-part logo-part3" />
+      </div>
+    </div>
+    <p class="loading-text">Loading...</p>
+  </div>
+
+  <div *ngIf="!_dataService.loading()" [@fadeInAnimation]>
+    <div id="kanban-selectors">
+      <div class="selectors">
+        <label>Workspace</label>
+        <div class="selector">
+          <select class="workspace-select" [ngModel]="_dataService.selectedWorkspace()"
+                  (ngModelChange)="_getDataService.setWorkspace($event)">
+            @for (workspace of _dataService.workspaces(); track workspace) {
+              <option [ngValue]="workspace">
+                {{ workspace.displayName }}
+              </option>
+            }
+          </select>
+          <button>+</button>
+        </div>
+      </div>
 <div id="kanban-selectors">
   <div *ngIf="_dataService.loading()"><app-loading /></div>
   <div class="selectors">
@@ -30,12 +58,33 @@
     </div>
   </div>
 </div>
+      <div class="selectors">
+        <label>Board</label>
+        <div class="selector">
+          <select class="board-select" [ngModel]="_dataService.selectedBoard()"
+                  (ngModelChange)="_getDataService.setBoard($event)">
+            @for (board of _dataService.boards(); track board) {
+              <option [ngValue]="board">
+                {{ board.name }}
+              </option>
+            }
+          </select>
+          <button>+</button>
+        </div>
+      </div>
+    </div>
 
-<div *ngIf="!_dataService.loading()" id="kanban-lists" cdkDropListGroup #kanbanContainer>
-  <app-list *ngFor="let list of _getDataService.getAllListsInArray()" [list]="list"
-    (cardDragMoved)="onDragMoved($event)" (moveListEvent)="onMoveList($event)" (deleteListEvent)="onDeleteList($event)">
-  </app-list>
+    <div id="kanban-lists" cdkDropListGroup #kanbanContainer>
+      <app-list *ngFor="let list of _getDataService.getAllListsInArray()"
+                [list]="list"
+                (cardDragMoved)="onDragMoved($event)"
+                (moveListEvent)="onMoveList($event)"
+                (deleteListEvent)="onDeleteList($event)">
+      </app-list>
+    </div>
+  </div>
 </div>
+
 
 <app-create-workspace-modal #createWorkspaceModal></app-create-workspace-modal>
 

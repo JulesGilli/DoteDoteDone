@@ -9,7 +9,6 @@ import { CdkDragMove } from '@angular/cdk/drag-drop';
 import { List } from '../../models';
 import { ListComponent } from '../../components/list/list.component';
 import { SharedModule } from '../../../shared.module';
-import { LoadingComponent } from '../../components/loading/loading.component';
 import {
   GetDataService,
   PostService,
@@ -19,12 +18,22 @@ import {
 import { DataService } from '../../services/data/data.service';
 import {CreateWorkspaceModalComponent} from '../../components/create-workspace-modal/create-workspace-modal.component';
 import {CreateBoardModalComponent} from '../../components/create-board-modal/create-board-modal.component';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-kanban',
-  imports: [ListComponent, LoadingComponent, SharedModule, CreateWorkspaceModalComponent, CreateBoardModalComponent],
+  imports: [ListComponent, SharedModule, CreateWorkspaceModalComponent, CreateBoardModalComponent],
   templateUrl: 'kanban.component.html',
   styleUrl: './kanban.component.scss'
+  styleUrls: ['./kanban.component.scss'],
+  animations: [
+    trigger('fadeInAnimation', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('1s ease-in-out', style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
 export class KanbanComponent implements OnInit {
   public readonly _dataService = inject(DataService);
