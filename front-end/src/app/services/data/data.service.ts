@@ -2,10 +2,9 @@ import { inject, Injectable, signal } from '@angular/core';
 import { Board, Card, List, Workspace } from '../../models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DataService {
-
   loading = signal<boolean>(true);
 
   workspaces = signal<Workspace[]>([]);

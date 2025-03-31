@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { GetService } from '../../crud/get/get.service';
 import { Board, Card, List, Workspace } from '../../../models';
 import { DataService } from '../data.service';
-import {Observable} from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,96 +11,107 @@ export class GetDataService {
   readonly _getService = inject(GetService);
   readonly _dataService = inject(DataService);
 
-  public loadWorkspaces(): void {
+  public async loadWorkspaces(): Promise<Workspace[]> {
     this._dataService.loading.set(true);
 
-    this._getService.getAllWorkspace().subscribe((data: Workspace[]) => {
-      this._dataService.workspaces.set(data);
-      if (this._dataService.workspaces().length > 0) {
-        this.setWorkspace(data[0]);
-      }
-      this._dataService.loading.set(false);
-    });
+    const data = await lastValueFrom(this._getService.getAllWorkspace());
+    this._dataService.workspaces.set(data);
+    if (this._dataService.workspaces().length > 0) {
+      this.setWorkspace(data[0]);
+    }
+    this._dataService.loading.set(false);
+    return data;
   }
 
-  public setWorkspace(workspace: Workspace) {
+  public async setWorkspace(workspace: Workspace): Promise<boolean> {
     this._dataService.selectedWorkspace.set(workspace);
-    if ((workspace.id === 'all')) {
-      this._dataService.workspaces().forEach((w) => this.setWorkspace(w));
+    if (workspace.id === 'all') {
+      let i = 0;
+      for (const w of this._dataService.workspaces()) {
+        await this.setWorkspace(w);
+      }
+      return false;
     } else {
-      this.loadBoards();
+      console.log('boards');
+      return await this.loadBoards();
     }
   }
 
-  public loadBoards(): void {
+  public async loadBoards(): Promise<boolean> {
     this._dataService.loading.set(true);
-    if (this._dataService.selectedWorkspace()) {
-      if (
-        !this._dataService.allBoards()[
-          this._dataService.selectedWorkspace()!.id
-        ]
-      ) {
-        this._getService
-          .getAllBoards({
-            organizations: this._dataService.selectedWorkspace()!.id,
-          })
-          .subscribe((data: Board[]) => {
-            this._dataService.boards.set(data);
-            if (this._dataService.boards().length > 0) {
-              this.setBoard(data[0]);
-            }
-            this._dataService.loading.set(false);
-          });
-      } else {
-        this._dataService.boards.set(
-          this._dataService.allBoards()[
-            this._dataService.selectedWorkspace()!.id
-          ]
+    const selectedWs = this._dataService.selectedWorkspace();
+    if (!selectedWs) return false;
+
+    if (!this._dataService.allBoards()[selectedWs.id]) {
+      try {
+        const boards: Board[] = await lastValueFrom(
+          this._getService.getAllBoards({ organizations: selectedWs.id })
         );
-        if (this._dataService.boards().length > 0) {
-          this.setBoard(this._dataService.boards()[0]);
+        this._dataService.allBoards()[selectedWs.id] = boards;
+        this._dataService.boards.set(boards);
+        if (boards.length > 0) {
+          await this.setBoard(boards[0]);
         }
+      } catch (error) {
+        console.error(error);
+      } finally {
         this._dataService.loading.set(false);
       }
+      return true;
+    } else {
+      const boards = this._dataService.allBoards()[selectedWs.id];
+      this._dataService.boards.set(boards);
+      if (boards.length > 0) {
+        await this.setBoard(boards[0]);
+      }
+      this._dataService.loading.set(false);
+      return true;
     }
   }
 
-  public setBoard(board: Board) {
+  public async setBoard(board: Board): Promise<Card[]> {
     this._dataService.selectedBoard.set(board);
-    this.loadListsWithCards();
+    return await this.loadListsWithCards();
   }
 
-  public loadListsWithCards(): void {
-    if (this._dataService.selectedBoard()) {
-      this._dataService.loading.set(true);
-      if (!this._dataService.lists()[this._dataService.selectedBoard()!.id]) {
+  public loadListsWithCards(): Promise<Card[]> {
+    if (!this._dataService.selectedBoard()) return Promise.resolve([]);
+
+    this._dataService.loading.set(true);
+    const boardId = this._dataService.selectedBoard()!.id;
+
+    return new Promise((resolve) => {
+      if (!this._dataService.lists()[boardId]) {
         this._getService
-          .getAllLists({ boards: this._dataService.selectedBoard()!.id })
+          .getAllLists({ boards: boardId })
           .subscribe((lists: List[]) => {
             let listsNotClosed: List[] = lists.filter((l) => !l.closed);
             this._dataService.lists.update((prevLists) => ({
               ...prevLists,
-              [this._dataService.selectedBoard()!.id]: listsNotClosed,
+              [boardId]: listsNotClosed,
             }));
 
             this._getService
-              .getAllCards({ boards: this._dataService.selectedBoard()!.id })
+              .getAllCards({ boards: boardId })
               .subscribe((cards: Card[]) => {
                 let cardsNotClosed = cards.filter((c) => !c.closed);
-                this._dataService.allTickets()[
-                  this._dataService.selectedBoard()!.id
-                ] = cardsNotClosed;
+                this._dataService.allTickets.update((prev) => ({
+                  ...prev,
+                  [boardId]: cardsNotClosed,
+                }));
+
                 this._dataService.tickets.set(cardsNotClosed);
                 this._dataService.loading.set(false);
+                resolve(cardsNotClosed);
               });
           });
       } else {
-        this._dataService.tickets.set(
-          this._dataService.allTickets()[this._dataService.selectedBoard()!.id]
-        );
+        const tickets = this._dataService.allTickets()[boardId] || [];
+        this._dataService.tickets.set(tickets);
         this._dataService.loading.set(false);
+        resolve(tickets);
       }
-    }
+    });
   }
 
   public getAllListsInArray(): List[] {

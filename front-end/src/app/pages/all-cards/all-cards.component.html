@@ -71,7 +71,7 @@
     <app-modal-create *ngIf="isCreateMode"
                       [selectedWorkspaceFromMain]="selectedWorkspace"
                       [allWorkspacesFromMain]="workspaces"
-                      [allBoardsFromMain]="boards"
+                      [allBoardsFromMain]="this._dataService.allBoards()"
                       (close)="closeCreateModal()"
                       (create)="createTicket($event)">
     </app-modal-create>
