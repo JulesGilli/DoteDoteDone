@@ -31,6 +31,22 @@ div {
   .card-preview {
   }
 
+  .editable-title {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: var.$white;
+  }
+
+  .edit-icon {
+    width: 16px;
+    height: 16px;
+    margin-left: 0.3rem;
+  }
+
+
+
+
   .card-placeholder {
     background-color: var.$lighter-dark;
     border-radius: 10px;
