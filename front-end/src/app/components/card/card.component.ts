@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import {ConfirmPopupComponent} from '../confirm-popup/confirm-popup.component';
+import {DeleteCardComponent} from '../confirm-popup/delete-card/delete-card.component';
 import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
   imports: [
-    ConfirmPopupComponent,
+    DeleteCardComponent,
     NgIf
   ],
   styleUrls: ['./card.component.scss']
