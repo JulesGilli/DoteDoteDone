@@ -26,13 +26,11 @@ export class PostService {
 
   postBoard(bodyBoard: Object): Observable<Board> {
     this.initializeUri('boards');
-    this._http.post<Board>(this.uri, bodyBoard);
     return this._http.post<Board>(this.uri, bodyBoard);
   }
 
   postList(bodyList: Object): Observable<List> {
     this.initializeUri('lists');
-    this._http.post<List>(this.uri, bodyList);
     return this._http.post<List>(this.uri, bodyList);
   }
 
