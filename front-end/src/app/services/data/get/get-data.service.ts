@@ -24,7 +24,11 @@ export class GetDataService {
 
   public setWorkspace(workspace: Workspace) {
     this._dataService.selectedWorkspace.set(workspace);
-    this.loadBoards();
+    if ((workspace.id === 'all')) {
+      this._dataService.workspaces().forEach((w) => this.setWorkspace(w));
+    } else {
+      this.loadBoards();
+    }
   }
 
   public loadBoards(): void {
@@ -99,8 +103,13 @@ export class GetDataService {
   }
 
   public getAllListsInArray(): List[] {
-    return Object.values(
+    if (
+      this._dataService.selectedBoard() &&
       this._dataService.lists()[this._dataService.selectedBoard()!.id]
-    ).flat();
+    )
+      return Object.values(
+        this._dataService.lists()[this._dataService.selectedBoard()!.id]
+      ).flat();
+    return [];
   }
 }
