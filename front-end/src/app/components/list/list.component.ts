@@ -68,8 +68,8 @@ export class ListComponent implements OnInit {
   private readonly _postService = inject(PostService);
   private readonly _putService = inject(PutService);
 
-  @ViewChild('dropdownContainer', { static: false })
-  dropdownContainer!: ElementRef;
+  @ViewChild('dropdownContainer', { static: false }) dropdownContainer!: ElementRef;
+  @ViewChild('editInput', { static: false }) editInput!: ElementRef;
 
   cards = computed(() =>
     this._dataService
@@ -120,6 +120,9 @@ export class ListComponent implements OnInit {
 
   editTitleMode(): void {
     this.isEditingTitle = true;
+    setTimeout(() => {
+      this.editInput?.nativeElement.focus();
+    }, 0);
   }
 
   saveTitle(): void {
@@ -152,6 +155,9 @@ export class ListComponent implements OnInit {
       !this.dropdownContainer.nativeElement.contains(event.target)
     ) {
       this.isMenuOpen = false;
+    }
+    if (this.isEditingTitle && this.editInput && !this.editInput.nativeElement.contains(event.target)) {
+      this.saveTitle();
     }
   }
 }
