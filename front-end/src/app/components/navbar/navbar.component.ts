@@ -15,7 +15,6 @@ export class NavbarComponent {
 
   toggleSidenav() {
     this.isExpanded = !this.isExpanded;
-    console.log('expanded', this.isExpanded);
   }
 
   logout(): void {

@@ -54,7 +54,7 @@ import { TopBarComponent } from '../components/top-bar/top-bar.component';
         }
       }
 
-      @media (min-width: 500px) {
+      @media (min-width: 700px) {
         .workspace-layout {
           display: flex;
 

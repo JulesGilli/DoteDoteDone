@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { DeleteService } from '../../crud/delete/delete.service';
-import { Card, List } from '../../../models';
+import {Board, Card, List, Workspace} from '../../../models';
 import { DataService } from '../data.service';
 
 @Injectable({
@@ -51,5 +51,13 @@ export class DelDataService {
         this._delService.deleteList(list.id).subscribe();
       }
     }
+  }
+
+  deleteBoard(board: Board) {
+    this._delService.deleteBoard(board.id).subscribe();
+  }
+
+  deleteWorkspace(workspace: Workspace) {
+    this._delService.deleteWorkspace(workspace.id).subscribe();
   }
 }

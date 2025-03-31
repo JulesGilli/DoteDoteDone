@@ -3,7 +3,6 @@ import {
   ElementRef,
   OnInit,
   ViewChild,
-  AfterViewInit,
   inject,
 } from '@angular/core';
 import { CdkDragMove } from '@angular/cdk/drag-drop';
@@ -18,13 +17,15 @@ import {
   PutService,
 } from '../../services';
 import { DataService } from '../../services/data/data.service';
+import {CreateWorkspaceModalComponent} from '../../components/create-workspace-modal/create-workspace-modal.component';
+import {CreateBoardModalComponent} from '../../components/create-board-modal/create-board-modal.component';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-kanban',
-  imports: [ListComponent, SharedModule],
+  imports: [ListComponent, SharedModule, CreateWorkspaceModalComponent, CreateBoardModalComponent],
   templateUrl: 'kanban.component.html',
-  styleUrls: ['./kanban.component.scss'],
+  styleUrl: './kanban.component.scss',
   animations: [
     trigger('fadeInAnimation', [
       transition(':enter', [
@@ -34,7 +35,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
     ]),
   ],
 })
-export class KanbanComponent implements OnInit, AfterViewInit {
+export class KanbanComponent implements OnInit {
   public readonly _dataService = inject(DataService);
   public readonly _postService = inject(PostService);
   public readonly _putService = inject(PutService);
@@ -45,6 +46,8 @@ export class KanbanComponent implements OnInit, AfterViewInit {
   public readonly _delDataService = inject(DelDataService);
 
   @ViewChild('kanbanContainer') kanbanContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('createWorkspaceModal') createWorkspaceModal!: CreateWorkspaceModalComponent;
+  @ViewChild('createBoardModal') createBoardModal!: CreateBoardModalComponent;
 
   autoScrollThreshold = 100;
   scrollSpeed = 10;
@@ -53,7 +56,13 @@ export class KanbanComponent implements OnInit, AfterViewInit {
     this._getDataService.loadWorkspaces();
   }
 
-  ngAfterViewInit(): void {}
+  openWorkspaceModal(): void {
+    this.createWorkspaceModal.openModal();
+  }
+
+  openBoardModal(): void {
+    this.createBoardModal.openModal();
+  }
 
   onDragMoved(event: CdkDragMove<any>): void {
     const containerEl = this.kanbanContainer.nativeElement;
@@ -113,20 +122,19 @@ export class KanbanComponent implements OnInit, AfterViewInit {
     this._delDataService.deleteList(list);
   }
 
-  createWorkspace(): void {
-    const workspaceName = prompt(
-      'Enter the name of the workspace you want to create'
-    );
-
-    if (!workspaceName) {
+  onDeleteBoard(): void {
+    const selectedBoard = this._dataService.selectedBoard();
+    if (!selectedBoard) {
       return;
     }
+    this._delDataService.deleteBoard(selectedBoard);
+  }
 
-    const workspaceToCreate = {
-      displayName: workspaceName,
-      desc: 'Workspace created via Trello API',
-    };
-
-    this._postDataService.createWorkspace(workspaceToCreate);
+  onDeleteWorkspace(): void {
+    const selectedWorkspace = this._dataService.selectedWorkspace();
+    if (!selectedWorkspace) {
+      return;
+    }
+    this._delDataService.deleteWorkspace(selectedWorkspace);
   }
 }

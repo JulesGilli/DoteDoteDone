@@ -1,1 +1,15 @@
-<div><input></div>
+<div *ngIf="isOpened()" class="modal-overlay">
+  <div class="modal-content">
+    <div class="create-workspace-title">
+      <h2>Create new workspace</h2>
+      <button class="close-btn" (click)="closeModal()">&#10005;</button>
+    </div>
+    <div id="create-workspace-form">
+      <label for="workspace">Workspace Name:</label>
+      <input id="workspace" type="text" placeholder="Enter your workspace name..." [(ngModel)]="workspaceName" />
+    </div>
+    <div class="modal-actions">
+      <button (click)="create()" [disabled]="!workspaceName">&#10003; Confirm</button>
+    </div>
+  </div>
+</div>

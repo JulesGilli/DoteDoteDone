@@ -1,1 +1,28 @@
-<p>create-board-modal works!</p>
+<div *ngIf="isOpened()" class="modal-overlay">
+  <div class="modal-content">
+    <div class="create-board-title">
+      <h2>Create new board</h2>
+      <button class="close-btn" (click)="closeModal()">&#10005;</button>
+    </div>
+    <div class="create-board-form">
+      <label>Board name :</label>
+      <input type="text" placeholder="Enter your board name..." [(ngModel)]="boardName" />
+    </div>
+    <div class="container">
+      <button
+        *ngFor="let option of options"
+        (click)="selectOption(option.id)"
+        class="radio-button"
+        [class.selected]="selectedOption === option.id"
+      >
+        <div class="icon">{{ option.icon }}</div>
+        <h3 class="title">{{ option.title }}</h3>
+        <p class="description">{{ option.description }}</p>
+      </button>
+    </div>
+    <div class="modal-actions">
+      <button (click)="closeModal()">&#10005; Cancel</button>
+      <button (click)="create()" [disabled]="!boardName">&#10003; Confirm</button>
+    </div>
+  </div>
+</div>
