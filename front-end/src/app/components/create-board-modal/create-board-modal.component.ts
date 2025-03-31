@@ -1,7 +1,8 @@
 import {Component, inject, signal} from '@angular/core';
-import {DelDataService, PostService} from '../../services';
+import {DelDataService, GetService, PostService} from '../../services';
 import {GetDataService} from '../../services';
 import {SharedModule} from '../../../shared.module';
+import {DataService} from '../../services/data/data.service';
 
 interface Option {
   id: string;
@@ -22,8 +23,11 @@ export class CreateBoardModalComponent {
   private readonly _postDataService = inject(PostService);
   private readonly _getDataService = inject(GetDataService);
   private readonly _delDataService = inject(DelDataService);
+  private readonly _getService = inject(GetService);
+  private readonly _dataService = inject(DataService);
 
   isOpened = signal<boolean>(false);
+
   boardName: string = "";
   selectedOption: string = "scrum";
 
@@ -45,31 +49,28 @@ export class CreateBoardModalComponent {
     this.selectedOption = id;
   }
 
-  create(): void {
+  async create(): Promise<void> {
     const board = {
       name: this.boardName,
-      desc: 'Board created via Trello API'
+      idOrganization: this._dataService.selectedWorkspace()?.id,
+      defaultLists: false
     };
 
-    this._postDataService.postBoard(board).subscribe((createdBoard) => {
-      const listsToDelete = ["À faire", "En cours", "Terminé"];
-
-      // listsToDelete.forEach(list => {
-      //   this._delDataService.deleteList(list).subscribe(() => {
-      //     console.log(`Liste supprimée : ${list}`);
-      //   });
-      // });
-
-      const lists = this.getListsForTemplate(this.selectedOption);
-
-      for (let i = 0; i < lists.length; i++) {
-        const listBody = { name: lists[i], idBoard: createdBoard.id, pos: i };
+    const newBoard = this._postDataService.postBoard(board).subscribe((createdBoard) => {
+      const listsToCreate = this.getListsForTemplate(this.selectedOption);
+      for (let i = 0; i < listsToCreate.length; i++) {
+        const listBody = { name: listsToCreate[i], idBoard: createdBoard.id, pos: i };
         this._postDataService.postList(listBody).subscribe();
       }
 
-      this._getDataService.loadBoards();
-      this.closeModal();
+      console.log(newBoard);
+
+      this._dataService.selectedBoard.update(() => createdBoard);
     });
+
+    this._getDataService.loadBoards();
+
+    this.closeModal();
   }
 
   private getListsForTemplate(template: string): Array<string> {
