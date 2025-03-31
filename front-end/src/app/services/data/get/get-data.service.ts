@@ -1,7 +1,8 @@
-import { inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { GetService } from '../../crud/get/get.service';
 import { Board, Card, List, Workspace } from '../../../models';
 import { DataService } from '../data.service';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
