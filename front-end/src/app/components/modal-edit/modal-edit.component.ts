@@ -1,6 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {Component, Input, Output, EventEmitter, inject} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {NgIf} from '@angular/common';
+import {DataService} from '../../services/data/data.service';
+import {GetDataService} from '../../services';
 
 type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
 
@@ -11,6 +13,9 @@ type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
   styleUrls: ['./modal-edit.component.scss']
 })
 export class ModalEditComponent {
+  protected readonly _dataService = inject(DataService);
+  protected readonly _getDataService = inject(GetDataService);
+
   @Input() ticket: any;
   @Output() close = new EventEmitter<void>();
   @Output() valid = new EventEmitter<void>();

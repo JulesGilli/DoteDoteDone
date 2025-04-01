@@ -1,11 +1,15 @@
 <div class="modal-overlay">
   <div class="modal-content">
-    <span class="close-btn" (click)="closeModal()">✖</span>
-
+    <div class="view-ticket-title">
+      <h2>Create new ticket</h2>
+      <button class="close-btn" (click)="closeModal()">&#10005;</button>
+    </div>
     <div class="modal-left">
+      <label>Ticket name</label>
       <div class="field title">
         {{ ticket?.titre || 'Card name' }}
       </div>
+      <label>Description</label>
       <div class="field resume">
         {{ ticket?.resume || 'Task resume' }}
       </div>
@@ -13,12 +17,12 @@
 
     <div class="modal-right">
       <div class="option">
-        <span class="option-label">Workspace</span>
+        <label class="option-label">Workspace</label>
         <span class="option-value">{{ ticket?.workspace || 'T-DEV' }}</span>
       </div>
 
       <div class="option">
-        <span class="option-label">Priorité</span>
+        <label class="option-label">Priority</label>
         <div class="option-value">
           <img
             class="status-indicator"
@@ -30,12 +34,12 @@
       </div>
 
       <div class="option">
-        <span class="option-label">Manager</span>
+        <label class="option-label">Manager</label>
         <span class="option-value">{{ ticket?.manager || 'username' }}</span>
       </div>
 
       <div class="option">
-        <span class="option-label">Board</span>
+        <label class="option-label">Board</label>
         <span class="option-value">{{ ticket?.board || 'Board name' }}</span>
       </div>
 

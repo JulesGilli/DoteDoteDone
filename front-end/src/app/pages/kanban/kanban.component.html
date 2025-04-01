@@ -25,23 +25,18 @@
           <div class="dropdown-container" #workspaceDropdown>
             <button (click)="toggleWorkspaceMenu()" class="menu-button">⋮</button>
             <div *ngIf="isWorkspaceMenuOpen" class="menu-dropdown">
-              <button (click)="enterRenameWorkspaceMode()">Rename</button>
+              <button (click)="enterRenameWorkspaceMode()">
+                Rename
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M17 4a2.12 2.12 0 0 1 0 3l-9.5 9.5l-4 1l1-3.944l9.504-9.552a2.116 2.116 0 0 1 2.864-.125zm-1.5 2.5l1 1" stroke-width="1"/></svg>
+              </button>
+              <button (click)="openBoardModal()">
+                Create
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M5.5 10.5h10m-5-5v10" stroke-width="1"/></svg>
+              </button>
               <button class="delete-button" (click)="deleteWorkspace()">
                 Delete
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  class="delete-icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M7 21C6.45 21 5.97933 20.8043 5.588 20.413C5.19667 20.0217 5.00067 19.5507 5 19V6H4V4H9V3H15V4H20V6H19V19C19 19.55 18.8043 20.021 18.413 20.413C18.0217 20.805 17.5507 21.0007 17 21H7ZM17 6H7V19H17V6ZM9 17H11V8H9V17ZM13 17H15V8H13V17Z"
-                    fill="currentColor"
-                  />
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M5.5 4.5h10v12a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2zm5-2a2 2 0 0 1 1.995 1.85l.005.15h-4a2 2 0 0 1 2-2m-7 2h14m-9 3v8m4-8v8" stroke-width="1"/></svg>
               </button>
-              <button (click)="openBoardModal()">Create</button>
             </div>
           </div>
         </div>
@@ -60,23 +55,18 @@
           <div class="dropdown-container" #boardDropdown>
             <button (click)="toggleBoardMenu()" class="menu-button">⋮</button>
             <div *ngIf="isBoardMenuOpen" class="menu-dropdown">
-              <button (click)="enterRenameBoardMode()">Rename</button>
+              <button (click)="enterRenameBoardMode()">
+                Rename
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M17 4a2.12 2.12 0 0 1 0 3l-9.5 9.5l-4 1l1-3.944l9.504-9.552a2.116 2.116 0 0 1 2.864-.125zm-1.5 2.5l1 1" stroke-width="1"/></svg>
+              </button>
+              <button (click)="openBoardModal()">
+                Create
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M5.5 10.5h10m-5-5v10" stroke-width="1"/></svg>
+              </button>
               <button class="delete-button" (click)="deleteBoard()">
                 Delete
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  class="delete-icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M7 21C6.45 21 5.97933 20.8043 5.588 20.413C5.19667 20.0217 5.00067 19.5507 5 19V6H4V4H9V3H15V4H20V6H19V19C19 19.55 18.8043 20.021 18.413 20.413C18.0217 20.805 17.5507 21.0007 17 21H7ZM17 6H7V19H17V6ZM9 17H11V8H9V17ZM13 17H15V8H13V17Z"
-                    fill="currentColor"
-                  />
-                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M5.5 4.5h10v12a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2zm5-2a2 2 0 0 1 1.995 1.85l.005.15h-4a2 2 0 0 1 2-2m-7 2h14m-9 3v8m4-8v8" stroke-width="1"/></svg>
               </button>
-              <button (click)="openBoardModal()">Create</button>
             </div>
           </div>
         </div>
