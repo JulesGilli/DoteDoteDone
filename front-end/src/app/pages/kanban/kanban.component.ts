@@ -18,13 +18,21 @@ import {
   PutService,
 } from '../../services';
 import { DataService } from '../../services/data/data.service';
-import {CreateWorkspaceModalComponent} from '../../components/create-workspace-modal/create-workspace-modal.component';
-import {CreateBoardModalComponent} from '../../components/create-board-modal/create-board-modal.component';
+import { CreateWorkspaceModalComponent } from '../../components/create-workspace-modal/create-workspace-modal.component';
+import { CreateBoardModalComponent } from '../../components/create-board-modal/create-board-modal.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { DeleteBoardComponent } from '../../components/confirm-popup/delete-board/delete-board.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteWorkspaceComponent } from '../../components/confirm-popup/delete-workspace/delete-workspace.component';
 
 @Component({
   selector: 'app-kanban',
-  imports: [ListComponent, SharedModule, CreateWorkspaceModalComponent, CreateBoardModalComponent],
+  imports: [
+    ListComponent,
+    SharedModule,
+    CreateWorkspaceModalComponent,
+    CreateBoardModalComponent,
+  ],
   templateUrl: 'kanban.component.html',
   styleUrls: ['./kanban.component.scss'],
   animations: [
@@ -44,12 +52,16 @@ export class KanbanComponent implements OnInit {
   public readonly _postDataService = inject(PostDataService);
   public readonly _delDataService = inject(DelDataService);
   @ViewChild('kanbanContainer') kanbanContainer!: ElementRef<HTMLDivElement>;
-  @ViewChild('createWorkspaceModal') createWorkspaceModal!: CreateWorkspaceModalComponent;
+  @ViewChild('createWorkspaceModal')
+  createWorkspaceModal!: CreateWorkspaceModalComponent;
   @ViewChild('createBoardModal') createBoardModal!: CreateBoardModalComponent;
   public isBoardMenuOpen: boolean = false;
   public isWorkspaceMenuOpen: boolean = false;
   autoScrollThreshold = 100;
   scrollSpeed = 10;
+
+  constructor(private dialog: MatDialog) {}
+
   ngOnInit(): void {
     this._getDataService.loadWorkspaces();
   }
@@ -84,7 +96,10 @@ export class KanbanComponent implements OnInit {
       let newIndex = currentIndex;
       if (event.direction === 'left' && currentIndex > 0) {
         newIndex = currentIndex - 1;
-      } else if (event.direction === 'right' && currentIndex < boardLists.length - 1) {
+      } else if (
+        event.direction === 'right' &&
+        currentIndex < boardLists.length - 1
+      ) {
         newIndex = currentIndex + 1;
       }
       if (newIndex !== currentIndex) {
@@ -103,6 +118,7 @@ export class KanbanComponent implements OnInit {
       return prev;
     });
   }
+
   onDeleteList(list: List): void {
     const selectedBoard = this._dataService.selectedBoard();
     if (!selectedBoard) {
@@ -110,19 +126,34 @@ export class KanbanComponent implements OnInit {
     }
     this._delDataService.deleteList(list);
   }
+
   onDeleteBoard(): void {
     const selectedBoard = this._dataService.selectedBoard();
     if (!selectedBoard) {
       return;
     }
-    this._delDataService.deleteBoard(selectedBoard);
+    const dialogRef = this.dialog.open(DeleteBoardComponent, {
+      data: { objectId: selectedBoard.id }, // Pass the board ID to the dialog
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+      }
+    });
   }
   onDeleteWorkspace(): void {
-    const selectedWorkspace = this._dataService.selectedWorkspace();
-    if (!selectedWorkspace) {
+    const selectedWorksapce = this._dataService.selectedWorkspace();
+    if (!selectedWorksapce) {
       return;
     }
-    this._delDataService.deleteWorkspace(selectedWorkspace);
+    const dialogRef = this.dialog.open(DeleteWorkspaceComponent, {
+      data: { objectId: selectedWorksapce.id }, // Pass the board ID to the dialog
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+      }
+    });
   }
   toggleBoardMenu(): void {
     this.isBoardMenuOpen = !this.isBoardMenuOpen;
@@ -146,7 +177,9 @@ export class KanbanComponent implements OnInit {
   }
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    const dropdown = (event.target as HTMLElement).closest('.dropdown-container');
+    const dropdown = (event.target as HTMLElement).closest(
+      '.dropdown-container'
+    );
     if (!dropdown) {
       this.isBoardMenuOpen = false;
       this.isWorkspaceMenuOpen = false;

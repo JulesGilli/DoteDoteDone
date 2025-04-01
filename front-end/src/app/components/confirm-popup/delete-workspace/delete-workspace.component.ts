@@ -1,28 +1,27 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { DelDataService, DeleteService } from '../../../services';
 import { ConfirmPopupComponent } from '../confirm-popup.component';
-import { DeleteService } from '../../../services';
 
 @Component({
   selector: 'app-delete-workspace',
-  imports: [],
   templateUrl: '../confirm-popup.component.html',
-  styleUrl: '../confirm-popup.component.scss',
+  styleUrls: ['../confirm-popup.component.scss'],
 })
-export class DeleteWorkspaceComponent
-  extends ConfirmPopupComponent
-  implements OnInit
-{
-  @Input() workspaceToDelId!: string;
+export class DeleteWorkspaceComponent extends ConfirmPopupComponent {
+  public override message = 'Do you really want to remove this workspace?';
+  private workspaceId!: string;
+  private _delService = inject(DelDataService);
+  constructor(
+    dialogRef: MatDialogRef<DeleteWorkspaceComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { objectId: string }
+  ) {
+    super(dialogRef);
+    this.workspaceId = data.objectId;
+  }
 
-  constructor(private _delService: DeleteService) {
-    super();
-  }
-  ngOnInit(): void {
-    this.message = 'Do you really want to remove this workspace?';
-  }
   override onConfirm(): void {
-    this._delService.deleteWorkspace(this.workspaceToDelId).subscribe(() => {
-      super.onConfirm();
-    });
+    this._delService.deleteWorkspace(this.workspaceId);
+    super.onConfirm();
   }
 }

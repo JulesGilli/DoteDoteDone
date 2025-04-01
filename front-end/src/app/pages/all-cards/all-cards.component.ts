@@ -9,7 +9,7 @@ import {
   PostService,
   PutService,
 } from '../../services';
-import { forkJoin, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
 import { ModalEditComponent } from '../../components/modal-edit/modal-edit.component';
 import { DataService } from '../../services/data/data.service';
@@ -74,54 +74,31 @@ export class AllCardsComponent implements OnInit {
   }
 
   async loadCards() {
-    const allBoards = Object.values(this._dataService.allBoards());
-    if (allBoards.length === 0) {
-      setTimeout(() => this.loadCards(), 500);
-      console.log("no boards");
-      return;
-    }
-    
+    this.loading = true;
     if (this.selectedWorkspace.id === 'all' && !this.allTickets['all']) {
       for (const board of Object.values(this._dataService.allBoards()).flat()) {
         await this._getDataService.setBoard(board);
       }
-      
+
       for (const k of Object.keys(this._dataService.allBoards())) {
         const boards = this._dataService.allBoards()[k];
         this.allTickets[k] = Object.values(this._dataService.allTickets())
           .flat()
           .filter((c) => boards.some((b) => b.id === c.idBoard));
       }
-      
-      this.allTickets['all'] = Object.values(this._dataService.allTickets()).flat();
+
+      this.allTickets['all'] = Object.values(
+        this._dataService.allTickets()
+      ).flat();
       this.tickets = this.formatOfTickets(this.allTickets['all']);
       this.loading = false;
     } else {
-      this.tickets = this.formatOfTickets(this.allTickets[this.selectedWorkspace.id]);
+      this.tickets = this.formatOfTickets(
+        this.allTickets[this.selectedWorkspace.id]
+      );
       this.loading = false;
     }
   }
-  
-  
-
-  // loadCardsFromBoard(boards: Board[]): void {
-  //   const cardsObservables = boards.map((board) =>
-  //     this._getService.getAllCards({ boards: board.id })
-  //   );
-  //   forkJoin(cardsObservables).subscribe({
-  //     next: (cardsArrays: Card[][]) => {
-  //       const allCards = ([] as Card[]).concat(...cardsArrays);
-  //       this.allTickets[this.selectedWorkspace.id] = allCards;
-  //       this.tickets = this.formatOfTickets(allCards);
-  //       this.loading = false;
-  //     },
-  //     error: (err) => {
-  //       console.error(err);
-  //       this.error = err;
-  //       this.loading = false;
-  //     },
-  //   });
-  // }
 
   formatOfTickets(cards: Card[]): any[] {
     const tickets = cards.map((card) => {
@@ -215,7 +192,8 @@ export class AllCardsComponent implements OnInit {
     }
     if (this.allTickets[workspaceIdFound!]) {
       this.allTickets[workspaceIdFound!].push(newTicket);
-      // this.allTickets['all'].push(newTicket);
+      this.allTickets['all'].push(newTicket);
+      this.tickets = this.formatOfTickets(this.allTickets[this.selectedWorkspace.id]);
     }
     // this.closeModal();
   }

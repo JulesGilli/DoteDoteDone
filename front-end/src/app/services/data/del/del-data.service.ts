@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { DeleteService } from '../../crud/delete/delete.service';
-import {Board, Card, List, Workspace} from '../../../models';
+import { Board, Card, List, Workspace } from '../../../models';
 import { DataService } from '../data.service';
+import { GetDataService } from '../get/get-data.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ import { DataService } from '../data.service';
 export class DelDataService {
   private readonly _dataService = inject(DataService);
   private readonly _delService = inject(DeleteService);
+  private _getDataService = inject(GetDataService);
 
   deleteList(list: List) {
     if (list.name === 'default') {
@@ -53,11 +55,37 @@ export class DelDataService {
     }
   }
 
-  deleteBoard(board: Board) {
-    this._delService.deleteBoard(board.id).subscribe();
+  deleteBoard(boardId: string) {
+    this._delService.deleteBoard(boardId);
+    this._dataService.allTickets.update((tickets) => {
+      const updatedTickets = { ...tickets };
+      delete updatedTickets[boardId];
+      return updatedTickets;
+    });
+
+    this._dataService.lists()[boardId].forEach((l) => {
+      this.deleteList(l);
+    });
+    this._dataService.allBoards.update((prev) => {
+      return {
+        ...prev,
+        [this._dataService.selectedWorkspace()!.id]: prev[
+          this._dataService.selectedWorkspace()!.id
+        ].filter((b) => boardId !== b.id),
+      };
+    });
+    this._getDataService.loadBoards();
   }
 
-  deleteWorkspace(workspace: Workspace) {
-    this._delService.deleteWorkspace(workspace.id).subscribe();
+  deleteWorkspace(workspaceId: string) {
+    this._delService.deleteWorkspace(workspaceId).subscribe();
+    this._dataService
+      .allBoards()
+      [workspaceId].forEach((b) => this.deleteBoard(b.id));
+    let workspaces: Workspace[] = this._dataService
+      .workspaces()
+      .filter((w) => w.id !== workspaceId);
+    this._dataService.workspaces.set(workspaces);
+    this._getDataService.loadWorkspaces();
   }
 }
