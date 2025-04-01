@@ -18,14 +18,23 @@ import {
   PutService,
 } from '../../services';
 import { DataService } from '../../services/data/data.service';
-import {CreateWorkspaceModalComponent} from '../../components/create-workspace-modal/create-workspace-modal.component';
-import {CreateBoardModalComponent} from '../../components/create-board-modal/create-board-modal.component';
+import { CreateWorkspaceModalComponent} from '../../components/create-workspace-modal/create-workspace-modal.component';
+import { CreateBoardModalComponent} from '../../components/create-board-modal/create-board-modal.component';
 import { RenameModalComponent } from '../../components/rename-modal/rename-modal.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { DeleteBoardComponent } from '../../components/confirm-popup/delete-board/delete-board.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteWorkspaceComponent } from '../../components/confirm-popup/delete-workspace/delete-workspace.component';
 
 @Component({
   selector: 'app-kanban',
-  imports: [ListComponent, SharedModule, CreateWorkspaceModalComponent, CreateBoardModalComponent, RenameModalComponent],
+  imports: [
+    ListComponent,
+    SharedModule,
+    CreateWorkspaceModalComponent,
+    CreateBoardModalComponent,
+    RenameModalComponent,
+  ],
   templateUrl: 'kanban.component.html',
   styleUrls: ['./kanban.component.scss'],
   animations: [
@@ -46,7 +55,8 @@ export class KanbanComponent implements OnInit {
   public readonly _postDataService = inject(PostDataService);
   public readonly _delDataService = inject(DelDataService);
   @ViewChild('kanbanContainer') kanbanContainer!: ElementRef<HTMLDivElement>;
-  @ViewChild('createWorkspaceModal') createWorkspaceModal!: CreateWorkspaceModalComponent;
+  @ViewChild('createWorkspaceModal')
+  createWorkspaceModal!: CreateWorkspaceModalComponent;
   @ViewChild('createBoardModal') createBoardModal!: CreateBoardModalComponent;
   @ViewChild('renameModal') renameModal!: RenameModalComponent;
 
@@ -56,6 +66,8 @@ export class KanbanComponent implements OnInit {
 
   autoScrollThreshold = 100;
   scrollSpeed = 10;
+
+  constructor(private dialog: MatDialog) {}
 
   renameType: 'workspace' | 'board' = 'workspace';
   showRenameModal = false;
@@ -76,24 +88,111 @@ export class KanbanComponent implements OnInit {
       containerEl.scrollLeft += this.scrollSpeed;
     if (event.pointerPosition.x < rect.left + this.autoScrollThreshold)
       containerEl.scrollLeft -= this.scrollSpeed;
+    }
+
+  onMoveList(event: { list: List; direction: 'left' | 'right' }): void {
+    const boardId = this._dataService.selectedBoard()?.id;
+    if (!boardId) {
+      return;
+    }
+    this._dataService.lists.update((prev) => {
+      const boardLists = prev[boardId] || [];
+      const currentIndex = boardLists.findIndex((l) => l.id === event.list.id);
+      if (currentIndex === -1) {
+        return prev;
+      }
+      let newIndex = currentIndex;
+      if (event.direction === 'left' && currentIndex > 0) {
+        newIndex = currentIndex - 1;
+      } else if (
+        event.direction === 'right' &&
+        currentIndex < boardLists.length - 1
+      ) {
+        newIndex = currentIndex + 1;
+      }
+      if (newIndex !== currentIndex) {
+        const updatedLists = [...boardLists];
+        const [movedList] = updatedLists.splice(currentIndex, 1);
+        updatedLists.splice(newIndex, 0, movedList);
+        updatedLists.forEach((l, index) => {
+          l.pos = index;
+          this._putService.putList(l.id, { pos: index }).subscribe();
+        });
+        return {
+          ...prev,
+          [boardId]: updatedLists,
+        };
+      }
+      return prev;
+    });
   }
 
-  onMoveList(event: { list: List; direction: 'left' | 'right' }): void { /* unchanged */ }
-  onDeleteList(list: List): void { this._delDataService.deleteList(list); }
-  onDeleteBoard(): void { this._delDataService.deleteBoard(this._dataService.selectedBoard()!); }
-  onDeleteWorkspace(): void { this._delDataService.deleteWorkspace(this._dataService.selectedWorkspace()!); }
+  onDeleteList(list: List): void {
+    const selectedBoard = this._dataService.selectedBoard();
+    if (!selectedBoard) {
+      return;
+    }
+    this._delDataService.deleteList(list);
+  }
 
-  toggleBoardMenu(): void { this.isBoardMenuOpen = !this.isBoardMenuOpen; }
-  deleteBoard(): void { this.isBoardMenuOpen = false; this.onDeleteBoard(); }
+  onDeleteBoard(): void {
+    const selectedBoard = this._dataService.selectedBoard();
+    if (!selectedBoard) {
+      return;
+    }
+    const dialogRef = this.dialog.open(DeleteBoardComponent, {
+      data: { objectId: selectedBoard.id }
+    });
 
-  toggleWorkspaceMenu(): void { this.isWorkspaceMenuOpen = !this.isWorkspaceMenuOpen; }
-  deleteWorkspace(): void { this.isWorkspaceMenuOpen = false; this.onDeleteWorkspace(); }
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+      }
+    });
+  }
+  onDeleteWorkspace(): void {
+    const selectedWorksapce = this._dataService.selectedWorkspace();
+    if (!selectedWorksapce) {
+      return;
+    }
+    const dialogRef = this.dialog.open(DeleteWorkspaceComponent, {
+      data: { objectId: selectedWorksapce.id }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+      }
+    });
+  }
+  toggleBoardMenu(): void {
+    this.isBoardMenuOpen = !this.isBoardMenuOpen;
+  }
+
+  deleteBoard(): void {
+    this.isBoardMenuOpen = false;
+    this.onDeleteBoard();
+  }
+  toggleWorkspaceMenu(): void {
+    this.isWorkspaceMenuOpen = !this.isWorkspaceMenuOpen;
+  }
+
+  deleteWorkspace(): void {
+    this.isWorkspaceMenuOpen = false;
+    this.onDeleteWorkspace();
+  }
+
+
+
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (!(event.target as HTMLElement).closest('.dropdown-container')) {
-      this.isBoardMenuOpen = false;
-      this.isWorkspaceMenuOpen = false;
+    const dropdown = (event.target as HTMLElement).closest(
+      '.dropdown-container'
+    );
+    if (!dropdown) {
+      if (!(event.target as HTMLElement).closest('.dropdown-container')) {
+        this.isBoardMenuOpen = false;
+        this.isWorkspaceMenuOpen = false;
+      }
     }
   }
 

@@ -1,21 +1,23 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-confirm-popup',
-  standalone: true,
   templateUrl: './confirm-popup.component.html',
-  styleUrls: ['./confirm-popup.component.scss']
+  styleUrls: ['./confirm-popup.component.scss'],
 })
 export class ConfirmPopupComponent {
-  @Input() message: string = "Do you really want to remove this card?";
-  @Output() confirm = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
+  public message!:string ;
+  constructor(
+    public dialogRef: MatDialogRef<ConfirmPopupComponent>
+  ) {
+  }
 
   onConfirm(): void {
-    this.confirm.emit();
+    this.dialogRef.close(true);
   }
 
   onCancel(): void {
-    this.cancel.emit();
+    this.dialogRef.close(false);
   }
 }

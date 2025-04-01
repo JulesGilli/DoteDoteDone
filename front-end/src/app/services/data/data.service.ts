@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Board, Card, List, Workspace } from '../../models';
 
 @Injectable({
