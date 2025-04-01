@@ -1,0 +1,65 @@
+<div *ngIf="isOpened()" class="modal-overlay">
+  <div class="modal-content">
+    <div class="create-ticket-title">
+      <h2>Create new ticket</h2>
+      <button class="close-btn" (click)="closeModal()">&#10005;</button>
+    </div>
+    <div id="create-ticket-form">
+      <div class="modal-left">
+        <label>Ticket name</label>
+        <input class="field title" type="text" [(ngModel)]="newTicket.name" placeholder="Ticket name" />
+        <label>Description</label>
+        <textarea class="field resume" [(ngModel)]="newTicket.desc" placeholder="Task resume"></textarea>
+      </div>
+
+      <div class="modal-right">
+        <div class="option">
+          <label class="option-label">Workspace</label>
+          <select class="workspace-select" [ngModel]="_dataService.selectedWorkspace()" (ngModelChange)="_getDataService.setWorkspace($event)">
+            @for (workspace of _dataService.workspaces(); track workspace) {
+              <option [ngValue]="workspace">
+                {{ workspace.displayName || "No workspace"}}
+              </option>
+            }
+          </select>
+        </div>
+        <div class="option">
+          <label class="option-label">Priority</label>
+          <select [(ngModel)]="newTicket.statusCard">
+            <option value="normal">Normal</option>
+            <option value="minor">Minor</option>
+            <option value="medium">Medium</option>
+            <option value="critical">Critical</option>
+            <option value="blocking">Blocking</option>
+          </select>
+        </div>
+        <div class="option">
+          <label class="option-label">Manager</label>
+          <select class="member-select" [ngModel]="_dataService.selectedBoard()">
+  <!--          @for (member of _dataService.members(); track member) {-->
+  <!--            <option [ngValue]="member">-->
+  <!--              {{ member.fullName || "No member"}}-->
+  <!--            </option>-->
+  <!--          }-->
+          </select>
+        </div>
+        <div class="option">
+          <label class="option-label">Board</label>
+          <select class="board-select" [ngModel]="_dataService.selectedBoard()" (ngModelChange)="_getDataService.setBoard($event)">
+            @for (board of _dataService.boards(); track board) {
+              <option [value]="board">
+                {{ board.name || "No boards for this workspace" }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button class="valid-btn" (click)="createTicket()" [disabled]="!newTicket.name">
+            Create
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

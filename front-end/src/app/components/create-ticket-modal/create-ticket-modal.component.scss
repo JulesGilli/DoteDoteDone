@@ -1,0 +1,176 @@
+@use '../../../variables.scss' as var;
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: relative;
+    background: var.$dark;
+    border: 2px solid var.$lighter-dark;
+    padding: 20px;
+    border-radius: var.$radius;
+    width: 85%;
+
+    .create-ticket-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      button {
+        background: none;
+        color: var.$white;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        border: none;
+        font-size: var.$h2-size;
+        &:hover {
+          color: var.$purple;
+        }
+      }
+    }
+
+    #create-ticket-form {
+      display: flex;
+      gap: 0.5rem;
+      flex-direction: column;
+
+      input {
+        padding: 10px 32px 10px 10px;
+        border-radius: var.$radius;
+        border: none;
+        color: var.$white;
+        background: var.$lighter-dark;
+        width: 100%;
+
+        &::placeholder {
+          color: var.$grey;
+          font-size: var.$h3-size;
+        }
+      }
+
+      .modal-left {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+
+        textarea {
+          background: var.$lighter-dark;
+          color: var.$white;
+          border-radius: var.$radius;
+          height: 100%;
+          font-size: 16px;
+          padding: 10px;
+          border: 1px solid var.$lighter-dark;
+          outline: none;
+          resize: none;
+          transition: border 0.3s ease;
+
+          &:focus {
+            border: 1px solid var.$light-purple;
+          }
+
+          &::placeholder {
+            color: var.$grey;
+            font-size: var.$p-size;
+            font-family: Roboto, 'Helvetica Neue', sans-serif;
+          }
+        }
+      }
+
+      .modal-right {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+
+        .option {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .modal-actions {
+          margin-top: 10px;
+          display: flex;
+          justify-content: flex-end;
+          gap: 1rem;
+
+          button {
+            background: var.$lighter-dark;
+            padding: 10px 32px 10px 10px;
+            color: var.$white;
+            border-radius: var.$radius;
+            border: 1px solid var.$lighter-dark;
+            width: 100%;
+            height: 100%;
+
+            &:hover {
+              background: var.$light-dark-hover;
+              border-color: var.$light-dark-hover;
+            }
+          }
+
+          button:disabled {
+            background: var.$lighter-dark;
+            border: 1px solid var.$dark;
+            color: var.$light-purple;
+            cursor: not-allowed;
+            opacity: 0.6;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 850px) {
+  .modal-overlay {
+    .modal-content {
+      width: 700px;
+
+      #create-ticket-form {
+        gap: 1.5rem;
+        flex-direction: row;
+      }
+
+      .modal-right {
+        width: 40%;
+      }
+
+      .modal-left {
+        width: 60%;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .modal-overlay {
+    .modal-content {
+      #create-ticket-form {
+        flex-direction: row;
+        gap: 1.5rem;
+      }
+
+      .modal-right {
+        width: 40%;
+      }
+
+      .modal-left {
+        width: 60%;
+      }
+    }
+  }
+}
