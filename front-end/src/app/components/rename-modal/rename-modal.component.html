@@ -1,0 +1,10 @@
+<div class="confirm-overlay">
+  <div class="confirm-content">
+    <h2 class="confirm-message">Rename</h2>
+    <input [(ngModel)]="newName" (keydown.enter)="confirm()" autofocus />
+    <div class="confirm-buttons">
+      <button class="confirm-btn" (click)="confirm()">Save</button>
+      <button class="cancel-btn" (click)="close()">Cancel</button>
+    </div>
+  </div>
+</div>

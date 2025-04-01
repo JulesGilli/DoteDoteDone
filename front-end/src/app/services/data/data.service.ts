@@ -18,4 +18,20 @@ export class DataService {
 
   tickets = signal<Card[]>([]);
   allTickets = signal<Record<string, Card[]>>({});
+
+  setBoards(newBoards: Board[]): void {
+    this.boards.set(newBoards);
+  }
+
+  setSelectedBoard(board: Board | null): void {
+    this.selectedBoard.set(board);
+  }
+
+  setWorkspaces(newWorkspaces: Workspace[]): void {
+    this.workspaces.set(newWorkspaces);
+  }
+
+  setSelectedWorkspace(workspace: Workspace | null): void {
+    this.selectedWorkspace.set(workspace);
+  }
 }

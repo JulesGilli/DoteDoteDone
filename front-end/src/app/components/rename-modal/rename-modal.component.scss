@@ -1,0 +1,97 @@
+@use '../../../variables.scss' as var;
+
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  animation: overlayFadeIn 0.3s forwards;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.confirm-content {
+  background: var.$dark;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid var.$lighter-dark;
+  transform: scale(0.9);
+  animation: contentScaleIn 0.3s forwards;
+}
+
+@keyframes contentScaleIn {
+  from {
+    transform: scale(0.9);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.confirm-message {
+  font-size: 1.2rem;
+  color: var.$white;
+  margin-bottom: 1rem;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 0.95rem;
+  border: 1px solid var.$lighter-dark;
+  background-color: var.$dark-less-dark;
+  color: var.$white;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.confirm-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.confirm-btn {
+  background: var.$purple;
+  color: var.$white;
+  border: 1px solid var.$purple;
+  border-radius: 5px;
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    background: var.$lighter-dark;
+    transform: scale(1.05);
+  }
+}
+
+.cancel-btn {
+  background: var.$dark;
+  color: var.$light-purple;
+  border: 1px solid var.$purple;
+  border-radius: 5px;
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    background: var.$dark;
+    transform: scale(1.05);
+  }
+}
