@@ -74,6 +74,14 @@ export class AllCardsComponent implements OnInit {
   }
 
   async loadCards() {
+    const allBoards = Object.values(this._dataService.allBoards());
+    if (allBoards.length === 0) {
+      setTimeout(() => this.loadCards(), 500);
+      console.log("no boards");
+      return;
+    }
+    
+
     this.loading = true;
     if (this.selectedWorkspace.id === 'all' && !this.allTickets['all']) {
       for (const board of Object.values(this._dataService.allBoards()).flat()) {
@@ -87,9 +95,7 @@ export class AllCardsComponent implements OnInit {
           .filter((c) => boards.some((b) => b.id === c.idBoard));
       }
 
-      this.allTickets['all'] = Object.values(
-        this._dataService.allTickets()
-      ).flat();
+      this.allTickets['all'] = Object.values(this._dataService.allTickets()).flat();
       this.tickets = this.formatOfTickets(this.allTickets['all']);
       this.loading = false;
     } else {
@@ -100,13 +106,45 @@ export class AllCardsComponent implements OnInit {
     }
   }
 
+
+  // loadCardsFromBoard(boards: Board[]): void {
+  //   const cardsObservables = boards.map((board) =>
+  //     this._getService.getAllCards({ boards: board.id })
+  //   );
+  //   forkJoin(cardsObservables).subscribe({
+  //     next: (cardsArrays: Card[][]) => {
+  //       const allCards = ([] as Card[]).concat(...cardsArrays);
+  //       this.allTickets[this.selectedWorkspace.id] = allCards;
+  //       this.tickets = this.formatOfTickets(allCards);
+  //       this.loading = false;
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //       this.error = err;
+  //       this.loading = false;
+  //     },
+  //   });
+  // }
+
   formatOfTickets(cards: Card[]): any[] {
-    const tickets = cards.map((card) => {
+    return cards.map((card) => {
+      let workspaceName = 'Unknown Workspace';
+      const allBoardsRecord = this._dataService.allBoards();
+      for (const [wsId, boardList] of Object.entries(allBoardsRecord)) {
+        if (boardList.some((board: Board) => board.id === card.idBoard)) {
+          const ws = this.workspaces.find((ws) => ws.id === wsId);
+          if (ws) {
+            workspaceName = ws.displayName ?? 'Unknown Workspace';
+          }
+          break;
+        }
+      }
+
       const ticket = {
         titre: card.name,
         resume: card.desc,
         statusCard: 'normal',
-        ticketId: card.id,
+        ticketId: workspaceName,
         manager: 'No one',
       };
 
@@ -121,7 +159,6 @@ export class AllCardsComponent implements OnInit {
       }
       return ticket;
     });
-    return tickets;
   }
 
   async getMembers(idMember: string): Promise<string> {
