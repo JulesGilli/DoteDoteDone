@@ -89,7 +89,7 @@ export class KanbanComponent implements OnInit {
     if (event.pointerPosition.x < rect.left + this.autoScrollThreshold)
       containerEl.scrollLeft -= this.scrollSpeed;
     }
-  }
+
   onMoveList(event: { list: List; direction: 'left' | 'right' }): void {
     const boardId = this._dataService.selectedBoard()?.id;
     if (!boardId) {
@@ -166,9 +166,7 @@ export class KanbanComponent implements OnInit {
   toggleBoardMenu(): void {
     this.isBoardMenuOpen = !this.isBoardMenuOpen;
   }
-  enterRenameBoardMode(): void {
-    this.isBoardMenuOpen = false;
-  }
+
   deleteBoard(): void {
     this.isBoardMenuOpen = false;
     this.onDeleteBoard();
@@ -176,9 +174,7 @@ export class KanbanComponent implements OnInit {
   toggleWorkspaceMenu(): void {
     this.isWorkspaceMenuOpen = !this.isWorkspaceMenuOpen;
   }
-  enterRenameWorkspaceMode(): void {
-    this.isWorkspaceMenuOpen = false;
-  }
+
   deleteWorkspace(): void {
     this.isWorkspaceMenuOpen = false;
     this.onDeleteWorkspace();
@@ -197,6 +193,7 @@ export class KanbanComponent implements OnInit {
         this.isBoardMenuOpen = false;
         this.isWorkspaceMenuOpen = false;
       }
+    }
   }
 
   enterRenameWorkspaceMode(): void {
