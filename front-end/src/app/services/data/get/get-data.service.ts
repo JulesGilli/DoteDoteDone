@@ -26,7 +26,6 @@ export class GetDataService {
   public async setWorkspace(workspace: Workspace): Promise<boolean> {
     this._dataService.selectedWorkspace.set(workspace);
     if (workspace.id === 'all') {
-      let i = 0;
       for (const w of this._dataService.workspaces()) {
         await this.setWorkspace(w);
       }
@@ -47,10 +46,11 @@ export class GetDataService {
         const boards: Board[] = await lastValueFrom(
           this._getService.getAllBoards({ organizations: selectedWs.id })
         );
-        this._dataService.allBoards()[selectedWs.id] = boards;
-        this._dataService.boards.set(boards);
-        if (boards.length > 0) {
-          await this.setBoard(boards[0]);
+        const boardsNotClosed = boards.filter((b) => !b.closed);
+        this._dataService.allBoards()[selectedWs.id] = boardsNotClosed;
+        this._dataService.boards.set(boardsNotClosed);
+        if (boardsNotClosed.length > 0) {
+          await this.setBoard(boardsNotClosed[0]);
         }
       } catch (error) {
         console.error(error);
