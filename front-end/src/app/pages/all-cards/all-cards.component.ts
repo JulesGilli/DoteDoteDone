@@ -3,10 +3,16 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { CardComponent } from '../../components/card/card.component';
 import { SharedModule } from '../../../shared.module';
 import { Workspace, Board, Card } from '../../models';
-import { GetService, PostService, PutService } from '../../services';
+import {
+  GetDataService,
+  GetService,
+  PostService,
+  PutService,
+} from '../../services';
 import { forkJoin, lastValueFrom } from 'rxjs';
 import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
 import { ModalEditComponent } from '../../components/modal-edit/modal-edit.component';
+import { DataService } from '../../services/data/data.service';
 
 @Component({
   selector: 'app-all-cards',
@@ -32,6 +38,9 @@ export class AllCardsComponent implements OnInit {
   private _getService = inject(GetService);
   private _postService = inject(PostService);
   private _putService = inject(PutService);
+  private _getDataService = inject(GetDataService);
+
+  _dataService = inject(DataService);
 
   isEditMode: boolean = false;
   isCreateMode: boolean = false;
@@ -40,7 +49,6 @@ export class AllCardsComponent implements OnInit {
 
   selectedWorkspace!: Workspace;
   workspaces: Workspace[] = [];
-  boards: Record<string, Board[]> = {};
 
   allTickets: Record<string, Card[]> = {};
   tickets: any[] = [];
@@ -50,105 +58,70 @@ export class AllCardsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    this._getService.getAllWorkspace().subscribe({
-      next: (data: Workspace[]) => {
-        const allCardsOption: Workspace = {
-          id: 'all',
-          displayName: 'All Tickets',
-        } as Workspace;
-        this.workspaces = [allCardsOption, ...data];
-        this.selectedWorkspace = this.workspaces[0];
+
+    this._getDataService.loadWorkspaces().then((data) => {
+      const allCardsOption: Workspace = {
+        id: 'all',
+        displayName: 'All Tickets',
+      } as Workspace;
+      this.workspaces = [allCardsOption, ...data];
+      this.selectedWorkspace = this.workspaces[0];
+      this._getDataService.setWorkspace(this.selectedWorkspace).then(() => {
+        console.log('boop');
         this.loadCards();
-      },
-      error: (err) => {
-        console.error(err);
-        this.error = err;
-        this.loading = false;
-      },
+      });
     });
   }
 
-  loadCards(): void {
-    this.loading = true;
-
-    if (this.selectedWorkspace.id === 'all') {
-      const workspacesToLoad = this.workspaces.filter((ws) => ws.id !== 'all');
-      const boardsObservables = workspacesToLoad.map((ws) =>
-        this._getService.getAllBoards({ organizations: ws.id })
-      );
-
-      forkJoin(boardsObservables).subscribe({
-        next: (boardsArrays: Board[][]) => {
-          const allBoards = ([] as Board[]).concat(...boardsArrays);
-          const cardsObservables = allBoards.map((board) =>
-            this._getService.getAllCards({ boards: board.id })
-          );
-
-          forkJoin(cardsObservables).subscribe({
-            next: (cardsArrays: Card[][]) => {
-              const allCards = ([] as Card[]).concat(...cardsArrays);
-              this.tickets = this.formatOfTickets(allCards);
-              this.loading = false;
-            },
-            error: (err) => {
-              console.error(err);
-              this.error = err;
-              this.loading = false;
-            },
-          });
-        },
-        error: (err) => {
-          console.error(err);
-          this.error = err;
-          this.loading = false;
-        },
-      });
-    } else {
-      if (!this.boards[this.selectedWorkspace.id]) {
-        this._getService
-          .getAllBoards({ organizations: this.selectedWorkspace.id })
-          .subscribe({
-            next: (boards: Board[]) => {
-              if (!boards || boards.length === 0) {
-                this.loading = false;
-                return;
-              }
-              this.boards[this.selectedWorkspace.id] = boards;
-              this.loadCardsFromBoard(boards);
-            },
-            error: (err) => {
-              console.error(err);
-              this.error = err;
-              this.loading = false;
-            },
-          });
-      } else {
-        this.tickets = this.formatOfTickets(
-          this.allTickets[this.selectedWorkspace.id]
-        );
-        this.loading = false;
+  async loadCards() {
+    const allBoards = Object.values(this._dataService.allBoards());
+    if (allBoards.length === 0) {
+      setTimeout(() => this.loadCards(), 500);
+      console.log("no boards");
+      return;
+    }
+    
+    if (this.selectedWorkspace.id === 'all' && !this.allTickets['all']) {
+      for (const board of Object.values(this._dataService.allBoards()).flat()) {
+        await this._getDataService.setBoard(board);
       }
+      
+      for (const k of Object.keys(this._dataService.allBoards())) {
+        const boards = this._dataService.allBoards()[k];
+        this.allTickets[k] = Object.values(this._dataService.allTickets())
+          .flat()
+          .filter((c) => boards.some((b) => b.id === c.idBoard));
+      }
+      
+      this.allTickets['all'] = Object.values(this._dataService.allTickets()).flat();
+      this.tickets = this.formatOfTickets(this.allTickets['all']);
+      this.loading = false;
+    } else {
+      this.tickets = this.formatOfTickets(this.allTickets[this.selectedWorkspace.id]);
+      this.loading = false;
     }
   }
+  
+  
 
-  loadCardsFromBoard(boards: Board[]): void {
-    const cardsObservables = boards.map((board) =>
-      this._getService.getAllCards({ boards: board.id })
-    );
-    forkJoin(cardsObservables).subscribe({
-      next: (cardsArrays: Card[][]) => {
-        const allCards = ([] as Card[]).concat(...cardsArrays);
-        this.allTickets[this.selectedWorkspace.id] = allCards;
-        this.tickets = this.formatOfTickets(allCards);
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error(err);
-        this.error = err;
-        this.loading = false;
-      },
-    });
-  }
+  // loadCardsFromBoard(boards: Board[]): void {
+  //   const cardsObservables = boards.map((board) =>
+  //     this._getService.getAllCards({ boards: board.id })
+  //   );
+  //   forkJoin(cardsObservables).subscribe({
+  //     next: (cardsArrays: Card[][]) => {
+  //       const allCards = ([] as Card[]).concat(...cardsArrays);
+  //       this.allTickets[this.selectedWorkspace.id] = allCards;
+  //       this.tickets = this.formatOfTickets(allCards);
+  //       this.loading = false;
+  //     },
+  //     error: (err) => {
+  //       console.error(err);
+  //       this.error = err;
+  //       this.loading = false;
+  //     },
+  //   });
+  // }
 
   formatOfTickets(cards: Card[]): any[] {
     const tickets = cards.map((card) => {
@@ -232,8 +205,10 @@ export class AllCardsComponent implements OnInit {
 
   createTicket(newTicket: Card): void {
     let workspaceIdFound;
-    for (const [workspaceId, boardList] of Object.entries(this.boards)) {
-      if (boardList.some((board) => board.id === newTicket.idBoard)) {
+    for (const [workspaceId, boardList] of Object.entries(
+      this._dataService.allBoards()
+    )) {
+      if (boardList.some((board: Board) => board.id === newTicket.idBoard)) {
         workspaceIdFound = workspaceId;
         break;
       }
