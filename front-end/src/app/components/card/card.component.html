@@ -1,10 +1,6 @@
 <div class="card" (click)="onCardClick()">
   <div class="card-part card-part-title">
-    <img
-      class="status-indicator"
-      [attr.src]="'/images/card-priority-' + statusCard + '.png'"
-      alt="priority"
-    />
+    <img class="status-indicator" [attr.src]="'/images/card-priority-' + statusCard + '.png'" alt="priority" />
     <span class="card-title">{{ titre }}</span>
   </div>
   <div class="card-part card-part-id">
@@ -16,9 +12,11 @@
   <button class="delete-btn" (click)="onDelete($event)">Delete</button>
 </div>
 
-<app-confirm-popup
-  *ngIf="showConfirmPopup"
+<app-delete-card 
+  *ngIf="showConfirmPopup" 
   message="Voulez-vous vraiment supprimer cette carte ?"
-  (confirm)="onConfirmDelete()"
-  (cancel)="onCancelDelete()">
-</app-confirm-popup>
+  [cardToDelId]="this.ticketId" 
+  (confirm)="onConfirmDelete()" 
+  (cancel)="onCancelDelete()"
+>
+</app-delete-card>

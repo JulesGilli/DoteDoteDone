@@ -9,7 +9,6 @@
     </div>
     <p class="loading-text">Loading...</p>
   </div>
-
   <div *ngIf="!_dataService.loading()" [@fadeInAnimation]>
     <div id="kanban-selectors">
       <div class="selectors">
@@ -23,28 +22,67 @@
               </option>
             }
           </select>
-          <button (click)="openWorkspaceModal()">+</button>
-          <button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#b60000" d="M12 2.75a2.25 2.25 0 0 0-2.122 1.5a.75.75 0 0 1-1.414-.5a3.751 3.751 0 0 1 7.073 0a.75.75 0 0 1-1.415.5A2.25 2.25 0 0 0 12 2.75M2.75 6a.75.75 0 0 1 .75-.75h17a.75.75 0 0 1 0 1.5h-17A.75.75 0 0 1 2.75 6m3.165 2.45a.75.75 0 1 0-1.497.1l.464 6.952c.085 1.282.154 2.318.316 3.132c.169.845.455 1.551 1.047 2.104s1.315.793 2.17.904c.822.108 1.86.108 3.146.108h.879c1.285 0 2.324 0 3.146-.108c.854-.111 1.578-.35 2.17-.904c.591-.553.877-1.26 1.046-2.104c.162-.814.23-1.85.316-3.132l.464-6.952a.75.75 0 0 0-1.497-.1l-.46 6.9c-.09 1.347-.154 2.285-.294 2.99c-.137.685-.327 1.047-.6 1.303c-.274.256-.648.422-1.34.512c-.713.093-1.653.095-3.004.095h-.774c-1.35 0-2.29-.002-3.004-.095c-.692-.09-1.066-.256-1.34-.512c-.273-.256-.463-.618-.6-1.303c-.14-.705-.204-1.643-.294-2.99z"/><path fill="#b60000" d="M9.425 10.254a.75.75 0 0 1 .821.671l.5 5a.75.75 0 0 1-1.492.15l-.5-5a.75.75 0 0 1 .671-.821m5.821.821a.75.75 0 0 0-1.492-.15l-.5 5a.75.75 0 0 0 1.492.15z"/></svg></button>
+          <div class="dropdown-container" #workspaceDropdown>
+            <button (click)="toggleWorkspaceMenu()" class="menu-button">⋮</button>
+            <div *ngIf="isWorkspaceMenuOpen" class="menu-dropdown">
+              <button (click)="enterRenameWorkspaceMode()">Rename</button>
+              <button class="delete-button" (click)="deleteWorkspace()">
+                Delete
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  class="delete-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7 21C6.45 21 5.97933 20.8043 5.588 20.413C5.19667 20.0217 5.00067 19.5507 5 19V6H4V4H9V3H15V4H20V6H19V19C19 19.55 18.8043 20.021 18.413 20.413C18.0217 20.805 17.5507 21.0007 17 21H7ZM17 6H7V19H17V6ZM9 17H11V8H9V17ZM13 17H15V8H13V17Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+              <button (click)="openBoardModal()">Create</button>
+            </div>
+          </div>
         </div>
       </div>
       <div class="selectors">
         <label>Board</label>
         <div class="selector">
           <select class="board-select" [ngModel]="_dataService.selectedBoard()"
-            (ngModelChange)="_getDataService.setBoard($event)">
+                  (ngModelChange)="_getDataService.setBoard($event)">
             @for (board of _dataService.boards(); track board) {
-            <option [ngValue]="board">
-              {{ board.name }}
-            </option>
+              <option [ngValue]="board">
+                {{ board.name }}
+              </option>
             }
           </select>
-          <button (click)="openBoardModal()">+</button>
-          <button><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#b60000" d="M12 2.75a2.25 2.25 0 0 0-2.122 1.5a.75.75 0 0 1-1.414-.5a3.751 3.751 0 0 1 7.073 0a.75.75 0 0 1-1.415.5A2.25 2.25 0 0 0 12 2.75M2.75 6a.75.75 0 0 1 .75-.75h17a.75.75 0 0 1 0 1.5h-17A.75.75 0 0 1 2.75 6m3.165 2.45a.75.75 0 1 0-1.497.1l.464 6.952c.085 1.282.154 2.318.316 3.132c.169.845.455 1.551 1.047 2.104s1.315.793 2.17.904c.822.108 1.86.108 3.146.108h.879c1.285 0 2.324 0 3.146-.108c.854-.111 1.578-.35 2.17-.904c.591-.553.877-1.26 1.046-2.104c.162-.814.23-1.85.316-3.132l.464-6.952a.75.75 0 0 0-1.497-.1l-.46 6.9c-.09 1.347-.154 2.285-.294 2.99c-.137.685-.327 1.047-.6 1.303c-.274.256-.648.422-1.34.512c-.713.093-1.653.095-3.004.095h-.774c-1.35 0-2.29-.002-3.004-.095c-.692-.09-1.066-.256-1.34-.512c-.273-.256-.463-.618-.6-1.303c-.14-.705-.204-1.643-.294-2.99z"/><path fill="#b60000" d="M9.425 10.254a.75.75 0 0 1 .821.671l.5 5a.75.75 0 0 1-1.492.15l-.5-5a.75.75 0 0 1 .671-.821m5.821.821a.75.75 0 0 0-1.492-.15l-.5 5a.75.75 0 0 0 1.492.15z"/></svg></button>
+          <div class="dropdown-container" #boardDropdown>
+            <button (click)="toggleBoardMenu()" class="menu-button">⋮</button>
+            <div *ngIf="isBoardMenuOpen" class="menu-dropdown">
+              <button (click)="enterRenameBoardMode()">Rename</button>
+              <button class="delete-button" (click)="deleteBoard()">
+                Delete
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  class="delete-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7 21C6.45 21 5.97933 20.8043 5.588 20.413C5.19667 20.0217 5.00067 19.5507 5 19V6H4V4H9V3H15V4H20V6H19V19C19 19.55 18.8043 20.021 18.413 20.413C18.0217 20.805 17.5507 21.0007 17 21H7ZM17 6H7V19H17V6ZM9 17H11V8H9V17ZM13 17H15V8H13V17Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+              <button (click)="openBoardModal()">Create</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
   <div id="kanban-lists" cdkDropListGroup #kanbanContainer>
     <app-list *ngFor="let list of _getDataService.getAllListsInArray()"
               [list]="list"
@@ -56,6 +94,4 @@
 </div>
 
 <app-create-workspace-modal #createWorkspaceModal></app-create-workspace-modal>
-
 <app-create-board-modal #createBoardModal></app-create-board-modal>
-
