@@ -9,7 +9,7 @@ import {
   PostService,
   PutService,
 } from '../../services';
-import { forkJoin, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
 import { ModalEditComponent } from '../../components/modal-edit/modal-edit.component';
 import { DataService } from '../../services/data/data.service';
@@ -82,6 +82,7 @@ export class AllCardsComponent implements OnInit {
     }
     
 
+    this.loading = true;
     if (this.selectedWorkspace.id === 'all' && !this.allTickets['all']) {
       for (const board of Object.values(this._dataService.allBoards()).flat()) {
         await this._getDataService.setBoard(board);
@@ -98,11 +99,12 @@ export class AllCardsComponent implements OnInit {
       this.tickets = this.formatOfTickets(this.allTickets['all']);
       this.loading = false;
     } else {
-      this.tickets = this.formatOfTickets(this.allTickets[this.selectedWorkspace.id]);
+      this.tickets = this.formatOfTickets(
+        this.allTickets[this.selectedWorkspace.id]
+      );
       this.loading = false;
     }
   }
-
 
 
   // loadCardsFromBoard(boards: Board[]): void {
@@ -227,7 +229,8 @@ export class AllCardsComponent implements OnInit {
     }
     if (this.allTickets[workspaceIdFound!]) {
       this.allTickets[workspaceIdFound!].push(newTicket);
-      // this.allTickets['all'].push(newTicket);
+      this.allTickets['all'].push(newTicket);
+      this.tickets = this.formatOfTickets(this.allTickets[this.selectedWorkspace.id]);
     }
     // this.closeModal();
   }

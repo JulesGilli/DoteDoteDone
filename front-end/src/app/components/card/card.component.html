@@ -9,14 +9,6 @@
   <div class="card-part card-part-manager">
     <span>{{ manager }}</span>
   </div>
-  <button class="delete-btn" (click)="onDelete($event)">Delete</button>
+  <button class="delete-btn" (click)="onOpenDelete($event)">Delete</button>
 </div>
 
-<app-delete-card 
-  *ngIf="showConfirmPopup" 
-  message="Voulez-vous vraiment supprimer cette carte ?"
-  [cardToDelId]="this.ticketId" 
-  (confirm)="onConfirmDelete()" 
-  (cancel)="onCancelDelete()"
->
-</app-delete-card>

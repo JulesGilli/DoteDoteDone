@@ -3,5 +3,5 @@ export interface Board {
   name: string;
   desc?: string;
   idOrganization?: string;
-  closed?: boolean;
+  closed?:boolean;
 }
