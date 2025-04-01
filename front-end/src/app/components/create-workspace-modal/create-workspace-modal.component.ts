@@ -30,9 +30,10 @@ export class CreateWorkspaceModalComponent {
       desc: 'Workspace created via Trello API'
     };
 
-    this._postDataService.postWorkspace(workspace).subscribe();
-
-    this._getDataService.loadWorkspaces();
-    this.closeModal();
+    this._postDataService.postWorkspace(workspace).subscribe(() => {
+      this._getDataService.loadWorkspaces();
+      this.closeModal();
+    });
   }
+
 }
