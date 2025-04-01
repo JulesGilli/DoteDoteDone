@@ -13,11 +13,10 @@ interface Option {
 
 @Component({
   selector: 'app-create-board-modal',
-  imports: [
-    SharedModule
-  ],
+  standalone: true,
+  imports: [SharedModule],
   templateUrl: './create-board-modal.component.html',
-  styleUrl: './create-board-modal.component.scss'
+  styleUrls: ['./create-board-modal.component.scss']
 })
 export class CreateBoardModalComponent {
   private readonly _postDataService = inject(PostService);
@@ -45,35 +44,35 @@ export class CreateBoardModalComponent {
     this.isOpened.set(false);
   }
 
-  selectOption(id: string) {
+  selectOption(id: string): void {
     this.selectedOption = id;
   }
 
-  async create(): Promise<void> {
-    const board = {
+  create(): void {
+    const boardPayload = {
       name: this.boardName,
       idOrganization: this._dataService.selectedWorkspace()?.id,
       defaultLists: false
     };
 
-    const newBoard = this._postDataService.postBoard(board).subscribe((createdBoard) => {
+    this._postDataService.postBoard(boardPayload).subscribe(createdBoard => {
       const listsToCreate = this.getListsForTemplate(this.selectedOption);
-      for (let i = 0; i < listsToCreate.length; i++) {
-        const listBody = { name: listsToCreate[i], idBoard: createdBoard.id, pos: i };
-        this._postDataService.postList(listBody).subscribe();
-      }
-
-      console.log(newBoard);
+      listsToCreate.forEach((listName, index) => {
+        const listPayload = { name: listName, idBoard: createdBoard.id, pos: index };
+        this._postDataService.postList(listPayload).subscribe();
+      });
 
       this._dataService.selectedBoard.update(() => createdBoard);
+
+      const currentBoards = this._dataService.boards();
+      const updatedBoards = [...currentBoards, createdBoard];
+      this._dataService.setBoards(updatedBoards);
+
+      this.closeModal();
     });
-
-    this._getDataService.loadBoards();
-
-    this.closeModal();
   }
 
-  private getListsForTemplate(template: string): Array<string> {
+  private getListsForTemplate(template: string): string[] {
     switch (template) {
       case 'scrum':
         return ['Backlog', 'To Do', 'In Progress', 'Done'];

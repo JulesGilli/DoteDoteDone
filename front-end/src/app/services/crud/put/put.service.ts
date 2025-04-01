@@ -39,4 +39,16 @@ export class PutService {
     this.initializeUri('cards', idCard);
     return this._http.put<Card>(this.uri, bodyCard);
   }
+
+  renameWorkspace(workspaceId: string, newName: string): Observable<Workspace> {
+    this.initializeUri('organizations', workspaceId);
+    return this._http.put<Workspace>(this.uri, { displayName: newName });
+  }
+
+  renameBoard(boardId: string, newName: string): Observable<Board> {
+    this.initializeUri('boards', boardId);
+    return this._http.put<Board>(this.uri, { name: newName });
+  }
+
+
 }
