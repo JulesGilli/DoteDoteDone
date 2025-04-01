@@ -81,18 +81,19 @@ export class AllCardsComponent implements OnInit {
       return;
     }
     
+
     if (this.selectedWorkspace.id === 'all' && !this.allTickets['all']) {
       for (const board of Object.values(this._dataService.allBoards()).flat()) {
         await this._getDataService.setBoard(board);
       }
-      
+
       for (const k of Object.keys(this._dataService.allBoards())) {
         const boards = this._dataService.allBoards()[k];
         this.allTickets[k] = Object.values(this._dataService.allTickets())
           .flat()
           .filter((c) => boards.some((b) => b.id === c.idBoard));
       }
-      
+
       this.allTickets['all'] = Object.values(this._dataService.allTickets()).flat();
       this.tickets = this.formatOfTickets(this.allTickets['all']);
       this.loading = false;
@@ -101,8 +102,8 @@ export class AllCardsComponent implements OnInit {
       this.loading = false;
     }
   }
-  
-  
+
+
 
   // loadCardsFromBoard(boards: Board[]): void {
   //   const cardsObservables = boards.map((board) =>
@@ -124,12 +125,24 @@ export class AllCardsComponent implements OnInit {
   // }
 
   formatOfTickets(cards: Card[]): any[] {
-    const tickets = cards.map((card) => {
+    return cards.map((card) => {
+      let workspaceName = 'Unknown Workspace';
+      const allBoardsRecord = this._dataService.allBoards();
+      for (const [wsId, boardList] of Object.entries(allBoardsRecord)) {
+        if (boardList.some((board: Board) => board.id === card.idBoard)) {
+          const ws = this.workspaces.find((ws) => ws.id === wsId);
+          if (ws) {
+            workspaceName = ws.displayName ?? 'Unknown Workspace';
+          }
+          break;
+        }
+      }
+
       const ticket = {
         titre: card.name,
         resume: card.desc,
         statusCard: 'normal',
-        ticketId: card.id,
+        ticketId: workspaceName,
         manager: 'No one',
       };
 
@@ -144,7 +157,6 @@ export class AllCardsComponent implements OnInit {
       }
       return ticket;
     });
-    return tickets;
   }
 
   async getMembers(idMember: string): Promise<string> {
