@@ -19,4 +19,5 @@ export class DataService {
 
   tickets = signal<Card[]>([]);
   allTickets = signal<Record<string, Card[]>>({});
+  selectedTicket = signal<Card | null>(null);
 }
