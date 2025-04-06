@@ -11,7 +11,7 @@
       <div class="option">
         <label class="option-label">Workspace</label>
         <select class="workspace-select" [(ngModel)]="selectedWorkspace" (change)="updateBoards()">
-          @for (workspace of workspaces; track workspace) {
+          @for (workspace of _dataService.workspaces(); track workspace) {
             <option [ngValue]="workspace">
               {{ workspace.displayName || "No workspace"}}
             </option>
@@ -41,7 +41,7 @@
       <div class="option">
         <label class="option-label">Board</label>
         <select class="board-select" [(ngModel)]="selectedBoard">
-          @for (board of boards; track board) {
+          @for (board of _dataService.boards(); track board) {
             <option [value]="board">
               {{ board.name || "No boards for this workspace" }}
             </option>
