@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserPageComponent } from './user-page.component';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('UserPageComponent', () => {
   let component: UserPageComponent;
@@ -8,7 +9,7 @@ describe('UserPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserPageComponent]
+      imports: [UserPageComponent, HttpClientModule]
     })
     .compileComponents();
 

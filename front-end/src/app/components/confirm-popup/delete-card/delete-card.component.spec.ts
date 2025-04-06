@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeleteCardComponent } from './delete-card.component';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('DeleteCardComponent', () => {
   let component: DeleteCardComponent;
@@ -8,7 +9,7 @@ describe('DeleteCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DeleteCardComponent]
+      imports: [DeleteCardComponent, HttpClientModule]
     })
     .compileComponents();
 

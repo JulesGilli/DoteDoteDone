@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateBoardModalComponent } from './create-board-modal.component';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('CreateBoardModalComponent', () => {
   let component: CreateBoardModalComponent;
@@ -8,7 +9,7 @@ describe('CreateBoardModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CreateBoardModalComponent]
+      imports: [CreateBoardModalComponent, HttpClientModule]
     })
     .compileComponents();
 

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ModalEditComponent } from './modal-edit.component';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('ModalEditComponent', () => {
   let component: ModalEditComponent;
@@ -8,7 +9,7 @@ describe('ModalEditComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ModalEditComponent]
+      imports: [ModalEditComponent, HttpClientModule]
     })
     .compileComponents();
 

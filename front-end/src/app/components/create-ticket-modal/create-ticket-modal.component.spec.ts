@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CreateTicketModalComponent } from './create-ticket-modal.component';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('CreateTicketModalComponent', () => {
   let component: CreateTicketModalComponent;
@@ -8,7 +9,7 @@ describe('CreateTicketModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CreateTicketModalComponent]
+      imports: [CreateTicketModalComponent, HttpClientModule]
     })
     .compileComponents();
 
