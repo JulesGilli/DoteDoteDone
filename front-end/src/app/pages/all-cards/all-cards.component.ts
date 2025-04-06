@@ -38,7 +38,7 @@ export class AllCardsComponent implements OnInit {
   private _getService = inject(GetService);
   private _postService = inject(PostService);
   private _putService = inject(PutService);
-  private _getDataService = inject(GetDataService);
+   _getDataService = inject(GetDataService);
 
   _dataService = inject(DataService);
 

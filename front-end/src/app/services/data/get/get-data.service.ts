@@ -102,10 +102,15 @@ export class GetDataService {
 
                 this._dataService.tickets.set(cardsNotClosed);
                 this._dataService.loading.set(false);
+                console.log('listssss');
+                console.log(this._dataService.lists());
+
                 resolve(cardsNotClosed);
               });
           });
       } else {
+        console.log('listssss');
+        console.log(this._dataService.lists());
         const tickets = this._dataService.allTickets()[boardId] || [];
         this._dataService.tickets.set(tickets);
         this._dataService.loading.set(false);

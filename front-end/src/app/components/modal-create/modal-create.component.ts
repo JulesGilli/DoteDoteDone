@@ -22,12 +22,12 @@ type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
   styleUrls: ['./modal-create.component.scss'],
 })
 export class ModalCreateComponent implements OnInit {
+  @Input() _dataService!: DataService;
+  @Input() _getDataService!: GetDataService;
   @Input() selectedWorkspaceFromMain!: Workspace;
 
   private readonly _getService = inject(GetService);
   private readonly _postService = inject(PostService);
-  readonly _dataService = inject(DataService);
-  private readonly _getDataService = inject(GetDataService);
   selectedWorkspace!: Workspace;
 
   selectedBoard!: Board;
@@ -45,17 +45,24 @@ export class ModalCreateComponent implements OnInit {
     } else {
       this.selectedWorkspace = this._dataService.workspaces()[0];
     }
+
     this.updateBoards();
   }
 
   async updateBoards() {
     await this._getDataService.setWorkspace(this.selectedWorkspace);
-    this.selectedBoard = this._dataService.selectedBoard()!;
+    if (this._dataService.selectedBoard()) {
+      this.selectedBoard = this._dataService.selectedBoard()!;
+    } else {
+      this._getDataService.loadBoards();
+      this.updateBoards();
+    }
     this.updateMembers();
   }
 
-  changeBoard() {
-    this._getDataService.setBoard(this.selectedBoard);
+  async changeBoard() {
+    await this._getDataService.setBoard(this.selectedBoard);
+    this.updateMembers();
   }
 
   updateMembers() {
@@ -96,7 +103,10 @@ export class ModalCreateComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() create = new EventEmitter<any>();
 
-  buttonCreateTicket() {
+  async buttonCreateTicket() {
+    if (!this._dataService.lists()[this.selectedBoard.id][0]) {
+      await this._getDataService.loadListsWithCards();
+    }
     const payload = {
       name: this.newTicket.titre,
       desc: this.newTicket.resume,
@@ -131,5 +141,10 @@ export class ModalCreateComponent implements OnInit {
 
   closeDropdown(option: DropdownOption): void {
     this.dropdowns[option] = false;
+  }
+
+  isCreateEnabled(): boolean {
+    const lists = this._dataService.lists()[this.selectedBoard?.id];
+    return !this.newTicket.titre && lists?.length!==0;
   }
 }
