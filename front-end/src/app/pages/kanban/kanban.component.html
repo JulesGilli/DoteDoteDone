@@ -90,7 +90,12 @@
                 (moveListEvent)="onMoveList($event)"
                 (deleteListEvent)="onDeleteList($event)">
       </app-list>
+
+      <div class="list-add-button">
+        <button (click)="createList()">+ Add List</button>
+      </div>
     </div>
+
   </ng-container>
   <ng-template #noBoards>
     <div class="no-lists-container">

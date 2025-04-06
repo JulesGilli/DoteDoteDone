@@ -216,3 +216,32 @@
   overflow-y: scroll;
   height: 100dvh;
 }
+
+.list-add-button {
+  min-width: 250px;
+  margin: 1rem 0.5rem;
+  background-color: var.$lighter-dark;
+  border-radius: var.$radius;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  height: fit-content;
+
+  button {
+    background: none;
+    border: none;
+    color: var.$white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: var.$radius;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: var.$light-dark-hover;
+    }
+  }
+}
+
