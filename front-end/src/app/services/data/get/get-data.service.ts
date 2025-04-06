@@ -31,7 +31,6 @@ export class GetDataService {
       }
       return false;
     } else {
-      console.log('boards');
       return await this.loadBoards();
     }
   }
@@ -72,6 +71,14 @@ export class GetDataService {
   public async setBoard(board: Board): Promise<Card[]> {
     this._dataService.selectedBoard.set(board);
     return await this.loadListsWithCards();
+  }
+
+  public async loadAll(): Promise<void> {
+    this._dataService.loading.set(true);
+    await this.loadWorkspaces();
+    await this.loadBoards();
+    await this.loadListsWithCards();
+    this._dataService.loading.set(false);
   }
 
   public loadListsWithCards(): Promise<Card[]> {
