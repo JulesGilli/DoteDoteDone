@@ -11,11 +11,9 @@
       <div class="option">
         <label class="option-label">Workspace</label>
         <select class="workspace-select" [(ngModel)]="selectedWorkspace" (change)="updateBoards()">
-          @for (workspace of workspaces; track workspace) {
-            <option [ngValue]="workspace">
-              {{ workspace.displayName || "No workspace"}}
-            </option>
-          }
+          <option *ngFor="let workspace of _dataService.workspaces()" [ngValue]="workspace">
+            {{ workspace.displayName || "No workspace" }}
+          </option>
         </select>
       </div>
       <div class="option">
@@ -31,26 +29,22 @@
       <div class="option">
         <label class="option-label">Manager</label>
         <select class="member-select" [(ngModel)]="selectedMember">
-          @for (member of this.members; track member) {
-            <option [ngValue]="member">
-              {{ member.fullName || "No member"}}
-            </option>
-          }
+          <option *ngFor="let member of members" [ngValue]="member">
+            {{ member.fullName || "No member" }}
+          </option>
         </select>
       </div>
       <div class="option">
         <label class="option-label">Board</label>
-        <select class="board-select" [(ngModel)]="selectedBoard">
-          @for (board of boards; track board) {
-            <option [value]="board">
-              {{ board.name || "No boards for this workspace" }}
-            </option>
-          }
+        <select class="board-select" [(ngModel)]="selectedBoard" (change)="changeBoard()">
+          <option *ngFor="let board of _dataService.boards()" [ngValue]="board">
+            {{ board.name || "No boards for this workspace" }}
+          </option>
         </select>
       </div>
 
       <div class="modal-footer">
-        <button class="valid-btn" (click)="buttonCreateTicket()" [disabled]="!newTicket.titre">
+        <button class="valid-btn" (click)="buttonCreateTicket()" [disabled]="isCreateEnabled()">
           Create
         </button>
       </div>

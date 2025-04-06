@@ -31,7 +31,6 @@ export class GetDataService {
       }
       return false;
     } else {
-      console.log('boards');
       return await this.loadBoards();
     }
   }

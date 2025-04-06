@@ -22,19 +22,14 @@ type DropdownOption = 'workspace' | 'statusCard' | 'manager' | 'board';
   styleUrls: ['./modal-create.component.scss'],
 })
 export class ModalCreateComponent implements OnInit {
+  @Input() _dataService!: DataService;
+  @Input() _getDataService!: GetDataService;
   @Input() selectedWorkspaceFromMain!: Workspace;
-  @Input() allWorkspacesFromMain: Workspace[] = [];
-  @Input() allBoardsFromMain: Record<string, Board[]> = {};
 
   private readonly _getService = inject(GetService);
   private readonly _postService = inject(PostService);
-  private readonly _dataService = inject(DataService);
-  private readonly _getDataService = inject(GetDataService);
   selectedWorkspace!: Workspace;
-  workspaces: Workspace[] = [];
 
-  allBoards: Record<string, Board[]> = {};
-  boards: Board[] = [];
   selectedBoard!: Board;
 
   allMembers: Record<string, Member[]> = {};
@@ -43,49 +38,31 @@ export class ModalCreateComponent implements OnInit {
 
   // idListDefault:Record<string,string>;
 
-  ngOnInit() {
-    if (this.allWorkspacesFromMain) {
-      if (this.allWorkspacesFromMain.length !== 0) {
-        this.workspaces = this.allWorkspacesFromMain.filter(
-          (workspace) => workspace.id !== 'all'
-        );
-        if (this.selectedWorkspaceFromMain.id !== 'all') {
-          this.selectedWorkspace = this.selectedWorkspaceFromMain;
-        } else {
-          this.selectedWorkspace = this.workspaces[0];
-        }
-        if (this.allBoardsFromMain) {
-          this.boards = this.allBoardsFromMain[this.selectedWorkspace.id];
-
-          this.allBoards = this.allBoardsFromMain;
-        }
-      }
+  async ngOnInit() {
+    await this._getDataService.loadWorkspaces();
+    if (this.selectedWorkspaceFromMain.id !== 'all') {
+      this.selectedWorkspace = this.selectedWorkspaceFromMain;
+    } else {
+      this.selectedWorkspace = this._dataService.workspaces()[0];
     }
+
     this.updateBoards();
   }
 
-  updateBoards() {
-    if (this.selectedWorkspace && this.allBoards[this.selectedWorkspace.id]) {
-      this.boards = this.allBoards[this.selectedWorkspace.id];
-
-      if (this.boards.length !== 0) {
-        this.selectedBoard = this.boards[0];
-        this._getDataService.setBoard(this.selectedBoard);
-      }
-      this.updateMembers();
+  async updateBoards() {
+    await this._getDataService.setWorkspace(this.selectedWorkspace);
+    if (this._dataService.selectedBoard()) {
+      this.selectedBoard = this._dataService.selectedBoard()!;
     } else {
-      this._getService
-        .getAllBoards({ organizations: this.selectedWorkspace.id })
-        .subscribe((data: Board[]) => {
-          this.allBoards[this.selectedWorkspace.id] = data;
-          this.boards = data;
-          if (this.boards.length > 0) {
-            this.selectedBoard = this.boards[0];
-            this._getDataService.setBoard(this.selectedBoard);
-          }
-          this.updateMembers();
-        });
+      this._getDataService.loadBoards();
+      this.updateBoards();
     }
+    this.updateMembers();
+  }
+
+  async changeBoard() {
+    await this._getDataService.setBoard(this.selectedBoard);
+    this.updateMembers();
   }
 
   updateMembers() {
@@ -93,12 +70,12 @@ export class ModalCreateComponent implements OnInit {
       this.members = this.allMembers[this.selectedBoard.id];
       this.selectedMember = this.members[0];
     } else {
-      const memberRequests = this.boards.map((board) =>
-        this._getService.getAllMembersByBoard(board.id)
-      );
+      const memberRequests = this._dataService
+        .boards()
+        .map((board) => this._getService.getAllMembersByBoard(board.id));
 
       forkJoin(memberRequests).subscribe((memberDataArray) => {
-        this.boards.forEach((board, index) => {
+        this._dataService.boards().forEach((board, index) => {
           this.allMembers[board.id] = memberDataArray[index];
         });
         this.members = this.allMembers[this.selectedBoard.id];
@@ -126,7 +103,10 @@ export class ModalCreateComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() create = new EventEmitter<any>();
 
-  buttonCreateTicket() {
+  async buttonCreateTicket() {
+    if (!this._dataService.lists()[this.selectedBoard.id][0]) {
+      await this._getDataService.loadListsWithCards();
+    }
     const payload = {
       name: this.newTicket.titre,
       desc: this.newTicket.resume,
@@ -161,5 +141,10 @@ export class ModalCreateComponent implements OnInit {
 
   closeDropdown(option: DropdownOption): void {
     this.dropdowns[option] = false;
+  }
+
+  isCreateEnabled(): boolean {
+    const lists = this._dataService.lists()[this.selectedBoard?.id];
+    return !this.newTicket.titre && lists?.length!==0;
   }
 }
