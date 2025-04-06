@@ -59,19 +59,8 @@ src/
 
 ---
 
-## 5. NgRx Store
 
-- Découpé par feature (card, board, list, workspace)
-- Chaque feature contient :
-  - `actions.ts`
-  - `reducers.ts`
-  - `effects.ts`
-  - `selectors.ts`
-- Utilisation d’effets (`effects`) pour appeler les services de manière asynchrone
-
----
-
-## 6. Cycle de vie Angular
+## 5. Cycle de vie Angular
 
 - `ngOnInit()` pour initialiser les données depuis le store
 - `ngOnDestroy()` pour le nettoyage
@@ -80,14 +69,14 @@ src/
 
 ---
 
-## 7. Sécurité
+## 6. Sécurité
 
 - Les clés Trello sont définies dans `environment.ts`
 - Le fichier n’est **pas versionné** pour des raisons de sécurité
 
 ---
 
-## 8. API Trello utilisée
+## 7. API Trello utilisée
 
 Exemples d’appels :
 - `GET /1/boards/` → récupérer les boards
@@ -97,7 +86,3 @@ Exemples d’appels :
 - Auth via `key` et `token`
 
 ---
-
-## 9. Conclusion
-
-Cette documentation présente les briques principales du projet, ses modèles, ses services, ainsi que son architecture NgRx. Elle permet à tout nouveau développeur de comprendre, maintenir et étendre le projet rapidement.
