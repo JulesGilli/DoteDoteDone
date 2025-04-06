@@ -1,19 +1,15 @@
 
-# 📘 README.md – DoteDoteDone
+# 📘 DoteDoteDone – Application de gestion de projet connectée à Trello
 
-## 🎯 Présentation
-
-DoteDoteDone est une application Angular de gestion de projet connectée à l’API Trello. Elle permet :
-- la gestion des workspaces, boards, listes et cartes,
-- l’assignation de membres à une carte,
-- une interface claire et responsive via Angular Material.
+DoteDoteDone est une application Angular permettant de gérer des espaces de travail, tableaux, listes et cartes, connectée à l'API Trello.  
+Elle propose une interface moderne avec Angular Material, une gestion d’état via NgRx, et une architecture modulaire orientée composants et services.
 
 ---
 
 ## 🚀 Lancement du projet
 
 ### Prérequis
-- Node.js (≥ 18)
+- Node.js (version ≥ 18)
 - Angular CLI : `npm install -g @angular/cli`
 
 ### Installation
@@ -22,78 +18,68 @@ DoteDoteDone est une application Angular de gestion de projet connectée à l’
 npm install
 ```
 
-### Démarrer en développement
+### Lancer en développement
 
 ```bash
 ng serve
 ```
-Puis ouvrir [http://localhost:4200](http://localhost:4200)
 
-### Build production
+Puis accéder à : [http://localhost:4200](http://localhost:4200)
+
+### Build pour la production
 
 ```bash
 ng build
 ```
 
-Les fichiers compilés sont générés dans `dist/front-end/`.
-
 ---
 
-## 🧪 Tests
-
-### Tests unitaires
-
-```bash
-ng test
-```
-
-### Tests end-to-end (optionnel)
-
-```bash
-ng e2e
-```
-
-> ℹ️ Vous pouvez intégrer Cypress ou Playwright pour les e2e.
-
----
-
-## 🧱 Structure du projet
+## 📁 Structure du projet
 
 ```
-front-end/
-├── src/
-│   ├── app/               # Composants, services, store
-│   │   ├── components/
-│   │   ├── services/
-│   │   ├── store/
-│   │   └── models/
-│   ├── environments/      # Config dev/prod
-│   └── index.html
-├── angular.json
-├── package.json
-└── README.md
+src/
+├── app/
+│   ├── components/        # Composants Angular pour UI (Card, Board, Modal, etc.)
+│   ├── services/          # Services pour les appels API, logique CRUD
+│   ├── models/            # Modèles TypeScript (CardModel, BoardModel, etc.)
+│   ├── store/             # NgRx Store (actions, reducers, effects)
+│   ├── api/               # Fonctions liées à l’API Trello (encapsulées)
+│   └── data/dataAPI/      # Données mockées ou transformées
+├── environments/          # Config environnements (clé/token Trello)
+└── index.html
 ```
 
 ---
 
-## 🛠️ Technologies utilisées
-
-- Angular 19
-- NgRx (gestion d’état)
-- Angular Material
-- Trello REST API
-
----
-
-## 🔐 API Trello
+## 🔌 API Trello utilisée
 
 - `GET /1/members/me`
 - `POST /1/boards/`
 - `PUT /1/cards/{id}`
 - `DELETE /1/cards/{id}`
-- …
+- Authentification via clé et token stockés dans `environment.ts`
 
-La clé API et le token sont à configurer dans `environment.ts`.
+---
+
+## 🧱 Technologies
+
+- Angular 15+
+- NgRx pour la gestion d’état
+- Angular Material pour l’UI
+- Trello REST API
+- Jasmine & Karma pour les tests unitaires
+
+---
+
+## 🧪 Tests
+
+### Lancer les tests unitaires
+
+```bash
+ng test
+```
+
+> Tests réalisés avec Jasmine, Karma
 
 ---
 
