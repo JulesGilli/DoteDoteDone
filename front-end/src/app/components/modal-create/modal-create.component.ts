@@ -108,8 +108,8 @@ export class ModalCreateComponent implements OnInit {
   }
 
   newTicket: any = {
-    titre: '',
-    resume: '',
+    name: '',
+    desc: '',
     workspace: '',
     statusCard: 'normal',
     manager: 'Not assigned',
@@ -128,16 +128,16 @@ export class ModalCreateComponent implements OnInit {
 
   buttonCreateTicket() {
     const payload = {
-      name: this.newTicket.titre,
-      desc: this.newTicket.resume,
+      name: this.newTicket.name,
+      desc: this.newTicket.desc,
       idList: this._dataService.lists()[this.selectedBoard.id][0].id,
     };
 
     this._postService.postCard(payload).subscribe((card: Card) => {
       const ticket: Card = {
         id: card.id,
-        name: this.newTicket.titre,
-        desc: this.newTicket.resume,
+        name: this.newTicket.name,
+        desc: this.newTicket.desc,
         idList: this._dataService.lists()[this.selectedBoard.id][0].id,
         idBoard: this.selectedBoard.id,
         idMembers: [this.selectedMember.id],

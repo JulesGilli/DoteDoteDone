@@ -9,7 +9,7 @@ import {
   PostService,
   PutService,
 } from '../../services';
-import { forkJoin, lastValueFrom } from 'rxjs';
+import {forkJoin, lastValueFrom, map} from 'rxjs';
 import { ModalCreateComponent } from '../../components/modal-create/modal-create.component';
 import { ModalEditComponent } from '../../components/modal-edit/modal-edit.component';
 import { DataService } from '../../services/data/data.service';
@@ -77,32 +77,34 @@ export class AllCardsComponent implements OnInit {
     const allBoards = Object.values(this._dataService.allBoards());
     if (allBoards.length === 0) {
       setTimeout(() => this.loadCards(), 500);
-      console.log("no boards");
+      console.log('no boards');
       return;
     }
-    
+
     if (this.selectedWorkspace.id === 'all' && !this.allTickets['all']) {
       for (const board of Object.values(this._dataService.allBoards()).flat()) {
         await this._getDataService.setBoard(board);
       }
-      
+
       for (const k of Object.keys(this._dataService.allBoards())) {
         const boards = this._dataService.allBoards()[k];
         this.allTickets[k] = Object.values(this._dataService.allTickets())
           .flat()
           .filter((c) => boards.some((b) => b.id === c.idBoard));
       }
-      
-      this.allTickets['all'] = Object.values(this._dataService.allTickets()).flat();
+
+      this.allTickets['all'] = Object.values(
+        this._dataService.allTickets()
+      ).flat();
       this.tickets = this.formatOfTickets(this.allTickets['all']);
       this.loading = false;
     } else {
-      this.tickets = this.formatOfTickets(this.allTickets[this.selectedWorkspace.id]);
+      this.tickets = this.formatOfTickets(
+        this.allTickets[this.selectedWorkspace.id]
+      );
       this.loading = false;
     }
   }
-  
-  
 
   // loadCardsFromBoard(boards: Board[]): void {
   //   const cardsObservables = boards.map((board) =>
@@ -125,13 +127,35 @@ export class AllCardsComponent implements OnInit {
 
   formatOfTickets(cards: Card[]): any[] {
     const tickets = cards.map((card) => {
-      const ticket = {
-        titre: card.name,
-        resume: card.desc,
+      let ticket = {
+        name: card.name,
+        desc: card.desc,
         statusCard: 'normal',
         ticketId: card.id,
         manager: 'No one',
+        idBoard: card.idBoard,
+        workspace: "",
       };
+
+      this._getService.getBoardById(ticket.idBoard).subscribe(
+        (board) => {
+          const organizationId = board.idOrganization;
+
+          if (organizationId) {
+            this._getService.getWorkspaceById(organizationId).subscribe(
+              (workspace) => {
+                ticket.workspace += workspace.displayName;
+              },
+              (err) => {
+                console.error('Error getting workspace name:', err);
+              }
+            );
+          }
+        },
+        (err) => {
+          console.error('Error getting board name:', err);
+        }
+      );
 
       if (card.idMembers && card.idMembers.length > 0) {
         if (!this.membersFromTicket[card.idMembers[0]]) {
@@ -142,6 +166,7 @@ export class AllCardsComponent implements OnInit {
           ticket.manager = this.membersFromTicket[card.idMembers[0]];
         }
       }
+
       return ticket;
     });
     return tickets;
@@ -160,7 +185,22 @@ export class AllCardsComponent implements OnInit {
 
   openModal(ticket: any): void {
     this.selectedTicket = { ...ticket };
-    this.isEditMode = true;
+
+    this._getService
+      .getBoardById(this.selectedTicket.idBoard)
+      .subscribe((board) => {
+        this.selectedTicket.board = board;
+
+        this._getService
+          .getWorkspaceById(this.selectedTicket.board.idOrganization)
+          .subscribe((workspace) => {
+            this.selectedTicket = {
+              ...ticket,
+              organization: workspace.displayName,
+            };
+            this.isEditMode = true;
+          });
+      });
   }
 
   closeModal(): void {
@@ -180,8 +220,9 @@ export class AllCardsComponent implements OnInit {
   updateTicket(): void {
     this._putService
       .putCard(this.selectedTicket.ticketId, {
-        name: this.selectedTicket.titre,
-        desc: this.selectedTicket.resume,
+        name: this.selectedTicket.name,
+        desc: this.selectedTicket.desc,
+        idBoard: this.selectedTicket.idBoard,
       })
       .subscribe({
         next: (updatedCard) => {
@@ -191,8 +232,8 @@ export class AllCardsComponent implements OnInit {
           if (index > -1) {
             this.tickets[index] = {
               ...this.tickets[index],
-              titre: updatedCard.name,
-              resume: updatedCard.desc,
+              name: updatedCard.name,
+              desc: updatedCard.desc,
             };
           }
         },

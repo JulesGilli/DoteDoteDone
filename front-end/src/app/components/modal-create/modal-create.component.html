@@ -7,18 +7,31 @@
     <div id="create-ticket-form">
       <div class="modal-left">
         <label>Ticket name</label>
-        <input class="field title" type="text" [(ngModel)]="newTicket.titre" placeholder="Card name" />
+        <input
+          class="field title"
+          type="text"
+          [(ngModel)]="newTicket.name"
+          placeholder="Card name"
+        />
         <label>Description</label>
-        <textarea class="field resume" [(ngModel)]="newTicket.resume" placeholder="Task resume"></textarea>
+        <textarea
+          class="field desc"
+          [(ngModel)]="newTicket.desc"
+          placeholder="Task desc"
+        ></textarea>
       </div>
 
       <div class="modal-right">
         <div class="option">
           <label class="option-label">Workspace</label>
-          <select class="workspace-select" [(ngModel)]="selectedWorkspace" (change)="updateBoards()">
+          <select
+            class="workspace-select"
+            [(ngModel)]="selectedWorkspace"
+            (change)="updateBoards()"
+          >
             @for (workspace of workspaces; track workspace) {
               <option [ngValue]="workspace">
-                {{ workspace.displayName || "No workspace"}}
+                {{ workspace.displayName || 'No workspace' }}
               </option>
             }
           </select>
@@ -38,7 +51,7 @@
           <select class="member-select" [(ngModel)]="selectedMember">
             @for (member of this.members; track member) {
               <option [ngValue]="member">
-                {{ member.fullName || "No member"}}
+                {{ member.fullName || 'No member' }}
               </option>
             }
           </select>
@@ -48,14 +61,18 @@
           <select class="board-select" [(ngModel)]="selectedBoard">
             @for (board of boards; track board) {
               <option [value]="board">
-                {{ board.name || "No boards for this workspace" }}
+                {{ board.name || 'No boards for this workspace' }}
               </option>
             }
           </select>
         </div>
 
         <div class="modal-actions">
-          <button class="valid-btn" (click)="buttonCreateTicket()" [disabled]="!newTicket.titre">
+          <button
+            class="valid-btn"
+            (click)="buttonCreateTicket()"
+            [disabled]="!newTicket.name"
+          >
             Create
           </button>
         </div>
