@@ -1,59 +1,99 @@
-# FrontEnd
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.7.
+# 📘 README.md – DoteDoteDone
 
-## Development server
+## 🎯 Présentation
 
-To start a local development server, run:
+DoteDoteDone est une application Angular de gestion de projet connectée à l’API Trello. Elle permet :
+- la gestion des workspaces, boards, listes et cartes,
+- l’assignation de membres à une carte,
+- une interface claire et responsive via Angular Material.
+
+---
+
+## 🚀 Lancement du projet
+
+### Prérequis
+- Node.js (≥ 18)
+- Angular CLI : `npm install -g @angular/cli`
+
+### Installation
+
+```bash
+npm install
+```
+
+### Démarrer en développement
 
 ```bash
 ng serve
 ```
+Puis ouvrir [http://localhost:4200](http://localhost:4200)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Build production
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Les fichiers compilés sont générés dans `dist/front-end/`.
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 🧪 Tests
+
+### Tests unitaires
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### Tests end-to-end (optionnel)
 
 ```bash
 ng e2e
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+> ℹ️ Vous pouvez intégrer Cypress ou Playwright pour les e2e.
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 🧱 Structure du projet
+
+```
+front-end/
+├── src/
+│   ├── app/               # Composants, services, store
+│   │   ├── components/
+│   │   ├── services/
+│   │   ├── store/
+│   │   └── models/
+│   ├── environments/      # Config dev/prod
+│   └── index.html
+├── angular.json
+├── package.json
+└── README.md
+```
+
+---
+
+## 🛠️ Technologies utilisées
+
+- Angular 19
+- NgRx (gestion d’état)
+- Angular Material
+- Trello REST API
+
+---
+
+## 🔐 API Trello
+
+- `GET /1/members/me`
+- `POST /1/boards/`
+- `PUT /1/cards/{id}`
+- `DELETE /1/cards/{id}`
+- …
+
+La clé API et le token sont à configurer dans `environment.ts`.
+
+---
+
