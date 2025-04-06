@@ -9,6 +9,7 @@
     </div>
     <p class="loading-text">Loading...</p>
   </div>
+
   <div *ngIf="!_dataService.loading()" [@fadeInAnimation]>
     <div id="kanban-selectors">
       <div class="selectors">
@@ -41,6 +42,7 @@
           </div>
         </div>
       </div>
+
       <div class="selectors">
         <label>Board</label>
         <div class="selector">
@@ -69,19 +71,40 @@
               </button>
             </div>
           </div>
+          <ng-template #noBoard>
+            <div class="no-board-container" [@fadeInAnimation]>
+              <p>There are no boards in this workspace.</p>
+              <button class="button-create" (click)="openBoardModal()">Create one</button>
+            </div>
+          </ng-template>
         </div>
       </div>
     </div>
   </div>
-  <div id="kanban-lists" cdkDropListGroup #kanbanContainer>
-    <app-list *ngFor="let list of _getDataService.getAllListsInArray()"
-              [list]="list"
-              (cardDragMoved)="onDragMoved($event)"
-              (moveListEvent)="onMoveList($event)"
-              (deleteListEvent)="onDeleteList($event)">
-    </app-list>
-  </div>
+
+  <ng-container *ngIf="(_dataService.boards() || []).length > 0; else noBoards">
+    <div id="kanban-lists" cdkDropListGroup #kanbanContainer>
+      <app-list *ngFor="let list of _getDataService.getAllListsInArray()"
+                [list]="list"
+                (cardDragMoved)="onDragMoved($event)"
+                (moveListEvent)="onMoveList($event)"
+                (deleteListEvent)="onDeleteList($event)">
+      </app-list>
+    </div>
+  </ng-container>
+  <ng-template #noBoards>
+    <div class="no-lists-container">
+      <p>There are no lists loaded for this workspace.</p>
+    </div>
+  </ng-template>
 </div>
 
 <app-create-workspace-modal #createWorkspaceModal></app-create-workspace-modal>
 <app-create-board-modal #createBoardModal></app-create-board-modal>
+
+<app-rename-modal
+  *ngIf="showRenameModal"
+  [newName]="renameInput"
+  (save)="handleRenameSave($event)"
+  (cancel)="handleRenameCancel()">
+</app-rename-modal>

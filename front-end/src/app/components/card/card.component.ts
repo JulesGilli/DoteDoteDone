@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DeleteCardComponent } from '../confirm-popup/delete-card/delete-card.component';
-import { NgIf } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
-  imports: [DeleteCardComponent, NgIf],
+  imports: [],
   styleUrls: ['./card.component.scss'],
 })
 export class CardComponent {
@@ -20,21 +20,21 @@ export class CardComponent {
 
   showConfirmPopup: boolean = false;
 
+  constructor(private dialog: MatDialog) {}
   onCardClick(): void {
     this.cardClick.emit();
   }
 
-  onDelete(event: MouseEvent): void {
+  onOpenDelete(event: MouseEvent) {
     event.stopPropagation();
-    this.showConfirmPopup = true;
-  }
+    const dialogRef = this.dialog.open(DeleteCardComponent, {
+      data: { objectId: this.ticketId }, // Pass the board ID to the dialog
+    });
 
-  onConfirmDelete(): void {
-    this.deleteCard.emit();
-    this.showConfirmPopup = false;
-  }
-
-  onCancelDelete(): void {
-    this.showConfirmPopup = false;
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.deleteCard.emit();
+      }
+    });
   }
 }

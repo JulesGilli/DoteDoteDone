@@ -1,28 +1,27 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ConfirmPopupComponent } from '../confirm-popup.component';
+import { Component, Inject, inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DeleteService } from '../../../services';
+import { ConfirmPopupComponent } from '../confirm-popup.component';
 
 @Component({
   selector: 'app-delete-card',
-  imports: [],
   templateUrl: '../confirm-popup.component.html',
-  styleUrl: '../confirm-popup.component.scss',
+  styleUrls: ['../confirm-popup.component.scss'],
 })
-export class DeleteCardComponent
-  extends ConfirmPopupComponent
-  implements OnInit
-{
-  @Input() cardToDelId!: string;
+export class DeleteCardComponent extends ConfirmPopupComponent {
+  public override message = 'Do you really want to remove this card?';
+  private cardId!: string;
+  private _delService = inject(DeleteService);
+  constructor(
+    dialogRef: MatDialogRef<DeleteCardComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { objectId: string }
+  ) {
+    super(dialogRef);
+    this.cardId = data.objectId;
+  }
 
-  constructor(private _delService: DeleteService) {
-    super();
-  }
-  ngOnInit(): void {
-    this.message = 'Do you really want to remove this card?';
-  }
   override onConfirm(): void {
-    this._delService.deleteCard(this.cardToDelId).subscribe(() => {
-      super.onConfirm();
-    });
+    this._delService.deleteCard(this.cardId).subscribe();
+    super.onConfirm();
   }
 }

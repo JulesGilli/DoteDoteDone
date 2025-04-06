@@ -167,11 +167,49 @@
       width: 16px;
       height: 16px;
     }
-
   }
 }
 
+.button-create {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #2d2d2d;
+  color: var.$white;
+  border: none;
+  border-radius: var.$radius;
+  cursor: pointer;
 
+  &:hover {
+    background-color: #1f1f1f;
+  }
+}
+
+.no-board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  background: var.$lighter-dark;
+  border-radius: var.$radius;
+  color: var.$white;
+  margin: 1rem 0;
+}
+
+.no-lists-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  background: var.$lighter-dark;
+  border-radius: var.$radius;
+  color: var.$white;
+  margin: 1rem 0;
+}
 
 #kanban-lists {
   display: flex;
