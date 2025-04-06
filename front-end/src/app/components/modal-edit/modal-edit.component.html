@@ -1,87 +1,73 @@
 <div class="modal-overlay">
   <div class="modal-content">
-    <span class="close-btn" (click)="closeModal()">✖</span>
-
-    <div class="modal-left">
-      <input
-        class="field title"
-        type="text"
-        [(ngModel)]="ticket.titre"
-        placeholder="Card name"
-      />
-      <textarea
-        class="field resume"
-        [(ngModel)]="ticket.resume"
-        placeholder="Task resume"
-      ></textarea>
+    <div class="view-ticket-title">
+      <h2>Edit ticket</h2>
+      <button class="close-btn" (click)="closeModal()">&#10005;</button>
     </div>
-
-    <div class="modal-right">
-      <div class="option">
-        <span class="option-label">Workspace</span>
-        <div class="dropdown">
-          <button class="option-value" (click)="toggleDropdown('workspace')">
-            ▲ {{ ticket?.workspace || 'T-DEV' }}
-          </button>
-          <ul class="dropdown-menu" *ngIf="isDropdownOpen('workspace')">
-            <li (click)="selectOption('workspace', 'T-DEV')">T-DEV</li>
-            <li (click)="selectOption('workspace', 'Production')">Production</li>
-            <li (click)="selectOption('workspace', 'Autre')">Autre</li>
-          </ul>
-        </div>
+    <div id="edit-content-modal">
+      <div class="modal-left">
+        <label class="option-label">Ticket name</label>
+        <input
+          class="field"
+          type="text"
+          [(ngModel)]="ticket.name"
+          placeholder="Card name"
+        />
+        <label class="option-label">Description</label>
+        <textarea
+          class="field desc"
+          [(ngModel)]="ticket.desc"
+          placeholder="Task desc"
+        ></textarea>
       </div>
 
-      <div class="option">
-        <span class="option-label">Priorité</span>
-        <div class="dropdown">
-          <button class="option-value" (click)="toggleDropdown('statusCard')">
-            <img
-              class="difficulty-indicator"
-              [attr.src]="'/images/card-priority-' + (ticket?.statusCard || 'normal') + '.png'"
-              alt="priority"
-            />
-            ▲ {{ ticket?.statusCard || 'Normal' }}
-          </button>
-          <ul class="dropdown-menu" *ngIf="isDropdownOpen('statusCard')">
-            <li (click)="selectOption('statusCard', 'normal')">Normal</li>
-            <li (click)="selectOption('statusCard', 'minor')">Minor</li>
-            <li (click)="selectOption('statusCard', 'medium')">Medium</li>
-            <li (click)="selectOption('statusCard', 'critical')">Critical</li>
-            <li (click)="selectOption('statusCard', 'blocking')">Blocking</li>
-          </ul>
+      <div class="modal-right">
+        <div class="option">
+          <label class="option-label">Workspace</label>
+          <p>{{ ticket.organization }}</p>
         </div>
-      </div>
 
-      <div class="option">
-        <span class="option-label">Manager</span>
-        <div class="dropdown">
-          <button class="option-value" (click)="toggleDropdown('manager')">
-            ▲ {{ ticket?.manager || 'Not assigned' }}
-          </button>
-          <ul class="dropdown-menu" *ngIf="isDropdownOpen('manager')">
-            <li (click)="selectOption('manager', 'Not assigned')">Not assigned</li>
-            <li (click)="selectOption('manager', 'Manager1')">Manager1</li>
-            <li (click)="selectOption('manager', 'Manager2')">Manager2</li>
-          </ul>
+        <div class="option">
+          <label class="option-label">Board</label>
+          <p>{{ ticket.board.name }}</p>
         </div>
-      </div>
 
-      <div class="option">
-        <span class="option-label">Board</span>
-        <div class="dropdown">
-          <button class="option-value" (click)="toggleDropdown('board')">
-            ▲ {{ ticket?.board || 'Board name' }}
-          </button>
-          <ul class="dropdown-menu" *ngIf="isDropdownOpen('board')">
-            <li (click)="selectOption('board', 'Board name')">Board name</li>
-            <li (click)="selectOption('board', 'Board1')">Board1</li>
-            <li (click)="selectOption('board', 'Board2')">Board2</li>
-          </ul>
+        <div class="option">
+          <label class="option-label">Priority</label>
+          <select
+            [(ngModel)]="ticket.statusCard"
+            (ngModelChange)="selectOption('statusCard', $event)"
+          >
+            <option value="normal">Normal</option>
+            <option value="minor">Minor</option>
+            <option value="medium">Medium</option>
+            <option value="critical">Critical</option>
+            <option value="blocking">Blocking</option>
+          </select>
         </div>
-      </div>
 
-      <div class="modal-footer">
-        <button class="valid-btn" (click)="validModal()">Valid</button>
+        <div class="option">
+          <label class="option-label">Member</label>
+          <select
+            class="board-select"
+            [ngModel]="ticket.manager"
+            (ngModelChange)="selectOption('manager', $event)"
+          >
+            <option [ngValue]="'Not assigned'">Not assigned</option>
+            <option [ngValue]="'Manager1'">Manager1</option>
+            <option [ngValue]="'Manager2'">Manager2</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button
+            class="valid-btn"
+            (click)="validModal()"
+            [disabled]="!ticket.name"
+          >
+            Valid
+          </button>
+        </div>
       </div>
     </div>
   </div>

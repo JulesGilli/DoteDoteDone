@@ -1,10 +1,14 @@
 <div class="card" (click)="onCardClick()">
   <div class="card-part card-part-title">
-    <img class="status-indicator" [attr.src]="'/images/card-priority-' + statusCard + '.png'" alt="priority" />
-    <span class="card-title">{{ titre }}</span>
+    <img
+      class="status-indicator"
+      [attr.src]="'/images/card-priority-' + statusCard + '.png'"
+      alt="priority"
+    />
+    <span class="card-title">{{ name }}</span>
   </div>
   <div class="card-part card-part-id">
-    <span>{{ ticketId }}</span>
+    <span>{{ workspace }}</span>
   </div>
   <div class="card-part card-part-manager">
     <span>{{ manager }}</span>

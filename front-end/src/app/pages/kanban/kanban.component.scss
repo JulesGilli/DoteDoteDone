@@ -103,7 +103,7 @@
 
       button {
         margin: 0.5rem 0 0 0.5rem;
-        padding: 10px;
+        padding: 0.5rem 0.8rem;
         border-radius: var.$radius;
         border: none;
         background: var.$lighter-dark;
@@ -126,6 +126,7 @@
       cursor: pointer;
       font-size: 1.2rem;
       margin-right: 0.5rem;
+      padding: 2px;
     }
 
     .menu-dropdown {
@@ -213,4 +214,5 @@
 #kanban-lists {
   display: flex;
   overflow-y: scroll;
+  height: 100dvh;
 }
