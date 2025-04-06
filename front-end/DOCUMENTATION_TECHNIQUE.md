@@ -1,106 +1,103 @@
 
 # 📘 Documentation Technique – DoteDoteDone
 
+## 👨‍💻 Auteur
+**Jules GILLI**  
+Projet réalisé dans le cadre du module `T-DEV-600`.
+
 ---
 
 ## 1. Architecture Générale
 
-DoteDoteDone est une application Angular connectée à l’API REST de Trello.  
-Elle se compose de :
-
-- **Frontend Angular** : interface utilisateur, logique métier, NgRx store.
-- **Backend distant** : API officielle de Trello (requêtes HTTP avec token).
-
-L’ensemble de la logique d’appel API est centralisée dans des services, et l’état global est géré avec NgRx.
+DoteDoteDone est une application Angular orientée gestion de projet, connectée à l’API Trello.  
+Elle est structurée de manière modulaire avec séparation claire des responsabilités :
+- **Composants** pour l’interface
+- **Services** pour la logique métier et les appels API
+- **Store NgRx** pour la gestion d’état globale
+- **Modèles TypeScript** pour typer les données
+- **Gestion des modales** via des composants dédiés
 
 ---
 
-## 2. Structure de l’application
+## 2. Structure du projet
 
 ```
-front-end/
+src/
 ├── app/
-│   ├── components/        # Composants Angular
-│   ├── services/          # Services métier + API
-│   ├── store/             # NgRx (actions, reducers, effects)
-│   └── models/            # Interfaces TypeScript
-├── environments/          # Fichiers de configuration
-└── index.html             # Point d’entrée de l’application
+│   ├── components/        # UI : cards, boards, lists, modals, etc.
+│   ├── services/          # Appels API et logique métier
+│   ├── store/             # Gestion d’état via NgRx
+│   ├── models/            # Interfaces TypeScript pour les données
+│   ├── api/               # Fonctions encapsulées pour l’API Trello
+│   └── data/dataAPI/      # Données mockées ou traitées
+├── environments/          # Variables d’environnement (clé/token)
+└── index.html
 ```
 
 ---
 
-## 3. Composants principaux
+## 3. Modèles principaux
 
-| Composant             | Rôle |
-|-----------------------|------|
-| `AppComponent`        | Composant racine |
-| `BoardComponent`      | Affiche un tableau |
-| `CardComponent`       | Affiche et édite une carte |
-| `ListComponent`       | Contient des cartes |
-| `WorkspaceComponent`  | Gère les workspaces |
-| `HeaderComponent`     | Barre de navigation |
+- `CardModel`: id, name, desc, idList
+- `ListModel`: id, name, idBoard
+- `BoardModel`: id, name, desc
+- `WorkspaceModel`: id, name
+- `MemberModel`: id, fullName, username
 
 ---
 
-## 4. Services principaux
+## 4. Services
 
-| Service                | Description |
-|------------------------|-------------|
-| `TrelloApiService`     | Gère toutes les requêtes vers l’API Trello |
-| `BoardService`         | Logique métier des boards |
-| `CardService`          | Gestion des cartes Trello |
-| `StoreService`         | Gestion de l’état avec NgRx |
-
----
-
-## 5. Architecture de l’état (NgRx)
-
-Chaque **feature** (`boards`, `cards`, etc.) contient :
-- `actions.ts`
-- `reducers.ts`
-- `effects.ts`
-- `selectors.ts`
-
-Ce pattern permet une **séparation claire** de la logique métier et une **gestion unifiée** des effets asynchrones.
+| Service             | Rôle |
+|---------------------|------|
+| `CardService`       | CRUD pour les cartes |
+| `BoardService`      | Gestion des tableaux |
+| `ListService`       | Gestion des listes |
+| `MemberService`     | Récupère les membres |
+| `AuthService`       | Gestion de l’auth Trello |
+| `ApiTrelloService`  | Requêtes HTTP Trello |
 
 ---
 
-## 6. Cycle de vie (Angular)
+## 5. NgRx Store
 
-Les composants suivent le cycle classique Angular :
-- `ngOnInit()` pour l’initialisation (ex : récupération des données)
-- `ngOnDestroy()` pour le nettoyage (désabonnement aux observables)
-- Utilisation de `async pipe` pour lier les Observables au template HTML
-
----
-
-## 7. API Trello utilisée
-
-| Méthode | Endpoint                  | Description |
-|---------|---------------------------|-------------|
-| GET     | `/1/members/me`           | Récupérer l’utilisateur connecté |
-| POST    | `/1/boards/`              | Créer un nouveau board |
-| PUT     | `/1/cards/{id}`           | Modifier une carte |
-| DELETE  | `/1/cards/{id}`           | Supprimer une carte |
-
-> La clé et le token API doivent être définis dans `environment.ts`.
+- Découpé par feature (card, board, list, workspace)
+- Chaque feature contient :
+  - `actions.ts`
+  - `reducers.ts`
+  - `effects.ts`
+  - `selectors.ts`
+- Utilisation d’effets (`effects`) pour appeler les services de manière asynchrone
 
 ---
 
-## 8. Dépendances techniques
+## 6. Cycle de vie Angular
 
-- Angular 19
-- NgRx
-- Angular Material
-- Trello REST API
-- Karma / Jasmine pour les tests
-
----
-
-## 9. Sécurité
-
-Les identifiants API sont stockés dans `environment.ts` (non versionné).  
+- `ngOnInit()` pour initialiser les données depuis le store
+- `ngOnDestroy()` pour le nettoyage
+- Utilisation d’observables combinées (`combineLatest`, `mergeMap`)
+- Data binding via `async pipe` dans le HTML
 
 ---
 
+## 7. Sécurité
+
+- Les clés Trello sont définies dans `environment.ts`
+- Le fichier n’est **pas versionné** pour des raisons de sécurité
+
+---
+
+## 8. API Trello utilisée
+
+Exemples d’appels :
+- `GET /1/boards/` → récupérer les boards
+- `POST /1/cards/` → créer une carte
+- `PUT /1/cards/{id}` → modifier une carte
+- `DELETE /1/cards/{id}` → supprimer une carte
+- Auth via `key` et `token`
+
+---
+
+## 9. Conclusion
+
+Cette documentation présente les briques principales du projet, ses modèles, ses services, ainsi que son architecture NgRx. Elle permet à tout nouveau développeur de comprendre, maintenir et étendre le projet rapidement.
