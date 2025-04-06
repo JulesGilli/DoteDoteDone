@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DeleteCardComponent } from './delete-card.component';
 import {HttpClientModule} from '@angular/common/http';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 describe('DeleteCardComponent', () => {
   let component: DeleteCardComponent;
@@ -9,7 +10,17 @@ describe('DeleteCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DeleteCardComponent, HttpClientModule]
+      imports: [DeleteCardComponent, HttpClientModule],
+      providers: [
+        {
+          provide: MatDialogRef,
+          useValue: { close: jasmine.createSpy('close') }
+        },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {}
+        }
+      ]
     })
     .compileComponents();
 

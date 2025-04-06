@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfirmPopupComponent } from './confirm-popup.component';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 describe('ConfirmPopupComponent', () => {
   let component: ConfirmPopupComponent;
@@ -8,7 +9,17 @@ describe('ConfirmPopupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmPopupComponent]
+      imports: [ConfirmPopupComponent],
+      providers: [
+        {
+          provide: MatDialogRef,
+          useValue: { close: jasmine.createSpy('close') }
+        },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {}
+        }
+      ]
     })
     .compileComponents();
 
