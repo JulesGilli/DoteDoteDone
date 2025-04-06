@@ -135,6 +135,27 @@ export class KanbanComponent implements OnInit {
     this._delDataService.deleteList(list);
   }
 
+  createList(): void {
+    const selectedBoard = this._dataService.selectedBoard();
+    if (!selectedBoard) return;
+
+    const allLists = this._getDataService.getAllListsInArray();
+    const nextPos = allLists.length > 0
+      ? Math.max(...allLists.map(list => list.pos ?? 0)) + 1
+      : 0;
+
+    const newList: Partial<List> = {
+      name: 'Nouvelle liste',
+      idBoard: selectedBoard.id,
+      pos: nextPos,
+    };
+
+    this._postService.postList(newList).subscribe((createdList) => {
+      this._getDataService.addListToBoard(createdList);
+    });
+  }
+
+
   onDeleteBoard(): void {
     const selectedBoard = this._dataService.selectedBoard();
     if (!selectedBoard) {

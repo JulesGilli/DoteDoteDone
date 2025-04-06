@@ -131,4 +131,16 @@ export class GetDataService {
       ).flat();
     return [];
   }
+
+  addListToBoard(list: List): void {
+    const boardId = list.idBoard;
+    this._dataService.lists.update((prev) => {
+      const updatedLists = [...(prev[boardId] || []), list];
+      return {
+        ...prev,
+        [boardId]: updatedLists,
+      };
+    });
+  }
+
 }
