@@ -78,7 +78,6 @@ export class DelDataService {
   }
 
   deleteWorkspace(workspaceId: string) {
-    this._delService.deleteWorkspace(workspaceId).subscribe();
     this._dataService
       .allBoards()
       [workspaceId].forEach((b) => this.deleteBoard(b.id));
@@ -87,5 +86,6 @@ export class DelDataService {
       .filter((w) => w.id !== workspaceId);
     this._dataService.workspaces.set(workspaces);
     this._getDataService.loadWorkspaces();
+    this._delService.deleteWorkspace(workspaceId).subscribe();
   }
 }
