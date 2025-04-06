@@ -29,6 +29,7 @@ import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { CardListComponent } from '../card-list/card-list.component';
 import { SharedModule } from '../../../shared.module';
 import { DataService } from '../../services/data/data.service';
+import {CreateTicketModalComponent} from '../create-ticket-modal/create-ticket-modal.component';
 
 @Component({
   selector: 'app-list',
@@ -44,6 +45,7 @@ import { DataService } from '../../services/data/data.service';
     CdkDragPreview,
     CdkDragPlaceholder,
     FormsModule,
+    CreateTicketModalComponent,
   ],
   styleUrls: ['./list.component.scss'],
 })
@@ -69,6 +71,7 @@ export class ListComponent implements OnInit {
   private readonly _putService = inject(PutService);
 
   @ViewChild('dropdownContainer', { static: false }) dropdownContainer!: ElementRef;
+  @ViewChild('createTicketModal') createTicketModal!: CreateTicketModalComponent
   @ViewChild('editInput', { static: false }) editInput!: ElementRef;
 
   cards = computed(() =>
@@ -80,6 +83,14 @@ export class ListComponent implements OnInit {
   );
 
   ngOnInit(): void {}
+
+  openTicketModal(): void {
+    this.createTicketModal.openModal();
+  }
+
+  closeModal(): void {
+    this.createTicketModal.closeModal();
+  }
 
   openCreateModal(): void {
     this.isCreateMode = true;

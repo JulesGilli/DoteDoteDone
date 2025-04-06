@@ -73,6 +73,14 @@ export class GetDataService {
     return await this.loadListsWithCards();
   }
 
+  public async loadAll(): Promise<void> {
+    this._dataService.loading.set(true);
+    await this.loadWorkspaces();
+    await this.loadBoards();
+    await this.loadListsWithCards();
+    this._dataService.loading.set(false);
+  }
+
   public loadListsWithCards(): Promise<Card[]> {
     if (!this._dataService.selectedBoard()) return Promise.resolve([]);
 

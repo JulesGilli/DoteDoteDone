@@ -28,6 +28,10 @@ export class GetService {
     });
   }
 
+  getWorkspaceById(workspaceId: string): Observable<Workspace> {
+    return this.getAll(null, { organizations: workspaceId });
+  }
+
   /*membersObject={
     members: {id};
     }*/
@@ -41,6 +45,10 @@ export class GetService {
   // members: {idMember}
   // }
   // }
+
+  getBoardById(boardId: string): Observable<Board> {
+    return this.getAll(null, { boards: boardId });
+  }
 
   getAllLists(boardsObject: Object): Observable<List[]> {
     return this.getAll('lists', boardsObject);

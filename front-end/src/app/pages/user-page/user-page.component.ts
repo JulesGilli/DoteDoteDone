@@ -2,13 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GetService } from '../../services';
 import { Member } from '../../models';
+import {fadeInAnimation} from '../../fade-in.animation';
 
 @Component({
   selector: 'app-user-page',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './user-page.component.html',
-  styleUrls: ['./user-page.component.scss']
+  styleUrls: ['./user-page.component.scss'],
+  animations: [fadeInAnimation]
 })
 export class UserPageComponent implements OnInit {
   userInfo: Member | null = null;

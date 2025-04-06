@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TopBarComponent } from './top-bar.component';
+import {HttpClientModule} from '@angular/common/http';
+import {ActivatedRoute} from '@angular/router';
+import {of} from 'rxjs';
 
 describe('TopBarComponent', () => {
   let component: TopBarComponent;
@@ -8,7 +11,20 @@ describe('TopBarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TopBarComponent]
+      imports: [TopBarComponent, HttpClientModule],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            paramMap: of({ get: (key: string) => 'mockValue' }),
+            snapshot: {
+              paramMap: {
+                get: (key: string) => 'mockValue'
+              }
+            },
+          }
+        }
+      ]
     })
     .compileComponents();
 

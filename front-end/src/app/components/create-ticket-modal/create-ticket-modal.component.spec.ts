@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateWorkspaceModalComponent } from './create-workspace-modal.component';
+import { CreateTicketModalComponent } from './create-ticket-modal.component';
 import {HttpClientModule} from '@angular/common/http';
 
-describe('CreateWorkspaceModalComponent', () => {
-  let component: CreateWorkspaceModalComponent;
-  let fixture: ComponentFixture<CreateWorkspaceModalComponent>;
+describe('CreateTicketModalComponent', () => {
+  let component: CreateTicketModalComponent;
+  let fixture: ComponentFixture<CreateTicketModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CreateWorkspaceModalComponent, HttpClientModule]
+      imports: [CreateTicketModalComponent, HttpClientModule]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CreateWorkspaceModalComponent);
+    fixture = TestBed.createComponent(CreateTicketModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

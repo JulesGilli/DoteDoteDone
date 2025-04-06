@@ -1,7 +1,14 @@
-<div id="card-list">
+<div id="card-list" (click)="openModal(card)">
   <svg></svg>
   <div id="card-list-description">
     <h3>{{ card.name }}</h3>
     <p>{{ card.desc }}</p>
   </div>
 </div>
+
+<app-modal-edit
+  *ngIf="isEditMode"
+  [ticket]="selectedTicket"
+  (close)="closeModal()"
+  (valid)="updateTicket()"
+></app-modal-edit>

@@ -18,6 +18,7 @@ export class DataService {
 
   tickets = signal<Card[]>([]);
   allTickets = signal<Record<string, Card[]>>({});
+  selectedTicket = signal<Card | null>(null);
 
   setBoards(newBoards: Board[]): void {
     this.boards.set(newBoards);

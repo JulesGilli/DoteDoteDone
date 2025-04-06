@@ -1,4 +1,4 @@
-<div class="modal-overlay">
+<div *ngIf="isOpened()" class="modal-overlay">
   <div class="modal-content">
     <div class="create-ticket-title">
       <h2>Create new ticket</h2>
@@ -11,7 +11,7 @@
           class="field title"
           type="text"
           [(ngModel)]="newTicket.name"
-          placeholder="Card name"
+          placeholder="Ticket name"
         />
         <label>Description</label>
         <textarea
@@ -26,10 +26,10 @@
           <label class="option-label">Workspace</label>
           <select
             class="workspace-select"
-            [(ngModel)]="selectedWorkspace"
-            (change)="updateBoards()"
+            [ngModel]="_dataService.selectedWorkspace()"
+            (ngModelChange)="_getDataService.setWorkspace($event)"
           >
-            @for (workspace of workspaces; track workspace) {
+            @for (workspace of _dataService.workspaces(); track workspace) {
               <option [ngValue]="workspace">
                 {{ workspace.displayName || 'No workspace' }}
               </option>
@@ -48,18 +48,20 @@
         </div>
         <div class="option">
           <label class="option-label">Manager</label>
-          <select class="member-select" [(ngModel)]="selectedMember">
-            @for (member of this.members; track member) {
-              <option [ngValue]="member">
-                {{ member.fullName || 'No member' }}
-              </option>
-            }
+          <select
+            class="member-select"
+            [ngModel]="_dataService.selectedBoard()"
+          >
           </select>
         </div>
         <div class="option">
           <label class="option-label">Board</label>
-          <select class="board-select" [(ngModel)]="selectedBoard">
-            @for (board of boards; track board) {
+          <select
+            class="board-select"
+            [ngModel]="_dataService.selectedBoard()"
+            (ngModelChange)="_getDataService.setBoard($event)"
+          >
+            @for (board of _dataService.boards(); track board) {
               <option [value]="board">
                 {{ board.name || 'No boards for this workspace' }}
               </option>
@@ -70,7 +72,7 @@
         <div class="modal-actions">
           <button
             class="valid-btn"
-            (click)="buttonCreateTicket()"
+            (click)="createTicket()"
             [disabled]="!newTicket.name"
           >
             Create
