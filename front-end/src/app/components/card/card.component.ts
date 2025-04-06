@@ -1,21 +1,19 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import {DeleteCardComponent} from '../confirm-popup/delete-card/delete-card.component';
-import {NgIf} from '@angular/common';
+import { DeleteCardComponent } from '../confirm-popup/delete-card/delete-card.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
-  imports: [
-    DeleteCardComponent,
-    NgIf
-  ],
-  styleUrls: ['./card.component.scss']
+  imports: [DeleteCardComponent, NgIf],
+  styleUrls: ['./card.component.scss'],
 })
 export class CardComponent {
-  @Input() titre!: string;
+  @Input() name!: string;
   @Input() statusCard!: string;
   @Input() ticketId!: string;
   @Input() manager!: string;
+  @Input() workspace!: string;
 
   @Output() cardClick = new EventEmitter<void>();
   @Output() deleteCard = new EventEmitter<void>();
