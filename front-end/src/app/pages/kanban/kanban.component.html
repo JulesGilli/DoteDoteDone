@@ -1,0 +1,118 @@
+<div class="kanban-page">
+  <div *ngIf="_dataService.loading()" class="loading">
+    <div class="logo-loading">
+      <div class="logo-container">
+        <img src="/images/Logo_1.png" alt="Logo Part 1" class="logo-part logo-part1" />
+        <img src="/images/Logo_2.png" alt="Logo Part 2" class="logo-part logo-part2" />
+        <img src="/images/Logo_3.png" alt="Logo Part 3" class="logo-part logo-part3" />
+      </div>
+    </div>
+    <p class="loading-text">Loading...</p>
+  </div>
+
+  <div *ngIf="!_dataService.loading()" [@fadeInAnimation]>
+    <div id="kanban-selectors">
+      <div class="selectors">
+        <label>Workspace</label>
+        <div class="selector">
+          <select class="workspace-select" [ngModel]="_dataService.selectedWorkspace()"
+                  (ngModelChange)="_getDataService.setWorkspace($event)">
+            @for (workspace of _dataService.workspaces(); track workspace) {
+              <option [ngValue]="workspace">
+                {{ workspace.displayName }}
+              </option>
+            }
+          </select>
+          <div class="dropdown-container" #workspaceDropdown>
+            <button (click)="toggleWorkspaceMenu()" class="menu-button">⋮</button>
+            <div *ngIf="isWorkspaceMenuOpen" class="menu-dropdown">
+              <button (click)="enterRenameWorkspaceMode()">Rename</button>
+              <button class="delete-button" (click)="deleteWorkspace()">
+                Delete
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  class="delete-icon"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M7 21C6.45 21 5.97933 20.8043 5.588 20.413C5.19667 20.0217 5.00067 19.5507 5 19V6H4V4H9V3H15V4H20V6H19V19C19 19.55 18.8043 20.021 18.413 20.413C18.0217 20.805 17.5507 21.0007 17 21H7ZM17 6H7V19H17V6ZM9 17H11V8H9V17ZM13 17H15V8H13V17Z"
+                    fill="currentColor"/>
+                </svg>
+              </button>
+              <button (click)="openWorkspaceModal()">Create</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="selectors">
+        <label>Board</label>
+        <div class="selector">
+          <ng-container *ngIf="(_dataService.boards() || []).length > 0; else noBoard">
+            <select class="board-select" [ngModel]="_dataService.selectedBoard()"
+                    (ngModelChange)="_getDataService.setBoard($event)">
+              @for (board of _dataService.boards(); track board) {
+                <option [ngValue]="board">
+                  {{ board.name }}
+                </option>
+              }
+            </select>
+            <div class="dropdown-container" #boardDropdown>
+              <button (click)="toggleBoardMenu()" class="menu-button">⋮</button>
+              <div *ngIf="isBoardMenuOpen" class="menu-dropdown">
+                <button (click)="enterRenameBoardMode()">Rename</button>
+                <button class="delete-button" (click)="deleteBoard()">
+                  Delete
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    class="delete-icon"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M7 21C6.45 21 5.97933 20.8043 5.588 20.413C5.19667 20.0217 5.00067 19.5507 5 19V6H4V4H9V3H15V4H20V6H19V19C19 19.55 18.8043 20.021 18.413 20.413C18.0217 20.805 17.5507 21.0007 17 21H7ZM17 6H7V19H17V6ZM9 17H11V8H9V17ZM13 17H15V8H13V17Z"
+                      fill="currentColor"/>
+                  </svg>
+                </button>
+                <button (click)="openBoardModal()">Create</button>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #noBoard>
+            <div class="no-board-container" [@fadeInAnimation]>
+              <p>There are no boards in this workspace.</p>
+              <button class="button-create" (click)="openBoardModal()">Create one</button>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="(_dataService.boards() || []).length > 0; else noBoards">
+    <div id="kanban-lists" cdkDropListGroup #kanbanContainer>
+      <app-list *ngFor="let list of _getDataService.getAllListsInArray()"
+                [list]="list"
+                (cardDragMoved)="onDragMoved($event)"
+                (moveListEvent)="onMoveList($event)"
+                (deleteListEvent)="onDeleteList($event)">
+      </app-list>
+    </div>
+  </ng-container>
+  <ng-template #noBoards>
+    <div class="no-lists-container">
+      <p>There are no lists loaded for this workspace.</p>
+    </div>
+  </ng-template>
+</div>
+
+<app-create-workspace-modal #createWorkspaceModal></app-create-workspace-modal>
+<app-create-board-modal #createBoardModal></app-create-board-modal>
+
+<app-rename-modal
+  *ngIf="showRenameModal"
+  [newName]="renameInput"
+  (save)="handleRenameSave($event)"
+  (cancel)="handleRenameCancel()">
+</app-rename-modal>

@@ -1,0 +1,78 @@
+@use '../../../variables.scss' as var;
+
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  animation: overlayFadeIn 0.3s forwards;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.confirm-content {
+  background: var.$dark;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid var.$lighter-dark;
+  transform: scale(0.9);
+  animation: contentScaleIn 0.3s forwards;
+}
+
+@keyframes contentScaleIn {
+  from { transform: scale(0.9); }
+  to { transform: scale(1); }
+}
+
+.confirm-message {
+  font-size: 0.95rem;
+  color: var.$white;
+  margin: 0 0 1rem;
+}
+
+.confirm-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.confirm-btn {
+  background: #d10000;
+  color: var.$white;
+  border: 1px solid #800000;
+  border-radius: 5px;
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    background: #970000;
+    transform: scale(1.05);
+  }
+}
+
+.cancel-btn {
+  background: var.$dark;
+  color: #fff;
+  border: 1px solid var.$purple;
+  border-radius: 5px;
+  padding: 10px 30px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    background: var.$light-purple;
+    transform: scale(1.05);
+  }
+}

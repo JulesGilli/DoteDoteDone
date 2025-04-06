@@ -1,0 +1,80 @@
+<div class="list-container">
+  <div class="list-header">
+    <ng-container *ngIf="!isEditingTitle; else editTitle">
+      <h2 (click)="editTitleMode()" class="editable-title">
+        {{ list.name }}
+        <svg
+          class="edit-icon"
+          width="24" height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M15 6L18 9M13 20H21M5 16L4 20L8 19L19.586 7.414C19.9609 7.03895 20.1716 6.53033 20.1716 6C20.1716 5.46967 19.9609 4.96106 19.586 4.586L19.414 4.414C19.0389 4.03906 18.5303 3.82843 18 3.82843C17.4697 3.82843 16.9611 4.03906 16.586 4.414L5 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </h2>
+    </ng-container>
+    <ng-template #editTitle>
+      <input
+        #editInput
+        type="text"
+        [(ngModel)]="list.name"
+        (blur)="saveTitle()"
+        (keydown.enter)="saveTitle()"
+      />
+    </ng-template>
+
+    <div class="dropdown-container" #dropdownContainer>
+      <button (click)="toggleMenu()" class="menu-button">⋯</button>
+      <div *ngIf="isMenuOpen" class="menu-dropdown">
+        <button class="delete-button" (click)="deleteList()">
+          Delete
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            class="delete-icon"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 21C6.45 21 5.97933 20.8043 5.588 20.413C5.19667 20.0217 5.00067 19.5507 5 19V6H4V4H9V3H15V4H20V6H19V19C19 19.55 18.8043 20.021 18.413 20.413C18.0217 20.805 17.5507 21.0007 17 21H7ZM17 6H7V19H17V6ZM9 17H11V8H9V17ZM13 17H15V8H13V17Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <button (click)="moveList('left')">Move left</button>
+        <button (click)="moveList('right')">Move right</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div
+    cdkDropList
+    [cdkDropListData]="cards()"
+    (cdkDropListDropped)="drop($event)"
+    class="drop-container"
+  >
+    <div *ngIf="cards().length === 0 && (isDragging.isDragging$ | async)" class="empty-dropzone">
+      Deposit your card here
+    </div>
+    <div
+      *ngFor="let card of cards()"
+      cdkDrag
+      (cdkDragStarted)="onDragStarted(card)"
+      (cdkDragEnded)="onDragEnded(card)"
+      (cdkDragMoved)="onCardDragMoved($event)"
+    >
+      <ng-template cdkDragPreview>
+        <div class="card-preview">
+          <app-card-list [card]="card"></app-card-list>
+        </div>
+      </ng-template>
+      <ng-template cdkDragPlaceholder>
+        <div class="card-placeholder"></div>
+      </ng-template>
+      <app-card-list [card]="card"></app-card-list>
+    </div>
+  </div>
+  <button (click)="openCreateModal()">+</button>
+</div>

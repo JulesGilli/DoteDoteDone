@@ -1,0 +1,28 @@
+<div [@fadeInAnimation] class="user-page-container">
+    <div *ngIf="loading" class="loading">
+        <div class="logo-loading">
+            <div class="logo-container">
+                <img src="/images/Logo_1.png" alt="Logo Part 1" class="logo-part logo-part1" />
+                <img src="/images/Logo_2.png" alt="Logo Part 2" class="logo-part logo-part2" />
+                <img src="/images/Logo_3.png" alt="Logo Part 3" class="logo-part logo-part3" />
+            </div>
+        </div>
+        <p class="loading-text">Loading...</p>
+    </div>
+    <div *ngIf="!loading && error" class="error">
+        <p>Une erreur est survenue : {{ error | json }}</p>
+    </div>
+    <div class="content-user-page">
+        <div *ngIf="!loading && userInfo">
+            <h1>Welcome, {{ userInfo.fullName }}</h1>
+            <div class="user-info-cards">
+                <div class="info-card">
+                    <p><strong>User name :</strong> {{ userInfo.username }}</p>
+                </div>
+                <div class="info-card">
+                    <p><strong>ID :</strong> {{ userInfo.id }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

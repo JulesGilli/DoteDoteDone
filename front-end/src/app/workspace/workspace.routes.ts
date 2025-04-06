@@ -1,8 +1,11 @@
 import { Routes } from '@angular/router';
-
 import { SignInComponent } from '../pages/sign-in/sign-in.component';
-import { SignUpComponent } from '../pages/sign-up/sign-up.component';
 import { WorkspaceComponent } from './workspace.component';
+import { AllCardsComponent } from '../pages/all-cards/all-cards.component';
+import { CallbackComponent } from '../components/callback/callback.component';
+import { KanbanComponent } from '../pages/kanban/kanban.component';
+import { UserPageComponent } from '../pages/user-page/user-page.component';
+import { WelcomeComponent } from '../pages/welcome/welcome.component';
 
 export const workspaceRoutes: Routes = [
   {
@@ -10,16 +13,28 @@ export const workspaceRoutes: Routes = [
     component: WorkspaceComponent,
     children: [
       {
-        path: 'sign-in',
-        component: SignInComponent,
+        path: 'callback',
+        component: CallbackComponent,
       },
       {
-        path: 'sign-up',
-        component: SignUpComponent,
+        path: 'welcome',
+        component: WelcomeComponent,
+      },
+      {
+        path: 'all-cards',
+        component: AllCardsComponent,
+      },
+      {
+        path: 'kanban',
+        component: KanbanComponent,
+      },
+      {
+        path: 'user',
+        component: UserPageComponent
       },
       {
         path: '**',
-        redirectTo: 'workspace',
+        redirectTo: 'kanban',
       },
     ],
   },

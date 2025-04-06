@@ -1,0 +1,137 @@
+<div [class.expanded]="isExpanded" class="menu-container">
+  <div id="button-container">
+    <button (click)="toggleSidenav()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        [style.fill]="'#d7d7ea'"
+      >
+        <path
+          d="M8 6a2 2 0 1 1-4 0a2 2 0 0 1 4 0m0 6a2 2 0 1 1-4 0a2 2 0 0 1 4 0m-2 8a2 2 0 1 0 0-4a2 2 0 0 0 0 4m8-14a2 2 0 1 1-4 0a2 2 0 0 1 4 0m-2 8a2 2 0 1 0 0-4a2 2 0 0 0 0 4m2 4a2 2 0 1 1-4 0a2 2 0 0 1 4 0m4-10a2 2 0 1 0 0-4a2 2 0 0 0 0 4m2 4a2 2 0 1 1-4 0a2 2 0 0 1 4 0m-2 8a2 2 0 1 0 0-4a2 2 0 0 0 0 4"
+        />
+      </svg>
+    </button>
+    <a routerLink="/workspace/all-cards" class="logo-wrapper">
+      <div class="logo-container">
+        <img src="/images/Logo_1.png" alt="Logo Part 1" class="logo-part logo-part1" />
+        <img src="/images/Logo_2.png" alt="Logo Part 2" class="logo-part logo-part2" />
+        <img src="/images/Logo_3.png" alt="Logo Part 3" class="logo-part logo-part3" />
+      </div>
+    </a>
+    <a href="workspace/user">
+      <svg class="user-icon" width="33" height="39" viewBox="0 0 33 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M31 36.9999V33.111C31 31.0482 30.127 29.0699 28.5732 27.6113C27.0193 26.1527 24.9118 25.3333 22.7143 25.3333H10.2857C8.08821 25.3333 5.9807 26.1527 4.42683 27.6113C2.87296 29.0699 2 31.0482 2 33.111V36.9999" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16.4996 17.5556C21.0757 17.5556 24.7853 14.0733 24.7853 9.77778C24.7853 5.48223 21.0757 2 16.4996 2C11.9235 2 8.21387 5.48223 8.21387 9.77778C8.21387 14.0733 11.9235 17.5556 16.4996 17.5556Z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+  <nav>
+    <div class="button-menu-container">
+      <a href="/workspace/all-cards">
+        <svg
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19.5 12.5C19.5 11.12 20.62 10 22 10V9C22 5 21 4 17 4H7C3 4 2 5 2 9V9.5C3.38 9.5 4.5 10.62 4.5 12C4.5 13.38 3.38 14.5 2 14.5V15C2 19 3 20 7 20H17C21 20 22 19 22 15C20.62 15 19.5 13.88 19.5 12.5Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M10 4L10 20"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-dasharray="5 5"
+          />
+        </svg>
+        <span>All tickets</span>
+      </a>
+      <a href="/workspace/kanban">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M3 19c0 1.414 0 2.121.44 2.56C3.878 22 4.585 22 6 22s2.121 0 2.56-.44C9 21.122 9 20.415 9 19s0-2.121-.44-2.56C8.122 16 7.415 16 6 16s-2.121 0-2.56.44C3 16.878 3 17.585 3 19M3 5c0 1.414 0 2.121.44 2.56C3.878 8 4.585 8 6 8s2.121 0 2.56-.44C9 7.122 9 6.415 9 5s0-2.121-.44-2.56C8.122 2 7.415 2 6 2s-2.121 0-2.56.44C3 2.878 3 3.585 3 5m12 0c0 1.414 0 2.121.44 2.56C15.878 8 16.585 8 18 8s2.121 0 2.56-.44C21 7.122 21 6.415 21 5s0-2.121-.44-2.56C20.122 2 19.415 2 18 2s-2.121 0-2.56.44C15 2.878 15 3.585 15 5M6 8v8m0-4h8c1.886 0 2.828 0 3.414-.586S18 9.886 18 8"
+            color="currentColor"
+          />
+        </svg>
+        <span>Kanban</span>
+      </a>
+      <a href="/workspace/statistics">
+        <svg
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.5 19.9V4.1C10.5 2.6 9.86 2 8.27 2H4.23C2.64 2 2 2.6 2 4.1V19.9C2 21.4 2.64 22 4.23 22H8.27C9.86 22 10.5 21.4 10.5 19.9Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M22 12.9V4.1C22 2.6 21.36 2 19.77 2H15.73C14.14 2 13.5 2.6 13.5 4.1V12.9C13.5 14.4 14.14 15 15.73 15H19.77C21.36 15 22 14.4 22 12.9Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <span>Statistics</span>
+      </a>
+    </div>
+    <a (click)="logout()" style="cursor: pointer;">
+      <svg
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.90002 7.55999C9.21002 3.95999 11.06 2.48999 15.11 2.48999H15.24C19.71 2.48999 21.5 4.27999 21.5 8.74999V15.27C21.5 19.74 19.71 21.53 15.24 21.53H15.11C11.09 21.53 9.24002 20.08 8.91002 16.54"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M15 12H3.62"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M5.85 8.6499L2.5 11.9999L5.85 15.3499"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span>Logout</span>
+    </a>
+  </nav>
+</div>
+

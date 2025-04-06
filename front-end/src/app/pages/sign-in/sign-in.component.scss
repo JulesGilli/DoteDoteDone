@@ -1,0 +1,115 @@
+@use '../../../variables.scss' as var;
+
+.sign-in-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #1a1522;
+  margin: 0;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo-part {
+  width: 120px;
+  opacity: 0;
+  transform: translateX(-1px);
+  animation: fadeInSlideRight 1s ease forwards;
+}
+
+.logo-part:not(:first-child) {
+  margin-left: -70px;
+}
+
+.logo-part1 {
+  animation-delay: 0.6s;
+  z-index: 3;
+}
+
+.logo-part2 {
+  animation-delay: 0.3s;
+  z-index: 2;
+}
+
+.logo-part3 {
+  animation-delay: 0s;
+  z-index: 1;
+}
+
+.logo-title {
+  width: 225px;
+  height: auto;
+  margin-bottom: 10%;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 1.5s;
+}
+
+.login-button {
+  background-color: #6650a8;
+  color: var.$white;
+  opacity: 0;
+  border: none;
+  border-radius: 5px;
+  padding: 14px 28px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  animation: fadeIn 1s ease forwards;
+  animation-delay: 1.8s;
+
+  &:hover {
+    background-color: #7e65c1;
+    transform: scale(1.05);
+  }
+}
+
+.welcome-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgba(26, 21, 34, 0.95);
+  color: var.$white;
+  text-align: center;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 3px solid var.$white;
+}
+
+@keyframes fadeInSlideRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-250px);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

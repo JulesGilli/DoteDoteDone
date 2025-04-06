@@ -1,0 +1,85 @@
+<div class="all-cards-page">
+  <div *ngIf="loading" class="loading">
+    <div class="logo-loading">
+      <div class="logo-container">
+        <img src="/images/Logo_1.png" alt="Logo Part 1" class="logo-part logo-part1" />
+        <img src="/images/Logo_2.png" alt="Logo Part 2" class="logo-part logo-part2" />
+        <img src="/images/Logo_3.png" alt="Logo Part 3" class="logo-part logo-part3" />
+      </div>
+    </div>
+    <p class="loading-text">Loading...</p>
+  </div>
+
+  <div *ngIf="!loading" [@fadeInAnimation]>
+    <div id="all-cards-selector">
+      <label>Workspace</label>
+      <div class="select-wrapper">
+        <select class="workspace-select"
+                [(ngModel)]="selectedWorkspace"
+                (ngModelChange)="loadCards()">
+          <option *ngFor="let workspace of workspaces" [ngValue]="workspace">
+            {{ workspace.displayName }}
+          </option>
+        </select>
+        <div class="select-arrow">
+          <svg width="40" height="20" viewBox="0 0 40 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_59_348)">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M18.815 16.9283L9.38664 7.49998L11.7433 5.14331L19.9933 13.3933L28.2433 5.14331L30.6 7.49998L21.1716 16.9283C20.8591 17.2408 20.4352 17.4163 19.9933 17.4163C19.5514 17.4163 19.1275 17.2408 18.815 16.9283Z" fill="#D7D7EA"/>
+            </g>
+            <defs>
+              <clipPath id="clip0_59_348">
+                <rect width="20" height="40" fill="white" transform="matrix(0 1 -1 0 40 0)"/>
+              </clipPath>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="ticket-header">
+      <h2 class="tickets-title">Tickets {{ tickets.length }}</h2>
+      <button class="new-tickets-btn" (click)="openCreateModal()">
+        New ticket
+      </button>
+    </div>
+
+    <div class="tickets-container">
+      <table class="tickets-table">
+        <thead>
+        <tr>
+          <th>Ticket</th>
+          <th>ID</th>
+          <th>Manager</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let ticket of tickets">
+          <td colspan="3">
+            <app-card
+              [titre]="ticket.titre"
+              [statusCard]="ticket.statusCard"
+              [ticketId]="ticket.ticketId"
+              [manager]="ticket.manager"
+              (cardClick)="openModal(ticket)"
+            ></app-card>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <app-modal-create *ngIf="isCreateMode"
+                      [selectedWorkspaceFromMain]="selectedWorkspace"
+                      [allWorkspacesFromMain]="workspaces"
+                      [allBoardsFromMain]="this._dataService.allBoards()"
+                      (close)="closeCreateModal()"
+                      (create)="createTicket($event)">
+    </app-modal-create>
+
+    <app-modal-edit *ngIf="isEditMode"
+                    [ticket]="selectedTicket"
+                    (close)="closeModal()"
+                    (valid)="updateTicket()">
+    </app-modal-edit>
+  </div>
+</div>

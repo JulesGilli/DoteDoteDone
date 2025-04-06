@@ -1,0 +1,18 @@
+@use '../../../variables' as var;
+
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100vh;
+  background-color: var.$dark;
+  color: var.$white;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.welcome-container h2 {
+  font-size: 2rem;
+  margin: 100px 0;
+}

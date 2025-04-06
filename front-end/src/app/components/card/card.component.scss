@@ -1,0 +1,73 @@
+@use '../../../variables.scss' as var;
+
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+  background-color: var.$dark;
+
+  &:hover {
+    background-color: var.$lighter-dark;
+  }
+}
+
+.card-part {
+  display: flex;
+  align-items: center;
+}
+
+.card-part-title {
+  flex: 2;
+}
+
+.card-part-id,
+.card-part-manager {
+  flex: 1;
+  text-align: center;
+}
+
+.status-indicator {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  object-fit: cover;
+}
+
+.card-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.delete-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  font-size: 0.95rem;
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  background-color: #b60000;
+  border: none;
+  color: white;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.card:hover .delete-btn {
+  transform: translateX(0);
+  opacity: 1;
+}
+

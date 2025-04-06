@@ -1,0 +1,14 @@
+<div class="card" (click)="onCardClick()">
+  <div class="card-part card-part-title">
+    <img class="status-indicator" [attr.src]="'/images/card-priority-' + statusCard + '.png'" alt="priority" />
+    <span class="card-title">{{ titre }}</span>
+  </div>
+  <div class="card-part card-part-id">
+    <span>{{ ticketId }}</span>
+  </div>
+  <div class="card-part card-part-manager">
+    <span>{{ manager }}</span>
+  </div>
+  <button class="delete-btn" (click)="onOpenDelete($event)">Delete</button>
+</div>
+
