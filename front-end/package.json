@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "predeploy": "ng build --output-path=dist/browser --base-href=/DoteDoteDone/",
+    "deploy": "rm -rf docs && mkdir docs && cp -r dist/browser/* docs/"
   },
   "private": true,
   "dependencies": {
